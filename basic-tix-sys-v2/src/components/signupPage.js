@@ -3,7 +3,7 @@ import { Form, FormInput, FormGroup, Container, Button } from "shards-react";
 import "./signupPage.css";
 
 class SignupCreds extends Component {
-  state = {};
+  state () {};
   render() {
     return (
       <div class="w-50 mx-auto">

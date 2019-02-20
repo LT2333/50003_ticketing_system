@@ -3,8 +3,9 @@ import { Form, FormInput, FormGroup, Button, NavLink } from "shards-react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Homepage from "./homePage";
 
+
 class LoginCreds extends Component {
-  state = {};
+  state () {};
   render() {
     return (
       <Router>
