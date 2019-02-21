@@ -1,3 +1,11 @@
+# 0. Pre-requisites
+
+Using Unirest 
+
+```
+$ npm install unirest
+```
+
 # 1. Register users 
 
 Native NodeJS
