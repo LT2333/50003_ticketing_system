@@ -17,6 +17,7 @@ class SignupCreds extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.validateField = this.validateField.bind(this);
   }
 
   handleChange(event) {
@@ -25,20 +26,51 @@ class SignupCreds extends Component {
     const name = target.name;
 
     this.setState({ [name]: value });
+    this.validateField(name, value);
   }
 
-  handlePassword(event) {
-    this.setState({ secondpass: event.target.secondpass });
+  // handlePassword(event) {
+  //   this.setState({ secondpass: event.target.secondpass });
 
-    if (this.state.secondpass == this.state.password) {
-      this.setState({ valid: true });
-    }
+  //   if (this.state.secondpass == this.state.password) {
+  //     this.setState({ valid: true });
+  //   }
 
-    if (this.state.valid) {
-      console.log("OKAY");
-    } else {
-      console.log("NOT OKAY");
+  //   if (this.state.valid) {
+  //     console.log("OKAY");
+  //   } else {
+  //     console.log("NOT OKAY");
+  //   }
+  // }
+
+  validateField(fieldName, value) {
+    let emailValid = this.state.emailValid;
+    let passValid = this.state.passValid;
+
+    switch (fieldName) {
+      case "email":
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        break;
+      case "secondpass":
+        passValid =
+          this.state.password === this.state.secondpass ? true : false;
+        break;
+      default:
+        break;
     }
+    this.setState(
+      {
+        emailValid: emailValid,
+        passValid: passValid
+      },
+      this.validateForm
+    );
+  }
+
+  validateForm() {
+    this.setState({
+      formValid: this.state.emailValid && this.state.passValid
+    });
   }
 
   handleSubmit(event) {
@@ -95,7 +127,7 @@ class SignupCreds extends Component {
             />
           </FormGroup>
         </Form>
-        <Button onClick={this.handleSubmit} disabled={!this.state.valid}>
+        <Button onClick={this.handleSubmit} disabled={this.state.valid}>
           Register
         </Button>
       </div>
