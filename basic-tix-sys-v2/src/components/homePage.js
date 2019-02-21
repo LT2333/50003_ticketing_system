@@ -26,6 +26,7 @@ class Homepage extends Component {
         <Button href="/login">Log in</Button>
         <Button href="/">Home Page</Button>
         <Button href="/signup">Sign up</Button>
+        <Button href="/message">Message Box</Button>
       </div>
     );
   }
