@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Button, NavLink } from "shards-react";
+import "./signupPage.css";
 
 class LoginCreds extends Component {
   constructor(props) {
@@ -59,7 +60,7 @@ class LoginCreds extends Component {
   render() {
     return (
       <div class="w-50 mx-auto">
-        <h1>Courier Tix</h1>
+        <h1 className="title">Courier Tix</h1>
         <Form>
           <FormGroup>
             <label>Username</label>
@@ -81,7 +82,9 @@ class LoginCreds extends Component {
           </FormGroup>
         </Form>
         <Button onClick={this.handleSubmit}>Login</Button>
-        <NavLink>New user? Register here!</NavLink>
+        <NavLink active href="/signup">
+          New user? Register here!
+        </NavLink>
       </div>
     );
   }

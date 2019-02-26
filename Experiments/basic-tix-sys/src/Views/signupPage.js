@@ -11,6 +11,7 @@ class SignupCreds extends Component {
       email: "",
       password: "",
       secondpass: "",
+
       emailValid: false,
       passValid: false,
       formValid: false
@@ -25,8 +26,9 @@ class SignupCreds extends Component {
     const value = target.value;
     const name = target.name;
 
-    this.setState({ [name]: value });
-    this.validateField(name, value);
+    this.setState({ [name]: value }, () => {
+      this.validateField(name, value);
+    });
   }
 
   // handlePassword(event) {
@@ -91,7 +93,7 @@ class SignupCreds extends Component {
   render() {
     return (
       <div class="w-50 mx-auto">
-        <h1>Signup</h1>
+        <h1 className="title">Signup</h1>
         <Form>
           <FormGroup>
             <label>Username</label>
@@ -100,6 +102,7 @@ class SignupCreds extends Component {
               name="username"
               onChange={this.handleChange}
             />
+            {/* <label>{this.state.emailValid}</label> */}
           </FormGroup>
           <FormGroup>
             <label>Email Address</label>
