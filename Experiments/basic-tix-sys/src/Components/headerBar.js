@@ -37,15 +37,6 @@ class HeaderBar extends Component {
           <NavItem>
             <NavLink href="/contactus">Contact Us</NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink href="/messages">Messages</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="/history">History</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="/profile">Profile</NavLink>
-          </NavItem>
         </Nav>
 
         <Nav navbar className="ml-auto">

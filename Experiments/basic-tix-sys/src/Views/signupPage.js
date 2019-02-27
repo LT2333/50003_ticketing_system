@@ -1,122 +1,137 @@
 import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Container, Button } from "shards-react";
 import "./signupPage.css";
+import { Redirect } from "react-router-dom";
 
 class SignupCreds extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
-      email: "",
-      password: "",
-      secondpass: "",
+      fields: {},
 
-      emailValid: false,
-      passValid: false,
-      formValid: false
+      errormsg: "",
+      cansignup: false,
+
+      errors: {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.validateField = this.validateField.bind(this);
+    this.validateForm = this.validateForm.bind(this);
   }
 
   handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({ [name]: value }, () => {
-      this.validateField(name, value);
+    let fields = this.state.fields;
+    fields[event.target.name] = event.target.value;
+    this.setState({
+      fields
     });
-  }
-
-  // handlePassword(event) {
-  //   this.setState({ secondpass: event.target.secondpass });
-
-  //   if (this.state.secondpass == this.state.password) {
-  //     this.setState({ valid: true });
-  //   }
-
-  //   if (this.state.valid) {
-  //     console.log("OKAY");
-  //   } else {
-  //     console.log("NOT OKAY");
-  //   }
-  // }
-
-  validateField(fieldName, value) {
-    let emailValid = this.state.emailValid;
-    let passValid = this.state.passValid;
-
-    switch (fieldName) {
-      case "email":
-        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-        break;
-      case "secondpass":
-        passValid =
-          this.state.password === this.state.secondpass ? true : false;
-        break;
-      default:
-        break;
-    }
-    this.setState(
-      {
-        emailValid: emailValid,
-        passValid: passValid
-      },
-      this.validateForm
-    );
   }
 
   validateForm() {
-    this.setState({
-      formValid: this.state.emailValid && this.state.passValid
-    });
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    if (typeof fields["password"] !== "undefined") {
+      if (
+        !fields["password"].match(
+          /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).*$/
+        )
+      ) {
+        formIsValid = false;
+        errors["password"] = "Please enter secure and strong password.";
+
+        // At least 8 chars
+        // Contains at least one digit
+        // Contains at least one lower alpha char and one upper alpha char
+        // Contains at least one char within a set of special chars (@#%$^ etc.)
+      }
+
+      if (!fields["secondpass"]) {
+        formIsValid = false;
+        errors["secondpass"] = "Please re-enter your password.";
+      }
+
+      if (typeof fields["secondpass"] !== "undefined") {
+        if (!fields["secondpass"].match(fields["password"])) {
+          formIsValid = false;
+          errors["secondpass"] = "Password does not match.";
+        }
+      }
+
+      this.setState({
+        errors: errors
+      });
+
+      if (typeof errors.password == "undefined") {
+        if (typeof errors.secondpass !== "undefined") {
+          this.setState({
+            errormsg: errors.secondpass
+          });
+        }
+      } else {
+        this.setState({
+          errormsg: errors.password
+        });
+      }
+
+      return formIsValid;
+    }
   }
 
   handleSubmit(event) {
+    event.preventDefault();
+    if (this.validateForm()) {
+      // username: esc
+      // password: hard
+      var unirest = require("unirest");
+      var req = unirest(
+        "POST",
+        "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
+      );
+
+      req.headers({
+        "cache-control": "no-cache",
+        "content-type": "application/json",
+        "server-token": ""
+      });
+
+      req.type("json");
+      req.send({
+        username: this.state.fields.username,
+        password: this.state.fields.password,
+        email: this.state.fields.email
+      });
+
+      req.end(res => {
+        console.log(res);
+        console.log(res.body);
+        //if no errors detected from api
+        if (res.error == false) {
+          this.setState({ cansignup: true });
+        } else {
+          this.setState({ errormsg: res.body.error });
+        }
+      });
+    }
     console.log(
       "New signup: \n" +
         "username: " +
-        this.state.username +
+        this.state.fields.username +
         "\nemail: " +
-        this.state.email +
+        this.state.fields.email +
         "\npassword: " +
-        this.state.password +
+        this.state.fields.password +
         "\nre-entered password:" +
-        this.state.secondpass
+        this.state.fields.secondpass
     );
-    // username: esc
-    // password: hard
-    var unirest = require("unirest");
-    var req = unirest(
-      "POST",
-      "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
-    );
-
-    req.headers({
-      "cache-control": "no-cache",
-      "content-type": "application/json",
-      "server-token": ""
-    });
-
-    req.type("json");
-    req.send({
-      username: this.state.username,
-      password: this.state.password,
-      email: this.state.email
-    });
-
-    req.end(function(res) {
-      if (res.error) throw new Error(res.error);
-
-      console.log(res.body);
-    });
-    event.preventDefault();
   }
 
   render() {
+    if (this.state.cansignup) {
+      return <Redirect push to="/login" />;
+    }
     return (
       <div class="w-50 mx-auto">
         <h1 className="title">Signup</h1>
@@ -128,7 +143,6 @@ class SignupCreds extends Component {
               name="username"
               onChange={this.handleChange}
             />
-            {/* <label>{this.state.emailValid}</label> */}
           </FormGroup>
           <FormGroup>
             <label>Email Address</label>
@@ -147,18 +161,20 @@ class SignupCreds extends Component {
               name="password"
               onChange={this.handleChange}
             />
+
             <FormInput
               className="secondpass"
               name="secondpass"
               type="password"
               placeholder="Re-enter password"
-              onChange={this.handlePassword}
+              onChange={this.handleChange}
             />
           </FormGroup>
+          <FormGroup>
+            <label className="errormsg">{this.state.errormsg}</label>
+          </FormGroup>
         </Form>
-        <Button onClick={this.handleSubmit} disabled={this.state.valid}>
-          Register
-        </Button>
+        <Button onClick={this.handleSubmit}>Register</Button>
       </div>
     );
   }

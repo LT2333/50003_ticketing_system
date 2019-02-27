@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Button, NavLink } from "shards-react";
 import "./signupPage.css";
+import { Redirect } from "react-router-dom";
 
 class LoginCreds extends Component {
   constructor(props) {
@@ -8,7 +9,9 @@ class LoginCreds extends Component {
 
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      errormsg: "",
+      canlogin: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,14 +53,24 @@ class LoginCreds extends Component {
       "server-token": ""
     });
 
-    req.end(function(res) {
-      if (res.error) throw new Error(res.error);
-
+    req.end(res => {
+      //if (res.error) throw new Error(res.error);
+      console.log(res);
       console.log(res.body);
+
+      if (res.error == false) {
+        this.setState({ canlogin: true });
+      } else {
+        this.setState({ errormsg: res.body.error });
+      }
     });
   }
 
   render() {
+    if (this.state.canlogin) {
+      return <Redirect push to="/contactus" />;
+    }
+
     return (
       <div class="w-50 mx-auto">
         <h1 className="title">Courier Tix</h1>
@@ -79,6 +92,9 @@ class LoginCreds extends Component {
               name="password"
               onChange={this.handleChange}
             />
+          </FormGroup>
+          <FormGroup>
+            <label className="errormsg">{this.state.errormsg}</label>
           </FormGroup>
         </Form>
         <Button onClick={this.handleSubmit}>Login</Button>
