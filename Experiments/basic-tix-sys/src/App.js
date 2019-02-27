@@ -18,7 +18,7 @@ class App extends Component {
         <div className="App">
           <Container>
             <HeaderBar />
-            {/* <SideBar /> */}
+            <SideBar />
           </Container>
 
           <Switch>

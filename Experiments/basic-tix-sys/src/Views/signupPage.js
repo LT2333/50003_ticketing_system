@@ -90,28 +90,31 @@ class SignupCreds extends Component {
     // username: esc
     // password: hard
     var unirest = require("unirest");
-    var req = unirest("POST", "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users");
+    var req = unirest(
+      "POST",
+      "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
+    );
 
     req.headers({
       "cache-control": "no-cache",
       "content-type": "application/json",
-      "server-token": "CHANGE THIS"
+      "server-token": ""
     });
 
     req.type("json");
     req.send({
-      "username": this.state.username,
-      "password": this.state.password,
-      "email": this.state.email
+      username: this.state.username,
+      password: this.state.password,
+      email: this.state.email
     });
 
-    req.end(function (res) {
+    req.end(function(res) {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
     });
-        event.preventDefault();
-      }
+    event.preventDefault();
+  }
 
   render() {
     return (
