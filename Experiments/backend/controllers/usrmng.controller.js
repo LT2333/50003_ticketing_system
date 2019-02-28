@@ -185,7 +185,8 @@ exports.send_form = function (req, res) {
     "Topic_Chosen": req.body.Topic_Chosen,
     "Message": req.body.Message,
     "Who":"",
-    "Status":""
+    "Status":"",
+    "Date": new Date()
   };
   MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
   	//ensure we've connected
