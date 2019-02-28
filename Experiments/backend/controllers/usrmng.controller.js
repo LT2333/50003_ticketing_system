@@ -157,9 +157,8 @@ exports.get_data = function (req, res) {
 			console.log("Error: ", error);
 		else
 		{
-			messages.forEach(function(message){
-				console.log(message);
-			});
+      console.log(messages);
+      res.send(messages);
 		}
 	});
        client.close();
