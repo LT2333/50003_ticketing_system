@@ -65,6 +65,7 @@ class ContactUs extends Component {
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeSelect = this.handleChangeSelect.bind(this);
+    //this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
@@ -104,6 +105,30 @@ class ContactUs extends Component {
         "\nrealtedtags: " +
         this.state.relatedtags
     );
+
+    var unirest = require("unirest");
+
+    var req = unirest("POST", "http://localhost:3000/form");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "Content-Type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      Username: this.state.name,
+      Email: this.state.email,
+      Contact_Number: this.state.contactnum,
+      Topic_Chosen: "the bored ninja",
+      Message: this.state.problem
+    });
+
+    req.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
   }
   render() {
     const { open } = this.state;
