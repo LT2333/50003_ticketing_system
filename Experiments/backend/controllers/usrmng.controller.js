@@ -4,6 +4,7 @@ var assert = require('assert');
 var uri = "mongodb+srv://Admin1:SUTD1111@escdb-anq5i.mongodb.net/test?retryWrites=true/";
 const mydb = "ACCENTURE_TEST1";
 const mycollection = "USER_INFORMATION";
+const msgcollection = "USER_REQUEST_FORM";
 //const { check } = require('express-validator/check');
 var Isemail = require('isemail');
 
@@ -41,8 +42,8 @@ exports.user_create = function (req, res) {
 
   	//Post
      var User_form = client.db(mydb).collection(mycollection);
-     if (User_form.find({"username":req.body.username}) != null) {
-       res.send({"error":"Username is being used"});
+     if (User_form.find({"username":req.body.username}) == null) {
+       res.send({"error":"Username is being used"}); // this has to be changed next time
      } else{
      //console.log(User_form.find(req.body.username));
      User_form.insertOne(mydocument,function(error, result){
@@ -136,3 +137,143 @@ exports.user_delete = function (req, res) {
         });
 
 }
+
+// Code for getting the messages based on username (ADMINS AND USERS)
+exports.get_data = function (req, res) {
+  var user = {"username":req.params.username};
+  MongoClient.connect(uri, function(err, client) {
+
+        //ensure we've connected
+        assert.equal(null, err);
+        if(err)
+        console.log("Error while connecting to database: ", err);
+        else
+        console.log("Connection established successfully");
+
+        //Get
+       var User_form = client.db(mydb).collection(msgcollection);
+       User_form.find(null).toArray(function(error, messages){
+		if(error)
+			console.log("Error: ", error);
+		else
+		{
+			messages.forEach(function(message){
+				console.log(message);
+			});
+		}
+	});
+       client.close();
+
+    });
+  }
+
+exports.send_form = function (req, res) {
+  var testi = req.body.Username;
+  if (Isemail.validate(req.body.Email) == false){
+    res.send({"error":"Invalid Email"});
+  } else if (req.body.Username.length==0){
+    res.send({"error":"Username field is empty"});
+  }  else if (req.body.Contact_Number.length==0){
+    res.send({"error":"contact number field is empty"});
+  } else if (req.body.Message.length==0){
+    res.send({"error":"message field is empty"});
+  }
+  else{
+  var mydocument = {
+    "Username":req.body.Username,
+    "Email":req.body.Email,
+    "Contact_Number":req.body.Contact_Number,
+    "Topic_Chosen": req.body.Topic_Chosen,
+    "Message": req.body.Message,
+    "Who":"",
+    "Status":""
+  };
+  MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
+  	//ensure we've connected
+  	assert.equal(null, err);
+  	if(err){
+      console.log("Error while connecting to database: ", err);
+    }
+    else{
+      console.log("Connection established successfully");
+    }
+
+  	//Post
+     var User_form = client.db(mydb).collection(msgcollection);
+     User_form.insertOne(mydocument,function(error, result){
+      if(error)
+          console.log("Error: ",error);
+      else
+          console.log("New message request has been inserted.");
+        });
+     res.send({"success":"Successfully sent message"});
+     client.close();
+   });
+}
+};
+// Code for getting the messages based on username (ADMINS AND USERS)
+// exports.get_data = function (req, res) {
+//   var user = {"username":req.params.username};
+//
+//   MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
+//   	//ensure we've connected
+//   	assert.equal(null, err);
+//   	if(err){
+//       console.log("Error while connecting to database: ", err);
+//     }
+//     else{
+//       console.log("Connection established successfully");
+//     }
+//
+//      var User_form = client.db(mydb).collection(mycollection);
+//
+//      User_form.find(user).toArray(function(error, messages){
+// 		if(error){
+//             console.log("Error: ", error);
+//         } else
+// 		{
+//             console.log(messages[0]['type']);
+//             if (messages[0]['type'] == 'Admin'){
+//               var Next_form = client.db(mydb).collection(msgcollection);
+//               Next_form.find(null).toArray(function(error, messages){
+//                 if(error)
+//                 console.log("Error: ", error);
+//                 else
+//                 {
+//                   messages.forEach(function(message){
+//                     console.log(message);
+//                   });
+//                 }
+// });
+//             }else if (messages[0]['type'] == 'User'){
+//                 User_get_request(username_filter,"ACCENTURE_TEST1","USER_REQUEST_FORM");
+//             }else{
+//                 console.log("Error: Neither Admin nor User");
+//             }
+//         }
+//
+//     });
+//
+//        client.close();
+//
+//     });
+//
+// }
+//
+//
+//      if (User_form.find({"username":req.body.username}) != null) {
+//        res.send({"error":"Username is being used"});
+//      } else{
+//      //console.log(User_form.find(req.body.username));
+//      User_form.insertOne(mydocument,function(error, result){
+//       if(error)
+//           console.log("Error: ",error);
+//       else
+//           console.log("New user request has been inserted.");
+//         });
+//      res.send({"objectID":testi});
+//      client.close();
+//    }
+//   });
+// }
+// };
