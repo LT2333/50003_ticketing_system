@@ -56,21 +56,54 @@ class ContactUs extends Component {
     this.state = {
       open: false,
 
-      fields: {
-        name: "",
-        email: "",
-        contactnum: "",
-        problem: "",
-        relatedtags: ""
-      }
+      name: "",
+      email: "",
+      contactnum: "",
+      problem: "",
+      relatedtags: []
     };
     this.toggle = this.toggle.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleChangeSelect = this.handleChangeSelect.bind(this);
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({ [name]: value });
+  }
+
+  handleChangeSelect(event) {
+    console.log(event);
+    this.setState({
+      relatedtags: [
+        {
+          label: event.label,
+          value: event.value
+        }
+      ]
+    });
   }
 
   toggle() {
     this.setState({
       open: !this.state.open
     });
+    console.log(
+      "Form Details: \n" +
+        "name: " +
+        this.state.name +
+        "\nemail: " +
+        this.state.email +
+        "\ncontactnum: " +
+        this.state.contactnum +
+        "\nproblem:" +
+        this.state.problem +
+        "\nrealtedtags: " +
+        this.state.relatedtags
+    );
   }
   render() {
     const { open } = this.state;
@@ -85,31 +118,54 @@ class ContactUs extends Component {
                 <Form>
                   <FormGroup>
                     <label>Name</label>
-                    <FormInput size="sm" />
+                    <FormInput
+                      name="name"
+                      onChange={this.handleChange}
+                      size="sm"
+                    />
                   </FormGroup>
 
                   <FormGroup>
                     <label>Email</label>
-                    <FormInput size="sm" />
+                    <FormInput
+                      name="email"
+                      onChange={this.handleChange}
+                      size="sm"
+                    />
                   </FormGroup>
 
                   <FormGroup>
                     <label>Contact Number</label>
-                    <FormInput size="sm" />
+                    <FormInput
+                      name="contactnum"
+                      onChange={this.handleChange}
+                      size="sm"
+                    />
                   </FormGroup>
 
                   <FormGroup>
                     <label htmlFor="feInputAddress">
                       Description of Problem
                     </label>
-                    <FormTextarea id="feInputAddress" rows="4" size="sm" />
+                    <FormTextarea
+                      name="problem"
+                      onChange={this.handleChange}
+                      id="feInputAddress"
+                      rows="4"
+                      size="sm"
+                    />
                   </FormGroup>
 
                   <FormGroup>
                     <label htmlFor="feInputAddress2">
                       Related Topics and Assets
                     </label>
-                    <Select isMulti options={topics} />
+                    <Select
+                      isMulti
+                      options={topics}
+                      value={this.state.relatedtags}
+                      onChange={this.handleChangeSelect}
+                    />
                   </FormGroup>
 
                   <Button onClick={this.toggle}>Submit Now!</Button>
@@ -117,7 +173,8 @@ class ContactUs extends Component {
                     <ModalHeader>Submitted</ModalHeader>
                     <ModalBody>
                       Thanks! We have received your request. Meanwhile, you
-                      might want to check out these common problems...
+                      might want to check out these common problems: help help
+                      help
                     </ModalBody>
                   </Modal>
                 </Form>
