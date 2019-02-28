@@ -25,11 +25,16 @@
     position: relative;
     text-align: left;
     margin-top: 50px;
-    margin-left: 50px;
+    margin-left: 100px;
     margin-right: 50px;
     height: 350px;
     /* overflow: hidden; */
   }
+
+.MessageText {
+    height: 80px;
+    overflow: hidden;
+}
 
 .TakeItSection {
   position: relative;
@@ -61,7 +66,10 @@
   
 /* Individual Message Display */
 .IndCard {
-  margin: 40px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: 100px;
+  margin-right: 40px;
 }
 
 #Click {

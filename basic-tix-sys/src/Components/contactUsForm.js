@@ -19,7 +19,7 @@ import {
   ModalBody,
   ModalHeader
 } from "shards-react";
-import "./widgets.css";
+import "./contactUsForm.css";
 
 const topics = [
   { label: "API DevOps", value: 1 },
@@ -53,7 +53,17 @@ const topics = [
 class ContactUs extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: false };
+    this.state = {
+      open: false,
+
+      fields: {
+        name: "",
+        email: "",
+        contactnum: "",
+        problem: "",
+        relatedtags: ""
+      }
+    };
     this.toggle = this.toggle.bind(this);
   }
 
@@ -63,6 +73,7 @@ class ContactUs extends Component {
     });
   }
   render() {
+
     const { open } = this.state;
     return (
       <Card className="ContactUsCard">
@@ -73,6 +84,21 @@ class ContactUs extends Component {
             <Row>
               <Col>
                 <Form>
+                  <FormGroup>
+                    <label>Name</label>
+                    <FormInput size="sm" />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <label>Email</label>
+                    <FormInput size="sm" />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <label>Contact Number</label>
+                    <FormInput size="sm" />
+                  </FormGroup>
+
                   <FormGroup>
                     <label htmlFor="feInputAddress">
                       Description of Problem

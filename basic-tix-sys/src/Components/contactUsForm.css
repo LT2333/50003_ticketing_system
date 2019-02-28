@@ -1,0 +1,11 @@
+.ContactUsCard {
+  position: relative;
+  margin-top: 50px;
+  margin-left: 250px;
+  margin-right: 250px;
+  padding-top: 20px;
+}
+
+#feInputAddress {
+  height: 100px;
+}

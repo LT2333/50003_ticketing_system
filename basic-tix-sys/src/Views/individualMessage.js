@@ -10,8 +10,8 @@ import {
     Button,
     Badge
   } from "shards-react";
-import MainPage from "../views/mainPage"
 import "./widgets.css";
+import MessageBox from "./messagePage";
 
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
@@ -20,12 +20,21 @@ const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 
 class IndMes extends Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            Name: "",
+            Mes: "",
+        }
+
+    }
     render() {
         return (
             <Card className="IndCard">
                 <CardHeader>Title</CardHeader>
                 <CardBody>
-                <h6>from xxx</h6><p>Date Submit: {date}/{month}/{year}</p>
+                <h6>from Alex</h6><p>Date Submit: {date}/{month}/{year}</p>
                 <hr/>
                 <p>Bro I got questions to ask. 
                 Bro I got questions to ask. 
@@ -93,7 +102,7 @@ class IndMes extends Component {
                     <Badge theme="light" className = "Tags">TAG4</Badge>
                     <Badge theme="light" className = "Tags">TAG5</Badge>
                     <hr/>
-                    <Button href="/message" theme="dark">Go Back</Button>
+                    <Button href="/messagepage" theme="dark">Go Back</Button>
                 </CardFooter>
             </Card>
         );
