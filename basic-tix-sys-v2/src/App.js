@@ -4,9 +4,11 @@ import SignupCreds from "./components/signupPage";
 import LoginCreds from "./components/loginPage";
 import Homepage from "./components/homePage";
 import ContactUs from "./components/contactUsForm";
-import MainPage from "./views/mainPage";
+import MainPage from "./views/mainPage"
+import IndMes from "./components/individualMessage";
 import "bootstrap/dist/css/bootstrap.css";
 import "shards-ui/dist/css/shards.min.css";
+import "./components/widgets.css";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import {
   Button,
@@ -29,12 +31,12 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-        <h1>Ticketing System</h1>
+          <h1 className="titles">Ticketing System</h1>
           <div>
-            <Button href="/contactus"> Contact Us</Button>
-            <Button href="/login">Log in</Button>
-            <Button href="/signup">Sign up</Button>
-            <Button href="/message">Message Box</Button>
+            <Button className="buttons" href="/contactus">Contact Us</Button>
+            <Button className="buttons" href="/login">Log in</Button>
+            <Button className="buttons" href="/signup">Sign up</Button>
+            <Button className="buttons" href="/message">Message Box</Button>
           </div>
 
           <Switch>
@@ -43,6 +45,7 @@ class App extends Component {
             <Route path="/contactus" component={ContactUs} />
             <Route path="/signup" component={SignupCreds} />
             <Route path="/message" component={MainPage} />
+            <Route path="/indmes" component={IndMes} />
           </Switch>
 
         </div>

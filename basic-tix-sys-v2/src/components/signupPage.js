@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Container, Button } from "shards-react";
-import "./signupPage.css";
+import "./widgets.css";
 
 class SignupCreds extends Component {
   state () {};

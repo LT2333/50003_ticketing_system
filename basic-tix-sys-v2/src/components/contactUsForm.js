@@ -19,7 +19,7 @@ import {
   ModalBody,
   ModalHeader
 } from "shards-react";
-import "./contactUsForm.css";
+import "./widgets.css";
 
 const topics = [
   { label: "API DevOps", value: 1 },

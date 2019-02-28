@@ -1,0 +1,71 @@
+.buttons {
+    margin: 5px;
+}
+
+.titles {
+    margin-top: 50px;
+    margin-bottom: 30px; 
+}
+
+/* Contact Us */
+.ContactUsCard {
+    position: relative;
+    margin-top: 50px;
+    margin-left: 250px;
+    margin-right: 250px;
+    padding-top: 20px;
+  }
+  
+#feInputAddress {
+  height: 100px;
+}
+
+/* Message Page */
+.MessageCard {
+    position: relative;
+    text-align: left;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    height: 350px;
+    /* overflow: hidden; */
+  }
+
+.TakeItSection {
+  position: relative;
+  /* background-color:orange; */
+  height: 160px;
+  padding-left: 30px;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.TakeItButt {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.Tags {
+  margin: 3px;
+}
+
+.Status {
+  margin-left: 20px;
+}
+
+/* Signup Page */
+.secondpass {
+    margin-top: 10px;
+  }
+  
+/* Individual Message Display */
+.IndCard {
+  margin: 40px;
+}
+
+#Click {
+  color: 	#707070;
+  hover: 	#707070;
+  
+}
