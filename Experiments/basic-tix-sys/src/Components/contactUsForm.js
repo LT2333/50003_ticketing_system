@@ -60,7 +60,7 @@ class ContactUs extends Component {
       email: "",
       contactnum: "",
       problem: "",
-      relatedtags: []
+      relatedtags: null
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -76,17 +76,20 @@ class ContactUs extends Component {
     this.setState({ [name]: value });
   }
 
-  handleChangeSelect(event) {
+  handleChangeSelect = event => {
     console.log(event);
+    // this.setState({
+    //   relatedtags: [
+    //     {
+    //       label: event.label,
+    //       value: event.value
+    //     }
+    //   ]
+    // });
     this.setState({
-      relatedtags: [
-        {
-          label: event.label,
-          value: event.value
-        }
-      ]
+      relatedtags: [event]
     });
-  }
+  };
 
   toggle() {
     this.setState({
@@ -120,8 +123,9 @@ class ContactUs extends Component {
       Username: this.state.name,
       Email: this.state.email,
       Contact_Number: this.state.contactnum,
-      Topic_Chosen: "the bored ninja",
-      Message: this.state.problem
+      Topic_Chosen: this.state.relatedtags,
+      Message: this.state.problem,
+      Date: new Date()
     });
 
     req.end(function(res) {
@@ -188,7 +192,7 @@ class ContactUs extends Component {
                     <Select
                       isMulti
                       options={topics}
-                      value={this.state.relatedtags}
+                      //value={this.state.relatedtags}
                       onChange={this.handleChangeSelect}
                     />
                   </FormGroup>
