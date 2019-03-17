@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 let UserManagementSchema = new Schema({
@@ -9,6 +10,13 @@ let UserManagementSchema = new Schema({
     authority:{type: String, default: 'user'} // user, admin or superAdmin
 
 });
+
+UserManagementSchema.methods.generateHash = function(password){
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+}
+UserManagementSchema.methods.validPassword = function(password){
+    return bcrypt.compareSync(password, this.password);
+};
 
 // Export the model
 module.exports = mongoose.model('USER_MANAGEMENT', UserManagementSchema);

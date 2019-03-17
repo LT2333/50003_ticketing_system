@@ -13,8 +13,9 @@ router.get('/test', USER_MANAGEMENT_controller.test);
 // user creation (Signup)
 router.post('/signup', USER_MANAGEMENT_controller.signup);
 // User login
-router.get('/login/:email/:password', USER_MANAGEMENT_controller.login);
-
+router.post('/login', USER_MANAGEMENT_controller.login);
+// User logout
+router.get('/logout', USER_MANAGEMENT_controller.logout);
 
 
 module.exports = router;
