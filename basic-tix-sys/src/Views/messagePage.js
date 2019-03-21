@@ -30,20 +30,23 @@ class MessagePage extends Component {
   constructor(props) {
     super(props);
 
-    var messageInfoArray = [{
-      id : 1,
-      userInfo: ["Alex","Bro I got questions to ask"],
-      statusInfo: ["Processing", "warning"],
-      takeWord: "Taken"
-    }];
+    var messageInfoArray = [    {
+      "username": "usertest",
+      "priority": -1,
+      "status": "unaddressed",
+      "who": "unaddressed",
+      "tags": [],
+      "category": "test",
+      "_id": "5c8e2874f75f992a30601303",
+      "imageURL": "",
+      "email": "glenn11@gmail.com",
+      "contact_num": 1234,
+      "message": "Help witsh thiss api",
+      "date": "2019-03-17T10:59:00.278Z",
+      "chat": [],
+      "__v": 0
+  }];
 
-    var messageInfoLocal = {
-      userInfo: ["Alex","Bro I got questions to ask"],
-      statusInfo: ["Processing", "warning"],
-      takeWord: "Taken"
-    };
-
-    this.messageInfoLocal = messageInfoLocal;
     this.messageInfoArray = messageInfoArray;
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
@@ -54,40 +57,27 @@ class MessagePage extends Component {
 
   viewMessages(event) {
     var unirest = require("unirest");
-    var req = unirest("GET", "http://localhost:3000/data/mark");
+
+    var req = unirest("GET", "https://courier50003.herokuapp.com/portal/viewdate");
+
+    req.query({
+      "token": "5c8e2818f75f992a30601300"
+    });
+
     req.headers({
       "cache-control": "no-cache"
     });
 
-    req.end(res => {
-      if (res.error) throw new Error(res.error);
-      // this.resource = res.body;
+
+    req.end(function (res) {
       console.log(res.body);
-
-      // this.setState({ 
-      //   messageInfo: {
-      //     userInfo: [res.body[0].Username,res.body[0].Message],
-      //     userInfo: ["User","Message"],
-      //     statusInfo: ["Processing", "warning"],
-      //     takeWord: "Taken"}
-      // });
-
+      if (res.error) throw new Error(res.error);
       this.setState({ 
-        messageInfoArray: [{
-          id : 1,
-          userInfo: ["Alex","Bro I got questions to ask"],
-          statusInfo: ["Processing", "warning"],
-          takeWord: "Taken"
-        },{
-          id : 2,
-          userInfo: ["Alex","Bro I got questions to ask"],
-          statusInfo: ["Processing", "warning"],
-          takeWord: "Taken"
-        }]
+        messageInfoArray: res.body
       });
+    });
       
       // this.setState({ Tag_1: res.body[0].Topic_Chosen });
-    });
   }
   render() {
     return (
@@ -101,7 +91,7 @@ class MessagePage extends Component {
             <Row>
               {/* <MessageBox messageInfo={this.state.messageInfo} /> */}
               {this.state.messageInfoArray.map((messageInfoArray)=>{
-                return <MessageBox messageInfo={messageInfoArray} key={messageInfoArray.id}/>
+                return <MessageBox messageInfo={messageInfoArray}/>
               })}
             </Row>
           </Container>

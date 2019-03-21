@@ -86,15 +86,12 @@ class SignupCreds extends Component {
       // username: esc
       // password: hard
       var unirest = require("unirest");
-      var req = unirest(
-        "POST",
-        "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
-      );
+
+      var req = unirest("POST", "https://courier50003.herokuapp.com/user/signup");
 
       req.headers({
         "cache-control": "no-cache",
-        "content-type": "application/json",
-        "server-token": ""
+        "content-type": "application/json"
       });
 
       req.type("json");
@@ -126,11 +123,14 @@ class SignupCreds extends Component {
         "\nre-entered password:" +
         this.state.fields.secondpass
     );
+    console.log(
+
+    );
   }
 
   render() {
     if (this.state.cansignup) {
-      return <Redirect push to="/login" />;
+      return <Redirect pusht to="/login" />;
     }
     return (
       <div class="w-50 mx-auto">

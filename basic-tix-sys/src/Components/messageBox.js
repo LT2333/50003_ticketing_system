@@ -40,14 +40,14 @@ class MessageBox extends Component {
         this.setState({ takeWords: " Taken " });
     }
     render() {
-        console.log(this.props.messageInfo.userInfo[0]);
+        console.log(this.props.messageInfo);
         return (
             <div>
                 <Card className="MessageCard">
                 <CardHeader>
-                    From Client {this.props.messageInfo.userInfo[0]}
-                    <Badge theme={this.props.messageInfo.statusInfo[0]} className="Status">
-                        {this.props.messageInfo.statusInfo[1]}
+                    From Client {this.props.messageInfo.username}
+                    <Badge theme={this.state.statusColor} className="Status">
+                        {this.props.messageInfo.status}
                     </Badge>
                 </CardHeader>
                 <CardBody>
@@ -56,14 +56,14 @@ class MessageBox extends Component {
                         <Col sm="12" md="12" lg="9">
                         <Row>
                             <a href="/individualmessage">
-                            <h5>{this.state.Tag_2}</h5>
+                            <h5>{this.state.Tag}</h5>
                             </a>
                             <hr />
                             <p>
                                 Date Submit: {date}/{month}/{year}
                             </p>
                             <a href="/individualmessage" id="Click">
-                            <p className="MessageText">{this.props.messageInfo.userInfo[1]}</p>
+                            <p className="MessageText">{this.props.messageInfo.message}</p>
                             </a>
                         </Row>
                         </Col>
