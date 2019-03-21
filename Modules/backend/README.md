@@ -276,3 +276,17 @@ https://stackoverflow.com/questions/13847766/how-to-sort-a-collection-by-date-in
 # 9. Debugging
 
 variables are only local to the find functions that they are in 
+
+https://github.com/expressjs/cors
+
+Add git ignore for node module
+
+Add node version in the package.json file in engine 
+
+bcrypt is a C package that does not work with heroku
+
+Use jeroku CLI to deplioy
+
+use bcryptjs instead 
+
+Enable CORS to let them see the response 

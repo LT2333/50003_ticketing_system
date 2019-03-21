@@ -1,6 +1,9 @@
 {
   "name": "template",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.15.1"
+  },
   "description": "user and database",
   "main": "app.js",
   "scripts": {
@@ -11,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/language": "^2.0.2",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^3.0.5",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "deepai": "^1.0.0",
     "express": "^4.16.4",
