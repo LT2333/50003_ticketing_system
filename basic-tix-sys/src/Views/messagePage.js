@@ -29,13 +29,17 @@ const min = new Date().getMinutes(); //Current Minutes
 class MessagePage extends Component {
   constructor(props) {
     super(props);
+
+    var messageInfoLocal = {
+      userInfo: ["Alex","Bro I got questions to ask"],
+      statusInfo: ["Processing", "warning"],
+      takeWord: "Taken"
+    };
+
+    this.messageInfoLocal = messageInfoLocal;
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
-      messageInfo : {
-        userInfo: ["Alex","Bro I got questions to ask"],
-        statudInfo: ["Processing", "warning"],
-        takeWord: "Taken"
-      }
+      messageInfo : this.messageInfoLocal
     }
   }
 
@@ -45,6 +49,7 @@ class MessagePage extends Component {
     req.headers({
       "cache-control": "no-cache"
     });
+
     req.end(res => {
       if (res.error) throw new Error(res.error);
       // this.resource = res.body;
@@ -52,8 +57,9 @@ class MessagePage extends Component {
 
       this.setState({ 
         messageInfo: {
-          userInfo: [res.body[0].Username,res.body[0].Message],
-          statudInfo: ["Processing", "warning"],
+          // userInfo: [res.body[0].Username,res.body[0].Message],
+          userInfo: ["User","Message"],
+          statusInfo: ["Processing", "warning"],
           takeWord: "Taken"}
       });
       
@@ -69,7 +75,10 @@ class MessagePage extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={messageInfo} />
+              <MessageBox messageInfo={this.state.messageInfo} />
+            </Row>
+            <Row>
+              <MessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>

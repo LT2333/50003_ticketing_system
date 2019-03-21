@@ -29,13 +29,16 @@ const min = new Date().getMinutes(); //Current Minutes
 class Ahistory extends Component {
   constructor(props) {
     super(props);
-    this.viewMessages = this.viewMessages.bind(this);
-    this.state = {
-      messageInfo : {
+
+    var messageInfoLocal = {
         userInfo: ["Alex","Bro I got questions to ask"],
         statudInfo: ["Processing", "warning"],
         takeWord: "Taken"
-      }
+      };
+
+    this.viewMessages = this.viewMessages.bind(this);
+    this.state = {
+      messageInfo : messageInfoLocal
     }
   }
 
@@ -69,7 +72,7 @@ class Ahistory extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={messageInfo} />
+              <MessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>

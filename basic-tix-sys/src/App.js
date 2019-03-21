@@ -5,12 +5,12 @@ import LoginCreds from "./Views/loginPage";
 import Homepage from "./Views/homePage";
 import ContactUs from "./Components/contactUsForm";
 import HeaderBar from "./Components/headerBar";
-import MessageBox from "./Views/messagePage";
+import MessagePage from "./Views/messagePage";
 import IndMes from "./Views/individualMessage";
 import MyJobs from "./Views/myJobs"
 import MyReqs from "./Views/myReqs"
 import Ahistory from "./Views/historyAdmin"
-import ProfileDisp from "./Views/prifileDisplaying"
+import ProfileDisp from "./Views/profileDisplaying"
 import ProfileEdit from "./Views/profileEditing"
 import "bootstrap/dist/css/bootstrap.css";
 import "shards-ui/dist/css/shards.min.css";
@@ -38,13 +38,13 @@ class App extends Component {
             <Route path="/signup" component={SignupCreds} />
             <Route path="/messagepage" component={MessagePage} />
             <Route path="/individualmessage" component={IndMes} />
-            <Route path="/ahistory" component={Ahistory} />
+            {/* <Route path="/ahistory" component={Ahistory} /> */}
             <Route path="/main" component={MessagePage} />
-            <Route path="chats/" component={Chats} />
+            {/* <Route path="chats/" component={Chats} />
             <Route path="/myjobs" component={MyJobs} />
             <Route path="/myreqs" component={MyReqs} />
-            <Route path="/profiledit" component={ProfileEdit} />
-            <Route path="/profiledisp" component={ProfileDisp} />
+            <Route path="/profileedit" component={ProfileEdit} />
+            <Route path="/profiledisp" component={ProfileDisp} /> */}
           </Switch>
         </div>
       </Router>

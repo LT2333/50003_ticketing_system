@@ -15,8 +15,8 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
-import "./widgets.css";
-import IndMes from "./individualMessage";
+import "../Views/widgets.css";
+import IndMes from "../Views/individualMessage";
 // library.add(faIgloo);
 
 const date = new Date().getDate(); //Current Date
@@ -28,21 +28,26 @@ const min = new Date().getMinutes(); //Current Minutes
 class MessageBox extends Component {
     constructor(props) {
         super(props)
-        this.state = {};
+        this.state = {
+            statusColor: "danger",
+            statusWords: "Unsolved",
+            takeWords: "Take it!",
+        };
     }
     changeStatus(event) {
-        this.setState({ statusWords_1: "Processing" });
-        this.setState({ statusColor_1: "warning" });
-        this.setState({ takeWords_1: " Taken " });
+        this.setState({ statusWords: "Processing" });
+        this.setState({ statusColor: "warning" });
+        this.setState({ takeWords: " Taken " });
     }
     render() {
+        console.log(this.props.messageInfo.userInfo[0]);
         return (
             <div>
                 <Card className="MessageCard">
                 <CardHeader>
                     From Client {this.props.messageInfo.userInfo[0]}
-                    <Badge theme={this.probs.messageInfo.statusInfo[0]} className="Status">
-                        {this.probs.messageInfo.statusInfo[1]}
+                    <Badge theme={this.props.messageInfo.statusInfo[0]} className="Status">
+                        {this.props.messageInfo.statusInfo[1]}
                     </Badge>
                 </CardHeader>
                 <CardBody>
@@ -58,7 +63,7 @@ class MessageBox extends Component {
                                 Date Submit: {date}/{month}/{year}
                             </p>
                             <a href="/individualmessage" id="Click">
-                            <p className="MessageText">{this.probs.messageInfo.userInfo[1]}</p>
+                            <p className="MessageText">{this.props.messageInfo.userInfo[1]}</p>
                             </a>
                         </Row>
                         </Col>
@@ -69,7 +74,7 @@ class MessageBox extends Component {
                             className="TakeItButt"
                             onClick={this.changeStatus}
                         >
-                            {this.probs.takeWords}
+                            {this.state.takeWords}
                         </Button>
                         </Col>
                     </Row>

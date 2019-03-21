@@ -29,6 +29,13 @@ const min = new Date().getMinutes(); //Current Minutes
 class MyReqs extends Component {
   constructor(props) {
     super(props);
+
+    var messageInfoLocal = {
+      userInfo: ["Alex","Bro I got questions to ask"],
+      statudInfo: ["Processing", "warning"],
+      takeWord: "Taken"
+    };
+
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
       messageInfo : {
@@ -69,7 +76,7 @@ class MyReqs extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={messageInfo} />
+              <MessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>
