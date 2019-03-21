@@ -33,6 +33,21 @@ class SignupCreds extends Component {
     let errors = {};
     let formIsValid = true;
 
+    // if (typeof fields["username"] == "undefined") {
+    //   formIsValid = false;
+    // }
+
+    // if (typeof fields["password"] == "undefined") {
+    //   formIsValid = false;
+    // }
+
+    // if (typeof fields["secondpass"] == "undefined") {
+    //   formIsValid = false;
+    // }
+    // if (typeof fields["email"] == "undefined") {
+    //   formIsValid = false;
+    // }
+
     if (typeof fields["password"] !== "undefined") {
       if (
         !fields["password"].match(
@@ -82,69 +97,43 @@ class SignupCreds extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    console.log("is this even clicked");
+
     if (this.validateForm()) {
-      // username: esc
-      // password: hard
+      console.log("at least this is executed");
       var unirest = require("unirest");
+
       var req = unirest(
         "POST",
-        "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
+        "https://courier50003.herokuapp.com/user/signup"
       );
 
       req.headers({
         "cache-control": "no-cache",
-        "content-type": "application/json",
-        "server-token": ""
+        "content-type": "application/json"
       });
 
       req.type("json");
       req.send({
         username: this.state.fields.username,
         password: this.state.fields.password,
-        email: this.state.fields.email
+        email: this.state.fields.email,
+        contact_num: 1234
       });
 
       req.end(res => {
         console.log(res);
         console.log(res.body);
-        //if no errors detected from api
-        if (res.error == false) {
+
+        if (res.body.error == false) {
           this.setState({ cansignup: true });
         } else {
           this.setState({ errormsg: res.body.error });
         }
       });
-
-      //   var unirest = require("unirest");
-
-      //   var req = unirest(
-      //     "POST",
-      //     "https://courier50003.herokuapp.com/user/signup"
-      //   );
-
-      //   req.headers({
-      //     "cache-control": "no-cache",
-      //     "content-type": "application/json"
-      //   });
-
-      //   req.type("json");
-      //   req.send({
-      //     username: this.state.fields.username,
-      //     password: this.state.fields.password,
-      //     email: this.state.fields.email,
-      //     contact_num: 1234
-      //   });
-
-      //   req.end(res => {
-      //     console.log(res);
-      //     console.log(res.body);
-      //     //if no errors detected from api
-      //     if (res.error == false) {
-      //       this.setState({ cansignup: true });
-      //     } else {
-      //       this.setState({ errormsg: res.body.error });
-      //     }
-      //   });
+    } else {
+      this.setState({ errormsg: "please fill in all blanks!" });
+      this.validateForm();
     }
 
     console.log(
