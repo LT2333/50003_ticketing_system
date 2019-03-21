@@ -14,16 +14,18 @@ let RequestsSchema = new Schema({
     contact_num: {type: Number}, //require: true},
     date: {type: Date, default:Date.now}, // auto-generated
     message:{type: String}, // user-typed
-    imageURL: {type: String, default: ''}, // retrieved from Amazon
+    //imageURL: {type: String, default: ''}, // retrieved from Amazon
+    img : { data: Buffer, contentType: String },  // use fs for testing
     priority:{type: Number, default:-1}, // Calculated between 0-1, accepts floats
-    status:{type: String, default:'unaddressed'}, // Unattended, addressing
+    status:{type: String, default:'unaddressed'}, // Unattended, addressing, finished
     who:{type: String, default:'unaddressed'}, // Admin Username. Find a way to link
     tags:{type: [String]}, // Array of tags of String data type
     category:{type: String, default:''}, // selected from a drop-down
     chat:{type: [
       {
         name:{type:String},
-        message: {type:String}
+        message: {type:String},
+        date:{type: Date, default:Date.now}
       }
     ]} // An array of hashMaps
 });

@@ -1,0 +1,9 @@
+1) Render specific request
+2) API for sentiment analysis
+3) Sort by date
+4) API for tagging 
+5) Change status to finished 
+6) email api to send email upon signup
+
+Extra:
+1) Edit request

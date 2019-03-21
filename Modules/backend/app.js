@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const USER_MAN = require('./routes/USER_MANAGEMENT.route'); // Imports routes for the USER_MANAGEMENT
 const REQUESTS = require('./routes/REQUESTS.route'); // Imports routes for the REQUESTS
+var fs = require('fs'); // for image
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use('/user', USER_MAN);
 // For requests
 // To test just use localhost:1234/portal/test
 app.use('/portal', REQUESTS)
+
+
 
 let port = 1234;
 app.listen(port, () => {
