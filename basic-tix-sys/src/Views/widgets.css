@@ -1,39 +1,39 @@
 .buttons {
-    margin: 5px;
+  margin: 5px;
 }
 
 .titles {
-    margin-top: 50px;
-    margin-bottom: 30px; 
+  margin-top: 50px;
+  margin-bottom: 30px;
 }
 
 /* Contact Us */
 .ContactUsCard {
-    position: relative;
-    margin-top: 50px;
-    margin-left: 250px;
-    margin-right: 250px;
-    padding-top: 20px;
-  }
-  
+  position: relative;
+  margin-top: 50px;
+  margin-left: 250px;
+  margin-right: 250px;
+  padding-top: 20px;
+}
+
 #feInputAddress {
   height: 100px;
 }
 
 /* Message Page */
 .MessageCard {
-    position: relative;
-    text-align: left;
-    margin-top: 50px;
-    margin-left: 100px;
-    margin-right: 50px;
-    height: 350px;
-    /* overflow: hidden; */
-  }
+  position: relative;
+  text-align: left;
+  margin-top: 50px;
+  margin-left: 100px;
+  margin-right: 50px;
+  height: 350px;
+  /* overflow: hidden; */
+}
 
 .MessageText {
-    height: 80px;
-    overflow: hidden;
+  height: 80px;
+  overflow: hidden;
 }
 
 .TakeItSection {
@@ -61,9 +61,9 @@
 
 /* Signup Page */
 .secondpass {
-    margin-top: 10px;
-  }
-  
+  margin-top: 10px;
+}
+
 /* Individual Message Display */
 .IndCard {
   margin-top: 40px;
@@ -73,7 +73,6 @@
 }
 
 #Click {
-  color: 	#707070;
-  hover: 	#707070;
-  
+  color: #707070;
+  hover: #707070;
 }

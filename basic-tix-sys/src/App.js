@@ -3,15 +3,21 @@ import "./App.css";
 import SignupCreds from "./Views/signupPage";
 import LoginCreds from "./Views/loginPage";
 import Homepage from "./Views/homePage";
-import MessageBox from "./Views/messagePage";
-import IndMes from "./Views/individualMessage";
 import ContactUs from "./Components/contactUsForm";
 import HeaderBar from "./Components/headerBar";
+import MessageBox from "./Views/messagePage";
+import IndMes from "./Views/individualMessage";
+import MyJobs from "./Views/myJobs"
+import MyReqs from "./Views/myReqs"
+import Ahistory from "./Views/historyAdmin"
+import ProfileDisp from "./Views/prifileDisplaying"
+import ProfileEdit from "./Views/profileEditing"
 import "bootstrap/dist/css/bootstrap.css";
 import "shards-ui/dist/css/shards.min.css";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import SideBar from "./Components/sideBar";
 import { Container } from "shards-react";
+import adminHeaderBar from "./Components/adminHeaderBar";
 
 class App extends Component {
   render() {
@@ -20,15 +26,25 @@ class App extends Component {
         <div className="App">
           <Container>
             <HeaderBar />
-            <SideBar />
           </Container>
+
+          <Switch>
+            <Route path="/adminheader" component={adminHeaderBar} />
+          </Switch>
 
           <Switch>
             <Route path="/login" component={LoginCreds} />
             <Route path="/contactus" component={ContactUs} />
             <Route path="/signup" component={SignupCreds} />
-            <Route path="/messagepage" component={MessageBox} />
+            <Route path="/messagepage" component={MessagePage} />
             <Route path="/individualmessage" component={IndMes} />
+            <Route path="/ahistory" component={Ahistory} />
+            <Route path="/main" component={MessagePage} />
+            <Route path="chats/" component={Chats} />
+            <Route path="/myjobs" component={MyJobs} />
+            <Route path="/myreqs" component={MyReqs} />
+            <Route path="/profiledit" component={ProfileEdit} />
+            <Route path="/profiledisp" component={ProfileDisp} />
           </Switch>
         </div>
       </Router>
