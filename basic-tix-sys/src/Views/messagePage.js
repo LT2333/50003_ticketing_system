@@ -30,6 +30,13 @@ class MessagePage extends Component {
   constructor(props) {
     super(props);
 
+    var messageInfoArray = [{
+      id : 1,
+      userInfo: ["Alex","Bro I got questions to ask"],
+      statusInfo: ["Processing", "warning"],
+      takeWord: "Taken"
+    }];
+
     var messageInfoLocal = {
       userInfo: ["Alex","Bro I got questions to ask"],
       statusInfo: ["Processing", "warning"],
@@ -37,9 +44,11 @@ class MessagePage extends Component {
     };
 
     this.messageInfoLocal = messageInfoLocal;
+    this.messageInfoArray = messageInfoArray;
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
-      messageInfo : this.messageInfoLocal
+      messageInfo : this.messageInfoLocal,
+      messageInfoArray : this.messageInfoArray
     }
   }
 
@@ -55,12 +64,26 @@ class MessagePage extends Component {
       // this.resource = res.body;
       console.log(res.body);
 
+      // this.setState({ 
+      //   messageInfo: {
+      //     userInfo: [res.body[0].Username,res.body[0].Message],
+      //     userInfo: ["User","Message"],
+      //     statusInfo: ["Processing", "warning"],
+      //     takeWord: "Taken"}
+      // });
+
       this.setState({ 
-        messageInfo: {
-          // userInfo: [res.body[0].Username,res.body[0].Message],
-          userInfo: ["User","Message"],
+        messageInfoArray: [{
+          id : 1,
+          userInfo: ["Alex","Bro I got questions to ask"],
           statusInfo: ["Processing", "warning"],
-          takeWord: "Taken"}
+          takeWord: "Taken"
+        },{
+          id : 2,
+          userInfo: ["Alex","Bro I got questions to ask"],
+          statusInfo: ["Processing", "warning"],
+          takeWord: "Taken"
+        }]
       });
       
       // this.setState({ Tag_1: res.body[0].Topic_Chosen });
@@ -73,12 +96,13 @@ class MessagePage extends Component {
             <Row>
               <Button className="buttons" onClick={this.viewMessages}>
                 View Messages
-              </Button></Row>
-            <Row>
-              <MessageBox messageInfo={this.state.messageInfo} />
+              </Button>
             </Row>
             <Row>
-              <MessageBox messageInfo={this.state.messageInfo} />
+              {/* <MessageBox messageInfo={this.state.messageInfo} /> */}
+              {this.state.messageInfoArray.map((messageInfoArray)=>{
+                return <MessageBox messageInfo={messageInfoArray} key={messageInfoArray.id}/>
+              })}
             </Row>
           </Container>
       </div>
