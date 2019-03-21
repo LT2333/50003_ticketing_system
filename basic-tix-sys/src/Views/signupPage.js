@@ -85,54 +85,23 @@ class SignupCreds extends Component {
     if (this.validateForm()) {
       // username: esc
       // password: hard
-      // var unirest = require("unirest");
-      // var req = unirest(
-      //   "POST",
-      //   "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
-      // );
-
-      // req.headers({
-      //   "cache-control": "no-cache",
-      //   "content-type": "application/json",
-      //   "server-token": ""
-      // });
-
-      // req.type("json");
-      // req.send({
-      //   username: this.state.fields.username,
-      //   password: this.state.fields.password,
-      //   email: this.state.fields.email
-      // });
-
-      // req.end(res => {
-      //   console.log(res);
-      //   console.log(res.body);
-      //   //if no errors detected from api
-      //   if (res.error == false) {
-      //     this.setState({ cansignup: true });
-      //   } else {
-      //     this.setState({ errormsg: res.body.error });
-      //   }
-      // });
-
       var unirest = require("unirest");
-
       var req = unirest(
         "POST",
-        "https://courier50003.herokuapp.com/user/signup"
+        "https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users"
       );
 
       req.headers({
         "cache-control": "no-cache",
-        "content-type": "application/json"
+        "content-type": "application/json",
+        "server-token": ""
       });
 
       req.type("json");
       req.send({
         username: this.state.fields.username,
         password: this.state.fields.password,
-        email: this.state.fields.email,
-        contact_num: 1234
+        email: this.state.fields.email
       });
 
       req.end(res => {
@@ -145,6 +114,37 @@ class SignupCreds extends Component {
           this.setState({ errormsg: res.body.error });
         }
       });
+
+      //   var unirest = require("unirest");
+
+      //   var req = unirest(
+      //     "POST",
+      //     "https://courier50003.herokuapp.com/user/signup"
+      //   );
+
+      //   req.headers({
+      //     "cache-control": "no-cache",
+      //     "content-type": "application/json"
+      //   });
+
+      //   req.type("json");
+      //   req.send({
+      //     username: this.state.fields.username,
+      //     password: this.state.fields.password,
+      //     email: this.state.fields.email,
+      //     contact_num: 1234
+      //   });
+
+      //   req.end(res => {
+      //     console.log(res);
+      //     console.log(res.body);
+      //     //if no errors detected from api
+      //     if (res.error == false) {
+      //       this.setState({ cansignup: true });
+      //     } else {
+      //       this.setState({ errormsg: res.body.error });
+      //     }
+      //   });
     }
 
     console.log(
