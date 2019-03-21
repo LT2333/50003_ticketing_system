@@ -30,7 +30,7 @@ class MessagePage extends Component {
   constructor(props) {
     super(props);
 
-    var messageInfoArray = [    {
+    var messageInfoArray = [{
       "username": "usertest",
       "priority": -1,
       "status": "unaddressed",
@@ -50,7 +50,6 @@ class MessagePage extends Component {
     this.messageInfoArray = messageInfoArray;
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
-      messageInfo : this.messageInfoLocal,
       messageInfoArray : this.messageInfoArray
     }
   }
@@ -69,7 +68,7 @@ class MessagePage extends Component {
     });
 
 
-    req.end(function (res) {
+    req.end(res => {
       console.log(res.body);
       if (res.error) throw new Error(res.error);
       this.setState({ 
