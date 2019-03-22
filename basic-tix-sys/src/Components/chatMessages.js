@@ -1,42 +1,10 @@
 import React, { Component } from "react";
 import ChatMessage from "./chatMessage";
-import { Button } from "shards-react";
+import { Button, Row } from "shards-react";
 
 class ChatMessages extends Component {
   constructor(props) {
     super(props);
-
-    // const dict = [
-    //   {
-    //     username: "Mark Tan",
-    //     priority: -4,
-    //     status: "unaddressed",
-    //     who: "unaddressed",
-    //     tags: ["problem", "API", "service", "request", "answer"],
-    //     category: "test",
-    //     _id: "5c945241f67fe258683e982f",
-    //     email: "mark@gmail.com",
-    //     contact_num: 1234,
-    //     message:
-    //       "I have a problem with my API service request that I could not solve. When can you get back to me with an answer. This is not so urgent",
-    //     date: "2019-03-22T03:10:57.274Z",
-    //     chat: [
-    //       {
-    //         date: "2019-03-22T03:14:16.105Z",
-    //         _id: "5c9453084f3c6f0004860156",
-    //         name: "admin1",
-    //         message: "Hello world i am testing again"
-    //       },
-    //       {
-    //         date: "2019-03-22T03:14:23.737Z",
-    //         _id: "5c94530f4f3c6f0004860157",
-    //         name: "admin1",
-    //         message: "Hello world i am testing again and again"
-    //       }
-    //     ],
-    //     __v: 0
-    //   }
-    // ];
 
     this.state = {
       messageInfoArray: []
@@ -75,14 +43,17 @@ class ChatMessages extends Component {
       });
 
       console.log(res.body);
+
       console.log(this.state.messageInfoArray);
+      //console.log(this.state.messageInfoArray[0].chat[1]);
     });
   }
 
   render() {
     var messageInfoArray = this.state.messageInfoArray;
-    var msg0 = messageInfoArray[0];
-    console.log(msg0);
+    console.log(messageInfoArray);
+    // var msg0 = messageInfoArray[0];
+    // console.log(messageInfoArray.chat);
 
     // var msgList = [];
     // for (var i = 0; i < 11; i++) {
@@ -92,21 +63,22 @@ class ChatMessages extends Component {
     // console.log(msgList);
 
     // // Loop through all the messages in the state and create a Message component
-    // const messages = messageInfoArray.map(messageInfoArray => {
-    //   return (
-    //     <ChatMessage
-    //       key={index}
-    //       username={messageInfoArray[0].chat.name}
-    //       message={messageInfoArray[0].chat.message}
-    //       // fromMe={messageInfoArray.fromMe}
-    //     />
-    //   );
-    // });
+    const messages = messageInfoArray.map(messageInfoArray => {
+      return (
+        <Row>username={messageInfoArray[0].name}</Row>
+        // <ChatMessage
+        //   key={mIA[0].chat}
+        //   username={mIA[0].chat.name}
+        //   message-body={mIA[0].chat.message}
+        //   // fromMe={messageInfoArray.fromMe}
+        // />
+      );
+    });
 
     return (
       <div className="messages" id="messageList">
         <Button onClick={this.handleRefresh}>Refresh</Button>
-        {/* {messages} */}
+        {messages}
       </div>
     );
   }
