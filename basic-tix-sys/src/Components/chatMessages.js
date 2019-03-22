@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ChatMessage from "./chatMessage";
 import { Button, Row, Container } from "shards-react";
+import "./chatMessages.css";
 
 class ChatMessages extends Component {
   constructor(props) {
@@ -11,12 +12,6 @@ class ChatMessages extends Component {
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
-  }
-
-  componentDidUpdate() {
-    // There is a new message in the state, scroll to bottom of list
-    const objDiv = document.getElementById("messageList");
-    objDiv.scrollTop = objDiv.scrollHeight;
   }
 
   // componentDidUpdate() {
@@ -74,8 +69,8 @@ class ChatMessages extends Component {
       return (
         <div>
           <Container>
-            <Row>username={m.name}</Row>
-            <Row>message={m.message}</Row>
+            <Row className="chatuser">{m.name}</Row>
+            <Row className="msgbody">{m.message}</Row>
 
             {/* <ChatMessage
             key={m.chat}
