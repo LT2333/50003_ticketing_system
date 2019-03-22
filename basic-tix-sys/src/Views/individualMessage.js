@@ -24,7 +24,7 @@ class IndMes extends Component {
     super(props);
 
     this.state = {
-      messageInfo : props.location.messageInfo
+      messageInfo: props.location.messageInfo
     };
   }
   render() {
@@ -38,13 +38,15 @@ class IndMes extends Component {
             Date Submit: {this.state.messageInfo.date}
           </p>
           <hr />
-          <p>
-            {this.state.messageInfo.message}
-          </p>
+          <p>{this.state.messageInfo.message}</p>
         </CardBody>
         <CardFooter>
-          {this.props.messageInfo.tags.map((tags)=>{
-              return <Badge theme="light" className="Tags">{tags}</Badge>
+          {this.state.messageInfo.tags.map(tags => {
+            return (
+              <Badge theme="light" className="Tags">
+                {tags}
+              </Badge>
+            );
           })}
           <hr />
           <Button href="/messagepage" theme="dark">
