@@ -40,6 +40,9 @@ class HeaderBar extends Component {
           <NavItem>
             <NavLink href="/messagepage">Message Page</NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink href="/chats">Chats</NavLink>
+          </NavItem>
         </Nav>
 
         <Nav navbar className="ml-auto">
