@@ -35,7 +35,7 @@ class MessagePage extends Component {
       "priority": -1,
       "status": "unaddressed",
       "who": "unaddressed",
-      "tags": [],
+      "tags": ["TAG1","TAG2","TAG3"],
       "category": "test",
       "_id": "5c8e2874f75f992a30601303",
       "imageURL": "",
@@ -72,7 +72,38 @@ class MessagePage extends Component {
       console.log(res.body);
       if (res.error) throw new Error(res.error);
       this.setState({ 
-        messageInfoArray: res.body
+        // messageInfoArray: res.body
+        messageInfoArray: [{
+          "username": "usertest",
+          "priority": -1,
+          "status": "unaddressed",
+          "who": "unaddressed",
+          "tags": ["TAG1","TAG2","TAG3"],
+          "category": "test",
+          "_id": "5c8e2874f75f992a30601303",
+          "imageURL": "",
+          "email": "glenn11@gmail.com",
+          "contact_num": 1234,
+          "message": "Help witsh thiss api",
+          "date": "2019-03-17T10:59:00.278Z",
+          "chat": [],
+          "__v": 0
+      },{
+        "username": "usertest",
+        "priority": -1,
+        "status": "unaddressed",
+        "who": "unaddressed",
+        "tags": [],
+        "category": "test",
+        "_id": "5c8e2874f75f992a30601303",
+        "imageURL": "",
+        "email": "glenn11@gmail.com",
+        "contact_num": 1234,
+        "message": "Help witsh thiss api",
+        "date": "2019-03-17T10:59:00.278Z",
+        "chat": [],
+        "__v": 0
+    }]
       });
     });
       

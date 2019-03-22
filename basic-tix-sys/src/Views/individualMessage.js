@@ -24,8 +24,7 @@ class IndMes extends Component {
     super(props);
 
     this.state = {
-      Name: "",
-      Mes: ""
+      messageInfo : props.location.messageInfo
     };
   }
   render() {
@@ -33,55 +32,20 @@ class IndMes extends Component {
       <Card className="IndCard">
         <CardHeader>Title</CardHeader>
         <CardBody>
-          <h6>from Alex</h6>
+          <h6>from {this.state.messageInfo.username}</h6>
           <p>
-            Date Submit: {date}/{month}/{year}
+            {/* Date Submit: {date}/{month}/{year} */}
+            Date Submit: {this.state.messageInfo.date}
           </p>
           <hr />
           <p>
-            Bro I got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask. Bro I got
-            questions to ask. Bro I got questions to ask. Bro I got questions to
-            ask. Bro I got questions to ask. Bro I got questions to ask. Bro I
-            got questions to ask. Bro I got questions to ask.{" "}
+            {this.state.messageInfo.message}
           </p>
         </CardBody>
         <CardFooter>
-          <Badge theme="light" className="Tags">
-            TAG1
-          </Badge>
-          <Badge theme="light" className="Tags">
-            TAG2
-          </Badge>
-          <Badge theme="light" className="Tags">
-            TAG3
-          </Badge>
-          <Badge theme="light" className="Tags">
-            TAG4
-          </Badge>
-          <Badge theme="light" className="Tags">
-            TAG5
-          </Badge>
+          {this.props.messageInfo.tags.map((tags)=>{
+              return <Badge theme="light" className="Tags">{tags}</Badge>
+          })}
           <hr />
           <Button href="/messagepage" theme="dark">
             Go Back
