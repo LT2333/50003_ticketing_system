@@ -43,7 +43,7 @@ class IndMes extends Component {
           </p>
         </CardBody>
         <CardFooter>
-          {this.props.messageInfo.tags.map((tags)=>{
+          {this.state.messageInfo.tags.map((tags)=>{
               return <Badge theme="light" className="Tags">{tags}</Badge>
           })}
           <hr />
