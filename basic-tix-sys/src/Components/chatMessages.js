@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ChatMessage from "./chatMessage";
-import { Button, Row } from "shards-react";
+import { Button, Row, Container } from "shards-react";
 
 class ChatMessages extends Component {
   constructor(props) {
@@ -11,6 +11,12 @@ class ChatMessages extends Component {
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
+  }
+
+  componentDidUpdate() {
+    // There is a new message in the state, scroll to bottom of list
+    const objDiv = document.getElementById("messageList");
+    objDiv.scrollTop = objDiv.scrollHeight;
   }
 
   // componentDidUpdate() {
@@ -29,6 +35,7 @@ class ChatMessages extends Component {
 
     req.query({
       token: "5c9464d4471b590004e5fd05"
+      //token: "5c94643a471b590004e5fd00"
     });
 
     req.headers({
@@ -44,7 +51,7 @@ class ChatMessages extends Component {
 
       console.log(res.body);
 
-      console.log(this.state.messageInfoArray);
+      //console.log(this.state.messageInfoArray);
       //console.log(this.state.messageInfoArray[0].chat[1]);
     });
   }
@@ -63,15 +70,21 @@ class ChatMessages extends Component {
     // console.log(msgList);
 
     // // Loop through all the messages in the state and create a Message component
-    const messages = messageInfoArray.map(messageInfoArray => {
+    const messages = messageInfoArray.map(m => {
       return (
-        <Row>username={messageInfoArray[0].name}</Row>
-        // <ChatMessage
-        //   key={mIA[0].chat}
-        //   username={mIA[0].chat.name}
-        //   message-body={mIA[0].chat.message}
-        //   // fromMe={messageInfoArray.fromMe}
-        // />
+        <div>
+          <Container>
+            <Row>username={m.name}</Row>
+            <Row>message={m.message}</Row>
+
+            {/* <ChatMessage
+            key={m.chat}
+            username={m.chat.name}
+            message-body={m.chat.message}
+            //fromMe={messageInfoArray.fromMe}
+          /> */}
+          </Container>
+        </div>
       );
     });
 

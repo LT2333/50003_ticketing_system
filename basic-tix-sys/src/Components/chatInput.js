@@ -48,7 +48,7 @@ class ChatInput extends Component {
     req.send({
       admin_id: "5c94643a471b590004e5fd00",
       request_id: "5c9464d4471b590004e5fd05",
-      conversastion: "Hello world i am testing again"
+      conversastion: this.state.chatInput
     });
 
     req.end(function(res) {
