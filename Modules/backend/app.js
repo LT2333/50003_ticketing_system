@@ -21,6 +21,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+
+app.get('/', function(req, res) {
+    return res.status(404).end();
+});
 // For user management
 // To test just use localhost:1234/user/test
 app.use('/user', USER_MAN);
@@ -34,18 +38,9 @@ app.use('/portal', REQUESTS)
 // const port = 1234;
 
 // For heroku
-// const host = '0.0.0.0';
-// const port = process.env.PORT || 1234;
-//
-// app.listen(port, host, function() {
-//   console.log("Server startedon port" +port);
-// });
+const host = '0.0.0.0';
+const port = process.env.PORT || 1234;
 
-// module.exports = app; // for testing
-
-let port = 1234;
-app.listen(port, () => {
-    console.log('Server is up and running on port numner ' + port);
+app.listen(port, host, function() {
+  console.log("Server started on port" +port);
 });
-
-module.exports = app; // for testing

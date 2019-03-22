@@ -568,6 +568,28 @@ exports.viewpriority = function(req,res){
 
 }
 
+// View a specific requests
+// Pre-condition: request_id
+// post-condition: see the full details of a request
+exports.viewreq = function(req,res){
+  const { query } = req;
+  const { token } = query;
+  console.log(token);
+  REQUESTS.find({
+    _id:token
+  }, function(err, requests) {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error'
+        });
+      }
+      var oneReq = requests[0];
+      var chatsOnly = oneReq.chat;
+      return res.send(chatsOnly);
+    });
+}
+
 //===============//
 // ADMIN APIs
 //===============//

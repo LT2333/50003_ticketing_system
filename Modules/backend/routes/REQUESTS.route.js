@@ -43,6 +43,8 @@ router.get('/viewwho', REQUESTS_controller.viewwho);
 router.get('/viewcategory', REQUESTS_controller.viewcategory);
 // Sort by sentiment
 router.get('/viewpriority', REQUESTS_controller.viewpriority);
+// View specific RequestsSchema
+router.get('/viewreq', REQUESTS_controller.viewreq);
 module.exports = router;
 
 

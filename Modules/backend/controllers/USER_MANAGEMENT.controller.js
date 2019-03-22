@@ -179,7 +179,7 @@ exports.login = function (req,res){
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: Invalid too many users or no user'
       });
     }
     console.log(users);
@@ -188,7 +188,7 @@ exports.login = function (req,res){
     if(!user.validPassword(password)){
       return res.send({
         success: false,
-        message: 'error:invalid'
+        message: 'error:invalid password'
       });
     }
     //const userSession = new USERSESSION();

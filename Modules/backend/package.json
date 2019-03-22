@@ -7,7 +7,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha || true",
+    "test": "mocha --timeout 5000 test/testing.js",
     "start": "node app.js"
   },
   "author": "Glenn",
@@ -21,11 +21,13 @@
     "express": "^4.16.4",
     "isemail": "^3.2.0",
     "mocha": "^6.0.2",
+    "mocha-test-url": "^0.1.17",
     "mongoose": "^5.4.19",
     "nodemailer": "^5.1.1",
     "retext": "^6.0.1",
     "retext-keywords": "^4.0.2",
     "sentiment": "^5.0.1",
+    "should": "^13.2.3",
     "supertest": "^4.0.2"
   }
 }
