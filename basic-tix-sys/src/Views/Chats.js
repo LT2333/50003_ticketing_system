@@ -20,25 +20,26 @@ class Chats extends Component {
     this.state = {
       messages: []
     };
-    this.sendHandler = this.sendHandler.bind(this);
+    // this.sendHandler = this.sendHandler.bind(this);
   }
 
-  sendHandler(message) {
-    const messageObject = {
-      username: this.props.username,
-      message
-    };
-  }
+  // sendHandler(message) {
+  //   const messageObject = {
+  //     username: this.props.username,
+  //     message
+  //   };
+  // }
 
-  addMessage(message) {
-    // Append the message to the component state
-    const messages = this.state.messages;
-    messages.push(message);
-    this.setState({ messages });
-  }
+  // addMessage(message) {
+  //   // Append the message to the component state
+  //   const messages = this.state.messages;
+  //   messages.push(message);
+  //   this.setState({ messages });
+  // }
 
   render() {
     console.log("test");
+    console.log(this.state.messages);
     return (
       <div>
         <h1 className="title">Chat</h1>

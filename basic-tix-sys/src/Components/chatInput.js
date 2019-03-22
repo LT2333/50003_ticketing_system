@@ -19,37 +19,60 @@ class ChatInput extends Component {
     this.state = {
       chatInput: ""
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({ [name]: value });
+    this.setState({ chatInput: event.target.value });
   }
 
   handleSubmit(event) {
     // Stop the form from refreshing the page on submit
     event.preventDefault();
+
+    var unirest = require("unirest");
+
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/chats"
+    );
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      admin_id: "5c94643a471b590004e5fd00",
+      request_id: "5c9464d4471b590004e5fd05",
+      conversastion: "Hello world i am testing again"
+    });
+
+    req.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+
     // Call the onSend callback with the chatInput message
-    this.props.onSend(this.state.chatInput);
+    // this.props.onSend(this.state.chatInput);
+
     // Clear the input box
     this.setState({ chatInput: "" });
+    console.log("not here");
+    console.log(this.state.chatInput);
   }
 
   render() {
     console.log("test");
     return (
       <div>
-        <h1 className="title">Chat</h1>
-        <chatMessages messages={this.state.messages} />
-        <ChatInput onSend={this.sendHandler} />
         <InputGroup>
           <FormInput
-            placeholder="Type here"
+            placeholder={this.state.chatInput}
             name="chatInput"
             onChange={this.handleChange}
           />
