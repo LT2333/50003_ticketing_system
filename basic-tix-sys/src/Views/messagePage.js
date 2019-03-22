@@ -180,42 +180,91 @@ class MessagePage extends Component {
   constructor(props) {
     super(props);
 
-    var messageInfoLocal = {
-      userInfo: ["Alex", "Bro I got questions to ask"],
-      statusInfo: ["Processing", "warning"],
-      takeWord: "Taken"
-    };
+    var messageInfoArray = [
+      {
+        username: "usertest",
+        priority: -1,
+        status: "unaddressed",
+        who: "unaddressed",
+        tags: ["TAG1", "TAG2", "TAG3"],
+        category: "test",
+        _id: "5c8e2874f75f992a30601303",
+        imageURL: "",
+        email: "glenn11@gmail.com",
+        contact_num: 1234,
+        message: "Help witsh thiss api",
+        date: "2019-03-17T10:59:00.278Z",
+        chat: [],
+        __v: 0
+      }
+    ];
 
-    this.messageInfoLocal = messageInfoLocal;
+    this.messageInfoArray = messageInfoArray;
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
-      messageInfo: this.messageInfoLocal
+      messageInfoArray: this.messageInfoArray
     };
   }
 
   viewMessages(event) {
-    // var unirest = require("unirest");
-    // var req = unirest("GET", "http://localhost:3000/data/mark");
-    // req.headers({
-    //   "cache-control": "no-cache"
-    // });
+    var unirest = require("unirest");
 
-    // req.end(res => {
-    //   if (res.error) throw new Error(res.error);
-    //   // this.resource = res.body;
-    //   console.log(res.body);
+    var req = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/viewdate"
+    );
 
-    this.setState({
-      messageInfo: {
-        // userInfo: [res.body[0].Username,res.body[0].Message],
-        userInfo: ["Not Alex anymore", "did it actually change"],
-        statusInfo: ["Processing", "warning"],
-        takeWord: "Taken"
-      }
+    req.query({
+      token: "5c94643a471b590004e5fd00"
+    });
+
+    req.headers({
+      "cache-control": "no-cache"
+    });
+
+    req.end(res => {
+      console.log(res.body);
+      if (res.error) throw new Error(res.error);
+      this.setState({
+        messageInfoArray: res.body
+        // messageInfoArray: [
+        //   {
+        //     username: "usertest",
+        //     priority: -1,
+        //     status: "unaddressed",
+        //     who: "unaddressed",
+        //     tags: ["TAG1", "TAG2", "TAG3"],
+        //     category: "test",
+        //     _id: "5c8e2874f75f992a30601303",
+        //     imageURL: "",
+        //     email: "glenn11@gmail.com",
+        //     contact_num: 1234,
+        //     message: "Help witsh thiss api",
+        //     date: "2019-03-17T10:59:00.278Z",
+        //     chat: [],
+        //     __v: 0
+        //   },
+        //   {
+        //     username: "usertest",
+        //     priority: -1,
+        //     status: "unaddressed",
+        //     who: "unaddressed",
+        //     tags: [],
+        //     category: "test",
+        //     _id: "5c8e2874f75f992a30601303",
+        //     imageURL: "",
+        //     email: "glenn11@gmail.com",
+        //     contact_num: 1234,
+        //     message: "Help witsh thiss api",
+        //     date: "2019-03-17T10:59:00.278Z",
+        //     chat: [],
+        //     __v: 0
+        //   }
+        // ]
+      });
     });
 
     // this.setState({ Tag_1: res.body[0].Topic_Chosen });
-    // });
   }
   render() {
     console.log(this.state);
@@ -227,11 +276,11 @@ class MessagePage extends Component {
               View Messages
             </Button>
           </Row>
-          {/* <Row>
-            <MessageBox messageInfo={this.state.messageInfo} />
-          </Row> */}
           <Row>
-            <LoopMessages messageInfo={messagesExample} />
+            {/* <MessageBox messageInfo={this.state.messageInfo} /> */}
+            {this.state.messageInfoArray.map(messageInfoArray => {
+              return <MessageBox messageInfo={messageInfoArray} />;
+            })}
           </Row>
         </Container>
       </div>

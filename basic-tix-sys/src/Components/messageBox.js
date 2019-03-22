@@ -33,6 +33,8 @@ class MessageBox extends Component {
       statusWords: "Unsolved",
       takeWords: "Take it!"
     };
+
+    this.changeStatus = this.changeStatus.bind(this);
   }
   changeStatus(event) {
     this.setState({ statusWords: "Processing" });
@@ -40,17 +42,14 @@ class MessageBox extends Component {
     this.setState({ takeWords: " Taken " });
   }
   render() {
-    console.log(this.props.messageInfo.userInfo[0]);
+    console.log(this.props.messageInfo);
     return (
       <div>
         <Card className="MessageCard">
           <CardHeader>
-            From Client {this.props.messageInfo.userInfo[0]}
-            <Badge
-              theme={this.props.messageInfo.statusInfo[0]}
-              className="Status"
-            >
-              {this.props.messageInfo.statusInfo[1]}
+            From Client {this.props.messageInfo.username}
+            <Badge theme={this.state.statusColor} className="Status">
+              {this.props.messageInfo.status}
             </Badge>
           </CardHeader>
           <CardBody>
@@ -58,18 +57,29 @@ class MessageBox extends Component {
               <Row>
                 <Col sm="12" md="12" lg="9">
                   <Row>
-                    <a href="/individualmessage">
-                      <h5>{this.state.Tag_2}</h5>
-                    </a>
+                    {/* <a href="/individualmessage"> */}
+                    <h5>{this.state.Tag}</h5>
+                    {/* </a> */}
                     <hr />
                     <p>
-                      Date Submit: {date}/{month}/{year}
+                      {/* Date Submit: {date}/{month}/{year} */}
+                      Date Submit: {this.props.messageInfo.date}
                     </p>
-                    <a href="/individualmessage" id="Click">
-                      <p className="MessageText">
-                        {this.props.messageInfo.userInfo[1]}
-                      </p>
-                    </a>
+                    <hr />
+                    {/* <a href="/individualmessage" id="Click"> */}
+                    <p className="MessageText">
+                      {this.props.messageInfo.message}
+                    </p>
+                    {/* </a> */}
+                    <hr />
+                    <Link
+                      to={{
+                        pathname: "/individualmessage",
+                        messageInfo: this.props.messageInfo
+                      }}
+                    >
+                      Click to view more
+                    </Link>
                   </Row>
                 </Col>
                 <Col sm="12" md="12" lg="1" />
@@ -86,21 +96,13 @@ class MessageBox extends Component {
             </Container>
           </CardBody>
           <CardFooter>
-            <Badge theme="light" className="Tags">
-              TAG1
-            </Badge>
-            <Badge theme="light" className="Tags">
-              TAG2
-            </Badge>
-            <Badge theme="light" className="Tags">
-              TAG3
-            </Badge>
-            <Badge theme="light" className="Tags">
-              TAG4
-            </Badge>
-            <Badge theme="light" className="Tags">
-              TAG5
-            </Badge>
+            {this.props.messageInfo.tags.map(tags => {
+              return (
+                <Badge theme="light" className="Tags">
+                  {tags}
+                </Badge>
+              );
+            })}
           </CardFooter>
         </Card>
       </div>
