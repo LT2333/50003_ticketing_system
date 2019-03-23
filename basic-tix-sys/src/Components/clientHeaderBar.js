@@ -35,9 +35,6 @@ class clientHeaderBar extends Component {
             <NavLink href="/myreq">My Request</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/chistory">History</NavLink>
-          </NavItem>
-          <NavItem>
             <NavLink href="/main">Main</NavLink>
           </NavItem>
         </Nav>

@@ -30,43 +30,12 @@ class MyReqs extends Component {
   constructor(props) {
     super(props);
 
-    var messageInfoLocal = {
-      userInfo: ["Alex","Bro I got questions to ask"],
-      statudInfo: ["Processing", "warning"],
-      takeWord: "Taken"
-    };
-
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
-      messageInfo : {
-        userInfo: ["Alex","Bro I got questions to ask"],
-        statudInfo: ["Processing", "warning"],
-        takeWord: "Taken"
-      }
     }
   }
 
-  viewMessages(event) {
-    var unirest = require("unirest");
-    var req = unirest("GET", "http://localhost:3000/data/mark");
-    req.headers({
-      "cache-control": "no-cache"
-    });
-    req.end(res => {
-      if (res.error) throw new Error(res.error);
-      // this.resource = res.body;
-      console.log(res.body);
-
-      this.setState({ 
-        messageInfo: {
-          userInfo: [res.body[0].Username,res.body[0].Message],
-          statudInfo: ["Processing", "warning"],
-          takeWord: "Taken"}
-      });
-      
-      // this.setState({ Tag_1: res.body[0].Topic_Chosen });
-    });
-  }
+  viewMessages(event) {}
   render() {
     return (
       <div>
