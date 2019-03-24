@@ -1,0 +1,4 @@
+[0225/124731.385:ERROR:process_info.cc(359)] UncheckedAllocate
+[0225/124736.092:ERROR:process_info.cc(359)] UncheckedAllocate
+[0321/214957.011:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0322/012022.283:ERROR:crash_report_database_win.cc(428)] unexpected header

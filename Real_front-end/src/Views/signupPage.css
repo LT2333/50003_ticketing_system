@@ -1,0 +1,12 @@
+.secondpass {
+  margin-top: 10px;
+}
+
+.title {
+  margin-top: 25px;
+}
+
+.errormsg {
+  color: red;
+  font-size: 15px;
+}
