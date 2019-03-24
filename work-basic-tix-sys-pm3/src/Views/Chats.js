@@ -44,7 +44,7 @@ class Chats extends Component {
       <div>
         <h1 className="title">Chat</h1>
         <ChatMessages messages={this.state.messages} />
-        <ChatInput onSend={this.sendHandler} />
+        <ChatInput />
       </div>
     );
   }
