@@ -109,7 +109,7 @@ class MessagePage extends Component {
     return (
       <div>
         <Container>
-          <Button onClick={this.handleBug}>Dubugger</Button>
+          {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
           <Row>
             <FormGroup>
               <label>

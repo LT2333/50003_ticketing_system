@@ -24,7 +24,7 @@ class ClientMessage extends Component {
     render() {
       return (
         <Container>
-          <Button onClick={this.handleBug}>Dubugger</Button>
+          {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
 
           <Nav pills>
             <NavItem>
