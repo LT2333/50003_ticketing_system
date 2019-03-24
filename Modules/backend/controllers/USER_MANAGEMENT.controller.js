@@ -48,6 +48,7 @@ exports.test = function (req, res) {
 exports.signup = function (req, res) {
   const{body} = req;
   const{
+    name,
     password,
     contact_num,
     type
@@ -111,6 +112,7 @@ exports.signup = function (req, res) {
           }
           let user = new USER( // Match the require path
             {
+              name:name,
               username: username,
               email: email,
               contact_num: contact_num,

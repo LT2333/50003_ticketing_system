@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 let UserManagementSchema = new Schema({
     username: {type: String}, //, required: true, max: 100},
+    name:{type: String},
     password: {type: String}, //, required: true, max: 100},
     email: {type: String}, //, required: true},
     contact_num: {type: Number}, //, require: true},

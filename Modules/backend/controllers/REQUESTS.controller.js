@@ -21,6 +21,7 @@ exports.test = function (req, res) {
 exports.usersubmit = function (req, res) {
   const{body} = req;
   const{ // Things that the user keys in on the form
+    name,
     contact_num,
     message,
     img,
@@ -29,6 +30,12 @@ exports.usersubmit = function (req, res) {
   let{ // Need these to check later
     email
   }=body;
+
+    if(!name){
+      return res.send({
+        "error":"You have not typed a name"
+      });
+    }
 
     if(!message){
       return res.send({
@@ -76,6 +83,7 @@ exports.usersubmit = function (req, res) {
 
     let requests = new REQUESTS( // Match the require path
       {
+        name: name,
         email: email,
         contact_num: contact_num,
         message: message,
@@ -157,6 +165,7 @@ exports.usersubmitacc = function(req,res){
       {
         username: user.username,
         email: user.email,
+        name: user.name,
         contact_num: user.contact_num,
         message: message,
         category: category,
