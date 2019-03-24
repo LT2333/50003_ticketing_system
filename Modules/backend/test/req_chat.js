@@ -1,8 +1,6 @@
 var request = require("request");
 let chai = require("chai");
 var assert = chai.assert;
-var base_url = "https://courier50003.herokuapp.com"
-
 
 //=========================//
 // For testing of sending chats

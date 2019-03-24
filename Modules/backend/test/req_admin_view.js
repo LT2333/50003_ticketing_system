@@ -1,214 +1,59 @@
 var request = require("request");
 let chai = require("chai");
 var assert = chai.assert;
-var base_url = "https://courier50003.herokuapp.com"
+var base_url = "https://courier50003.herokuapp.com";
+var adminSample = '5c94643a471b590004e5fd00';
+var invalid_id = '243242342';
+let requestDB = '../models/REQUESTS.model.js';
 
 
 //=========================//
-// For testing of user management SIGNUPS
+// For testing of Filter by date
 //========================//
-describe("User Management SIGN UPS", function() {
+describe("Filtering by admin handling", function() {
+  // Post 3 messages and admin chooses to handle those 3
+
   //=========================//
-  // TEST OF BASIC CONNECTION
+  // TEST ADMIN VIEW REQUESTS THAT HE OR SHE HANDLES
   //========================//
-  // Just the status code which is 200
-  describe("GET /users/test", function() {
-    it("returns status code 200", function(done) {
-      request.get(base_url+'/user/test', function(error, response, body) {
-        assert.equal(200, response.statusCode);
-        done();
-      });
-    });
-  });
-  // Check for the body if it is equals
-  describe("GET /users/test", function() {
-    it("returns the sample string", function(done) {
-      request.get(base_url+'/user/test', function(error, response, body) {
-        assert.equal(200, response.statusCode);
-        assert.equal("This is the USER_MANAGEMENT Test controller!", body)
-        done();
-      });
-    });
-  });
-  //=========================//
-  // TEST OF Signups
-  //========================//
-  // username blank
-  describe("POST /users/signup", function() {
-    it("username is blank sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+  // Valid Viewing
+  describe("GET /portal/adminview", function() {
+    it("valid view", function(done) {
+      var options = { method: 'GET',
+        url: 'https://courier50003.herokuapp.com/portal/adminview',
+        qs: { token: adminSample },
         headers:
          {
-           'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: '',
-           password: 'test',
-           email: 'jjjj@gmail.com',
-           contact_num: 1234 },
-        json: true };
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-        console.log(body.error);
-        assert.equal("Username field is empty", body.error);
-        done();
-      });
-      });
-    });
-  // username in use
-  describe("POST /users/signup", function() {
-    it("username is used sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
-        headers:
-         { 'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: 'eunice',
-           password: 'test',
-           email: 'hello@gmail.com',
-           contact_num: 1234 },
-        json: true };
+           'cache-control': 'no-cache' } };
 
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        assert.equal('error:Username already exists', body)
+        var lengthOfBody = body.length,
+        assert.equal(3, lengthOfBody);
         done();
       });
+      });
     });
-  });
-
-  // email blank
-  describe("POST /users/signup", function() {
-    it("email is blank sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+  // _id does not exist
+  describe("GET /portal/adminview", function() {
+    it("invalid id", function(done) {
+      var options = { method: 'GET',
+        url: 'https://courier50003.herokuapp.com/portal/adminview',
+        qs: { token: invalid_id },
         headers:
          {
-           'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: 'tom hanks',
-           password: 'test',
-           email: '',
-           contact_num: 1234 },
-        json: true };
+           'cache-control': 'no-cache' } };
+
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        console.log(body.error);
-        assert.equal("email field is empty", body.error);
+        assert.equal('Error: Invalid', body.message);
         done();
       });
-    });
-  });
-
-  // // invalid Email
-  describe("POST /users/signup", function() {
-    it("email is invalid sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
-        headers:
-         {
-           'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: 'loo hanks',
-           password: 'test',
-           email: 'abcd',
-           contact_num: 1234 },
-        json: true };
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-        console.log(body.error);
-        assert.equal("Invalid Email", body.error);
-        done();
       });
     });
-  });
-
-  // Email in use
-  describe("POST /users/signup", function() {
-    it("email is used sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
-        headers:
-         {
-           'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: 'looew hanks',
-           password: 'test',
-           email: 'rohit@accenture.com',
-           contact_num: 1234 },
-        json: true };
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-        console.log(body.error);
-        assert.equal('error:Email already used', body);
-        done();
-      });
-    });
-  });
-
-  //  password blank
-  describe("POST /users/signup", function() {
-    it("Password is blank sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
-        headers:
-         {
-           'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: 'loosew hanks',
-           password: '',
-           email: 'rohisst@accenture.com',
-           contact_num: 1234 },
-        json: true };
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-        console.log(body.error);
-        assert.equal("Password field is empty", body.error);
-        done();
-      });
-    });
-  });
-
-  // successful signup
-  // describe("POST /users/signup", function() {
-  //   it("Successful sign up", function(done) {
-  //     var options = { method: 'POST',
-  //       url: 'https://courier50003.herokuapp.com/user/signup',
-  //       headers:
-  //        {
-  //          'cache-control': 'no-cache',
-  //          'content-type': 'application/json' },
-  //       body:
-  //        { username: 'Shane hanks',
-  //          password: 'shane',
-  //          email: 'shane@accenture.com',
-  //          contact_num: 1234 },
-  //       json: true };
-  //     request(options, function (error, response, body) {
-  //       if (error) throw new Error(error);
-  //
-  //       assert.equal("false", body.error);
-  //       done();
-  //     });
-  //   });
-  // });
 
  });

@@ -43,6 +43,7 @@ describe("User Management SIGN UPS", function() {
            'content-type': 'application/json' },
         body:
          { username: '',
+           name: 'jjjj',
            password: 'test',
            email: 'jjjj@gmail.com',
            contact_num: 1234 },
@@ -67,6 +68,7 @@ describe("User Management SIGN UPS", function() {
            'content-type': 'application/json' },
         body:
          { username: 'eunice',
+           name:"eunice",
            password: 'test',
            email: 'hello@gmail.com',
            contact_num: 1234 },
@@ -93,6 +95,7 @@ describe("User Management SIGN UPS", function() {
            'content-type': 'application/json' },
         body:
          { username: 'tom hanks',
+           name:'tom',
            password: 'test',
            email: '',
            contact_num: 1234 },
@@ -119,6 +122,7 @@ describe("User Management SIGN UPS", function() {
            'content-type': 'application/json' },
         body:
          { username: 'loo hanks',
+           name: 'loo',
            password: 'test',
            email: 'abcd',
            contact_num: 1234 },
@@ -145,6 +149,7 @@ describe("User Management SIGN UPS", function() {
            'content-type': 'application/json' },
         body:
          { username: 'looew hanks',
+           name: 'looew',
            password: 'test',
            email: 'rohit@accenture.com',
            contact_num: 1234 },
@@ -171,6 +176,7 @@ describe("User Management SIGN UPS", function() {
            'content-type': 'application/json' },
         body:
          { username: 'loosew hanks',
+           name:'loosew',
            password: '',
            email: 'rohisst@accenture.com',
            contact_num: 1234 },
@@ -185,7 +191,32 @@ describe("User Management SIGN UPS", function() {
       });
     });
   });
+  // name blank
+  describe("POST /users/signup", function() {
+    it("Password is blank sign up", function(done) {
+      var options = { method: 'POST',
+        url: 'https://courier50003.herokuapp.com/user/signup',
+        headers:
+         {
+           'cache-control': 'no-cache',
+           'content-type': 'application/json' },
+        body:
+         { username: 'loosew hanks',
+           name:'',
+           password: 'test',
+           email: 'rohisst@accenture.com',
+           contact_num: 1234 },
+        json: true };
+      request(options, function (error, response, body) {
+        if (error) throw new Error(error);
 
+        console.log(body);
+        console.log(body.error);
+        assert.equal("Name field is empty", body.error);
+        done();
+      });
+    });
+  });
   // successful signup
   // describe("POST /users/signup", function() {
   //   it("Successful sign up", function(done) {
