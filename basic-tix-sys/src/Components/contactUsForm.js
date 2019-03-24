@@ -75,7 +75,7 @@ class ContactUs extends Component {
     this.setState({ [name]: value });
   }
 
-  handleChangeSelect = event => {
+  handleChangeSelect(event){
     console.log(event);
 
     this.setState({
@@ -101,29 +101,6 @@ class ContactUs extends Component {
         this.state.relatedtags
     );
 
-    //   var unirest = require("unirest");
-
-    //   var req = unirest("POST", "http://localhost:3000/form");
-
-    //   req.headers({
-    //     "cache-control": "no-cache",
-    //     "Content-Type": "application/json"
-    //   });
-
-    //   req.type("json");
-    //   req.send({
-    //     Username: this.state.name,
-    //     Email: this.state.email,
-    //     Contact_Number: this.state.contactnum,
-    //     Topic_Chosen: this.state.relatedtags,
-    //     Message: this.state.problem
-    //   });
-
-    //   req.end(function(res) {
-    //     if (res.error) throw new Error(res.error);
-
-    //     console.log(res.body);
-    //   });
     var unirest = require("unirest");
 
     var req = unirest(

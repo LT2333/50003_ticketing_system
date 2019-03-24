@@ -18,7 +18,7 @@ class AdminMessage extends Component {
         super(props);
 
         this.state = {
-            token: this.props.location.state.token
+            token: this.props.location.state
         }
       }
     render() {

@@ -62,7 +62,8 @@ class LoginCreds extends Component {
       } else {
         this.setState({ errormsg: res.body.message });
       }
-      console.log(res.body);
+
+      console.log("res.body: ", res.body);
     });
   }
 
