@@ -35,14 +35,24 @@ class MessageBox extends Component {
     };
 
     this.changeStatus = this.changeStatus.bind(this);
+    this.handleFinish = this.handleFinish.bind(this);
   }
   changeStatus(event) {
     this.setState({ statusWords: "Processing" });
     this.setState({ statusColor: "warning" });
     this.setState({ takeWords: " Taken " });
   }
+
+  handleFinish() {
+    // this.setState({ this.props.messageInfo.status: "Resolved" });
+
+    // add api here to send an update to status maybe?
+
+    this.setState({ statusColor: "success" });
+  }
+
   render() {
-    console.log("MessageInfo in messageBox: ", this.props.messageInfo);
+    console.log(this.props.messageInfo);
     return (
       <div>
         <Card className="MessageCard">
@@ -74,7 +84,7 @@ class MessageBox extends Component {
                     <hr />
                     <Link
                       to={{
-                        pathname: "/individualmessage",
+                        pathname: "/cmessagepage/individualmessage" ,
                         messageInfo: this.props.messageInfo
                       }}
                     >
@@ -91,6 +101,7 @@ class MessageBox extends Component {
                   >
                     {this.state.takeWords}
                   </Button>
+                  <Button onClick={this.handleFinish}>Finish</Button>
                 </Col>
               </Row>
             </Container>

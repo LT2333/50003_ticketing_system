@@ -7,7 +7,8 @@ import {
   NavLink,
   Container,
   InputGroup,
-  InputGroupAddon
+  InputGroupAddon,
+  Row
 } from "shards-react";
 import "../Views/signupPage.css";
 import ChatMessages from "./chatMessages";
@@ -34,40 +35,42 @@ class ChatInput extends Component {
 
     var unirest = require("unirest");
 
-    var req = unirest(
+    var reqpost = unirest(
       "POST",
       "https://courier50003.herokuapp.com/portal/chats"
     );
 
-    req.headers({
+    reqpost.headers({
       "cache-control": "no-cache",
       "content-type": "application/json"
     });
 
-    req.type("json");
-    req.send({
+    reqpost.type("json");
+    reqpost.send({
       admin_id: "5c94643a471b590004e5fd00",
       request_id: "5c946495471b590004e5fd01",
       conversastion: this.state.chatInput
     });
 
-    req.end(function(res) {
+    reqpost.end(res => {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
+
+      this.setState({ chatInput: "" });
+      console.log("not here");
+      console.log(this.state.chatInput);
     });
 
     // Call the onSend callback with the chatInput message
     // this.props.onSend(this.state.chatInput);
 
     // Clear the input box
-    this.setState({ chatInput: "" });
-    console.log("not here");
-    console.log(this.state.chatInput);
   }
 
   render() {
     console.log("test");
+
     return (
       <div>
         <InputGroup>
