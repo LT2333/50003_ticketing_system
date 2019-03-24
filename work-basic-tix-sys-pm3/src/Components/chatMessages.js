@@ -54,15 +54,6 @@ class ChatMessages extends Component {
   render() {
     var messageInfoArray = this.state.messageInfoArray;
     console.log(messageInfoArray);
-    // var msg0 = messageInfoArray[0];
-    // console.log(messageInfoArray.chat);
-
-    // var msgList = [];
-    // for (var i = 0; i < 11; i++) {
-    //   var chatList = messageInfoArray[0].chat[i];
-    //   msgList.push(chatList);
-    // }
-    // console.log(msgList);
 
     // // Loop through all the messages in the state and create a Message component
     const messages = messageInfoArray.map(m => {
@@ -83,8 +74,11 @@ class ChatMessages extends Component {
       );
     });
 
+    // const browserHistory = require("react-router-dom/BrowserHistory").default;
+
     return (
       <div className="messages" id="messageList">
+        {/* <Button onClick={browserHistory.goBack}>Go Back</Button> */}
         <Button onClick={this.handleRefresh}>Refresh</Button>
         {messages}
       </div>

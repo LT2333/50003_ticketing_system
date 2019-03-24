@@ -49,6 +49,7 @@ class IndMes extends Component {
             );
           })}
           <hr />
+          <Button href="/chats">Chat Now</Button>
           <Button href="/messagepage" theme="dark">
             Go Back
           </Button>
