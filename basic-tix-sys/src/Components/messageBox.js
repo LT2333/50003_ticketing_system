@@ -42,7 +42,7 @@ class MessageBox extends Component {
     this.setState({ takeWords: " Taken " });
   }
   render() {
-    console.log(this.props.messageInfo);
+    console.log("MessageInfo in messageBox: ", this.props.messageInfo);
     return (
       <div>
         <Card className="MessageCard">

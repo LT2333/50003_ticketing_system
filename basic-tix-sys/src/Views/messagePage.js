@@ -7,8 +7,10 @@ import {
   CardBody,
   CardFooter,
   CardSubtitle,
-  Button
+  Button,
+  FormGroup
 } from "shards-react";
+import Select from "react-select";
 import { Badge } from "shards-react";
 import { Container, Row, Col } from "shards-react";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
@@ -25,6 +27,14 @@ const month = new Date().getMonth() + 1; //Current Month
 const year = new Date().getFullYear(); //Current Year
 const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
+
+const filterOptions = [
+  { label: "Sort by status", value: "viewstatus" },
+  { label: "Sort by date", value: "viewdate" },
+  { label: "Sort by who", value: "viewwho" },
+  { label: "Sort by category", value: "viewcategory" },
+  { label: "Sort by priority", value: "viewpriority" }
+];
 
 class MessagePage extends Component {
   constructor(props) {
@@ -50,22 +60,33 @@ class MessagePage extends Component {
     ];
 
     this.messageInfoArray = messageInfoArray;
-    this.viewMessages = this.viewMessages.bind(this);
-    this.state = {
-      messageInfoArray: this.messageInfoArray
-    };
-  }
+    // this.viewMessages = this.viewMessages.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
 
-  viewMessages(event) {
+    this.state = {
+      messageInfoArray: this.messageInfoArray,
+      token: this.props.token,
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate"
+    };
+    this.handleBug = this.handleBug.bind(this);
+  }
+  handleBug(event) {
+    console.log("Props from clientMes to messagePage: ", this.props);
+  }
+  handleFilter(event) {
+    console.log("Event: ", event);
+    //Do stuff here
+    this.setState({
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.value
+    });
+
     var unirest = require("unirest");
 
-    var req = unirest(
-      "GET",
-      "https://courier50003.herokuapp.com/portal/viewdate"
-    );
+    var req = unirest("GET", this.state.filterEndpoint);
 
     req.query({
       token: "5c94643a471b590004e5fd00"
+      // this.state.token
     });
 
     req.headers({
@@ -73,57 +94,29 @@ class MessagePage extends Component {
     });
 
     req.end(res => {
-      console.log(res.body);
+      console.log("res.body: ", res.body);
+      console.log("token passed: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
         messageInfoArray: res.body
-        // messageInfoArray: [
-        //   {
-        //     username: "usertest",
-        //     priority: -1,
-        //     status: "unaddressed",
-        //     who: "unaddressed",
-        //     tags: ["TAG1", "TAG2", "TAG3"],
-        //     category: "test",
-        //     _id: "5c8e2874f75f992a30601303",
-        //     imageURL: "",
-        //     email: "glenn11@gmail.com",
-        //     contact_num: 1234,
-        //     message: "Help witsh thiss api",
-        //     date: "2019-03-17T10:59:00.278Z",
-        //     chat: [],
-        //     __v: 0
-        //   },
-        //   {
-        //     username: "usertest",
-        //     priority: -1,
-        //     status: "unaddressed",
-        //     who: "unaddressed",
-        //     tags: [],
-        //     category: "test",
-        //     _id: "5c8e2874f75f992a30601303",
-        //     imageURL: "",
-        //     email: "glenn11@gmail.com",
-        //     contact_num: 1234,
-        //     message: "Help witsh thiss api",
-        //     date: "2019-03-17T10:59:00.278Z",
-        //     chat: [],
-        //     __v: 0
-        //   }
-        // ]
       });
     });
-
-    // this.setState({ Tag_1: res.body[0].Topic_Chosen });
   }
+
   render() {
     return (
       <div>
         <Container>
+          <Button onClick={this.handleBug}>Dubugger</Button>
           <Row>
-            <Button className="buttons" onClick={this.viewMessages}>
-              View Messages
-            </Button>
+            <FormGroup>
+              <label>Chose your filter</label>
+              <Select
+                multiple={false}
+                options={filterOptions}
+                onChange={this.handleFilter}
+              />
+            </FormGroup>
           </Row>
           <Row>
             {/* <MessageBox messageInfo={this.state.messageInfo} /> */}

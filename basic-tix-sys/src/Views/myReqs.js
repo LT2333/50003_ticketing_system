@@ -19,7 +19,6 @@ import "./widgets.css";
 import IndMes from "./individualMessage";
 import MessageBox from "../Components/messageBox";
 // library.add(faIgloo);
-
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
 const year = new Date().getFullYear(); //Current Year
@@ -30,43 +29,12 @@ class MyReqs extends Component {
   constructor(props) {
     super(props);
 
-    var messageInfoLocal = {
-      userInfo: ["Alex","Bro I got questions to ask"],
-      statudInfo: ["Processing", "warning"],
-      takeWord: "Taken"
-    };
-
     this.viewMessages = this.viewMessages.bind(this);
     this.state = {
-      messageInfo : {
-        userInfo: ["Alex","Bro I got questions to ask"],
-        statudInfo: ["Processing", "warning"],
-        takeWord: "Taken"
-      }
     }
   }
 
-  viewMessages(event) {
-    var unirest = require("unirest");
-    var req = unirest("GET", "http://localhost:3000/data/mark");
-    req.headers({
-      "cache-control": "no-cache"
-    });
-    req.end(res => {
-      if (res.error) throw new Error(res.error);
-      // this.resource = res.body;
-      console.log(res.body);
-
-      this.setState({ 
-        messageInfo: {
-          userInfo: [res.body[0].Username,res.body[0].Message],
-          statudInfo: ["Processing", "warning"],
-          takeWord: "Taken"}
-      });
-      
-      // this.setState({ Tag_1: res.body[0].Topic_Chosen });
-    });
-  }
+  viewMessages(event) {}
   render() {
     return (
       <div>
@@ -76,7 +44,6 @@ class MyReqs extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>

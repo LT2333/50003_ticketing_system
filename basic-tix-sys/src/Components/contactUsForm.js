@@ -75,7 +75,7 @@ class ContactUs extends Component {
     this.setState({ [name]: value });
   }
 
-  handleChangeSelect = event => {
+  handleChangeSelect(event){
     console.log(event);
 
     this.setState({
@@ -103,20 +103,22 @@ class ContactUs extends Component {
 
     var unirest = require("unirest");
 
-    var req = unirest("POST", "http://localhost:3000/form");
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/usersubmit"
+    );
 
     req.headers({
       "cache-control": "no-cache",
-      "Content-Type": "application/json"
+      "content-type": "application/json"
     });
 
     req.type("json");
     req.send({
-      Username: this.state.name,
-      Email: this.state.email,
-      Contact_Number: this.state.contactnum,
-      Topic_Chosen: this.state.relatedtags,
-      Message: this.state.problem
+      email: this.state.email,
+      contact_num: this.state.contactnum,
+      message: this.state.problem,
+      category: this.state.relatedtags
     });
 
     req.end(function(res) {
