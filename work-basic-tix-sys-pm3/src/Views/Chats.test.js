@@ -4,7 +4,6 @@ import toJson from "enzyme-to-json";
 import ChatInput from "../Components/chatInput";
 import ChatMessages from "../Components/chatMessages";
 import Chats from "./Chats";
-import { prependOnceListener } from "cluster";
 
 describe("tests for Chats view", () => {
   let wrapper;
