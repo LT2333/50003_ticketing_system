@@ -19,7 +19,6 @@ import "./widgets.css";
 import IndMes from "./individualMessage";
 import MessageBox from "../Components/messageBox";
 // library.add(faIgloo);
-
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
 const year = new Date().getFullYear(); //Current Year
@@ -45,7 +44,6 @@ class MyReqs extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>

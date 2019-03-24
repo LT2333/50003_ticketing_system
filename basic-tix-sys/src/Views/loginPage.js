@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Button, NavLink } from "shards-react";
 import "./signupPage.css";
-import { Redirect } from "react-router-dom";
+import { Redirect,  Router } from "react-router-dom";
 
 class LoginCreds extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
+      email: "",
       password: "",
       errormsg: "",
       canlogin: false,
@@ -30,8 +30,8 @@ class LoginCreds extends Component {
   handleSubmit(event) {
     console.log(
       "Login details were submitted: \n" +
-        "username: " +
-        this.state.username +
+        "useremail: " +
+        this.state.email +
         "\npassword: " +
         this.state.password
     );
@@ -49,7 +49,7 @@ class LoginCreds extends Component {
     req.type("json");
     req.send({
       password: this.state.password,
-      email: this.state.username
+      email: this.state.email
     });
 
     req.end(res => {
@@ -58,27 +58,37 @@ class LoginCreds extends Component {
       if (res.body.success === true) {
         this.setState({ canlogin: true });
         this.setState({token: res.body.token});
-        this.setState({type: res.body.type});
+        this.setState({type: res.body.authority});
       } else {
         this.setState({ errormsg: res.body.message });
       }
-      console.log(res);
       console.log(res.body);
     });
   }
 
   render() {
-    if (this.state.canlogin && this.state.type == "admin") {
-      return <Redirect push to={{
-        pathname: "/amessagepage",
-        token: this.state.token
-      }}/>;
+    if (this.state.canlogin && this.state.type === "admin") {
+      return (
+        <Redirect to = {{
+            pathname: '/amessagepage',
+            state: this.state.token
+        }}/> )
+    }
 
-    if (this.state.canlogin && this.state.type == "client") {
-      return <Redirect push to={{
-        pathname: "/cmessagepage",
-        token: this.state.token
-      }}/>;
+    if (this.state.canlogin && this.state.type === "user") {
+      return (
+        <Redirect to = {{
+            pathname: '/cmessagepage',
+            state: this.state.token
+        }}/> )
+    }
+    
+    if (this.state.canlogin && this.state.type === "unaddressed") {
+      return (
+        <Redirect to = {{
+            pathname: '/amessagepage',
+            state: this.state.token
+        }}/> )
     }
 
     return (
@@ -86,10 +96,10 @@ class LoginCreds extends Component {
         <h1 className="title">Courier Tix</h1>
         <Form>
           <FormGroup>
-            <label>Username</label>
+            <label>User Email</label>
             <FormInput
-              placeholder="Username"
-              name="username"
+              placeholder="User email"
+              name="email"
               onChange={this.handleChange}
             />
           </FormGroup>
@@ -112,7 +122,7 @@ class LoginCreds extends Component {
           New user? Register here!
         </NavLink>
         <NavLink active href="/contactus">
-          Want to contact us withou t an acount? Click here!
+          Want to contact us without an acount? Click here!
         </NavLink>
       </div>
     );

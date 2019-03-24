@@ -7,8 +7,10 @@ import {
   CardBody,
   CardFooter,
   CardSubtitle,
-  Button
+  Button,
+  FormGroup,
 } from "shards-react";
+import Select from "react-select";
 import { Badge } from "shards-react";
 import { Container, Row, Col } from "shards-react";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
@@ -217,6 +219,25 @@ class MessagePage extends Component {
   handleFilter = event => {
     console.log(event);
     //Do stuff here
+    var unirest = require("unirest");
+
+    var req = unirest("POST", 
+    "https://courier50003.herokuapp.com/portal/viewstatus");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      id: this.state.token,
+      filter: event
+    });
+
+    req.end(res => {
+      console.log(res);
+    });
   };
 
   viewMessages(event) {
@@ -286,6 +307,9 @@ class MessagePage extends Component {
         <Container>
           <Row>
             <FormGroup>
+              <label>
+                Chose your filter
+              </label>
               <Select
                 multiple={false}
                 options={filterOptions}
@@ -295,7 +319,7 @@ class MessagePage extends Component {
           </Row>
           <Row>
             <Button className="buttons" onClick={this.viewMessages}>
-              View Messages
+              View All
             </Button>
           </Row>
           <Row>
