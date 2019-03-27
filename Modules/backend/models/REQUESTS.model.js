@@ -10,7 +10,7 @@ const Schema = mongoose.Schema;
 
 let RequestsSchema = new Schema({
     username: {type: String, default:"no account"},// max: 100}, // If the user is signed in then the username is already in the system
-    name:{type: String}, // This is for users who don't have accounts 
+    name:{type: String}, // This is for users who don't have accounts
     email: {type: String}, //, required: true},
     contact_num: {type: Number}, //require: true},
     date: {type: Date, default:Date.now}, // auto-generated
@@ -28,7 +28,9 @@ let RequestsSchema = new Schema({
         message: {type:String},
         date:{type: Date, default:Date.now}
       }
-    ]} // An array of hashMaps
+    ]}, // An array of hashMaps
+    dateTaken:{type: Date},
+    dateComplete:{ type: Date}
 });
 
 

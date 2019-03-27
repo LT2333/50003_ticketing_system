@@ -6,6 +6,8 @@ var toString = require('nlcst-to-string')
 var Sentiment = require('sentiment');
 
 var Isemail = require('isemail'); // Checks for valid email for users with no account
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || "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");
 
 //===============//
 // User APIs
@@ -33,32 +35,39 @@ exports.usersubmit = function (req, res) {
 
     if(!name){
       return res.send({
-        "error":"You have not typed a name"
+        success: false,
+        error:"name field is blank"
       });
     }
 
     if(!message){
       return res.send({
-        "error":"You have not typed a message"
+        success: false,
+        error:"message field is blank"
       });
     }
 
     if(!email){
       return res.send({
-        "error":"email field is empty"
+        success: false,
+        message:"Error: email field is empty"
       });
     }
 
     if(!contact_num){
       return res.send({
-        "error":"Contact Number field is empty"
+        success:false,
+        message:"Error: Contact Number field is empty"
       });
     }
 
     email = email.toLowerCase();
 
     if (Isemail.validate(req.body.email) == false){
-      res.send({"error":"Invalid Email"});
+      res.send({
+        success: false,
+        message:"Error: Invalid Email"
+      });
     }
 
     // Extract tags
@@ -97,7 +106,36 @@ exports.usersubmit = function (req, res) {
         if (err) {
             return next(err);
         }
-        res.send(requests);
+
+        // const msg = {
+        //   to: email,
+        //   from: 'courier50003esc@courier.com',
+        //   subject: 'Request received',
+        //   text: `
+        //   Dear Sir/Mdm,
+        //
+        //
+        //   Thanks for your request, we will attend to it shortly.
+        //
+        //
+        //   Yours sincerely,
+        //   Team Courier
+        //   `
+        //   //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+        // };
+        // sgMail.send(msg);
+
+        res.send({
+          success: true,
+          name: name,
+          email: email,
+          contact_num: contact_num,
+          message: message,
+          category: category,
+          img:img,
+          tags:tags,
+          priority: priority
+        });
       });
   }
 
@@ -116,13 +154,15 @@ exports.usersubmitacc = function(req,res){
 
   if(!id){
     return res.send({
-      "error":"front-end please send the id"
+      success:false,
+      error:"front-end please send the id"
     });
   }
 
   if(!message){
     return res.send({
-      "error":"You have not typed a message"
+      success: false,
+      error:"message field is blank"
     });
   }
 
@@ -151,13 +191,13 @@ exports.usersubmitacc = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -178,7 +218,18 @@ exports.usersubmitacc = function(req,res){
         if (err) {
             return next(err);
         }
-        res.send(requests);
+        res.send({
+          success: true,
+          username: user.username,
+          email: user.email,
+          name: user.name,
+          contact_num: user.contact_num,
+          message: message,
+          category: category,
+          imageURL:imageURL,
+          tags:tags,
+          priority: priority
+        });
       });
   });
 }
@@ -203,13 +254,14 @@ exports.viewmessage = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
+      console.log(users);
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -220,27 +272,25 @@ exports.viewmessage = function(req,res){
     if(authority == 'admin'){
       // Render all images if admin
       REQUESTS.find({}, function(err, requests) {
-          var reqMap = {};
-          requests.forEach(function(request) {
-            reqMap[request._id] = request;
+          return res.send({
+            success:true,
+            requests
           });
-          res.send(reqMap);
+          //res.send(requests);
         });
     } else{
       // Chcek the username
       REQUESTS.find({
         username:username
       }, function(err, requests) {
-          var reqMap = {};
-          console.log(requests);
-          requests.forEach(function(request) {
-            reqMap[request._id] = request;
-          });
-          res.send(reqMap);
+        return res.send({
+          success:true,
+          requests
         });
-      }
+      });
+    }
 
-    });
+  });
 
 }
 
@@ -250,40 +300,43 @@ exports.viewmessage = function(req,res){
 exports.chats = function(req,res){
   const{body} = req;
   const{
-    admin_id,  // Who the admin is
+    requestor_id,  // Who the admin is
     request_id,  // for us to search the request and update the who field
     conversastion
   } = body;
-  if(!admin_id){
+  if(!requestor_id){
     return res.send({
-      "error":"front-end please send admin's id"
+      success: false,
+      message: 'Error: Requestor ID not sent'
     });
   }
   if(!request_id){
     return res.send({
-      "error":"front-end please send request's id"
+      success: false,
+      message: 'Error: Request ID not sent'
     });
   }
   if(!conversastion){
     return res.send({
-      "error":"front-end please send request's id"
+      success: false,
+      message: 'Error: conversastion cannot be blank'
     });
   }
 
   // Search for the admin's username
   USER.find({
-    _id: admin_id,
+    _id: requestor_id,
   }, (err, users)=> {
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -306,13 +359,15 @@ exports.chats = function(req,res){
           console.log(err);
           return res.send({
               success:false,
-              message:'Error: Server error'
+              message:'Error: Server error, requests collection'
           });
       }
       console.log(updateRequest);
       return res.send({
         success: true,
-        message: 'Chat sent'
+        message: 'Chat sent successfully',
+        requester_id: requestor_id,
+        request_id: request_id
       });
     });
 });
@@ -337,13 +392,13 @@ exports.viewdate = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -354,14 +409,20 @@ exports.viewdate = function(req,res){
     if(authority == 'admin'){
       // Render all images if admin and sort from the earliest at the front of the list
       REQUESTS.find({}).sort({date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
     } else{
       // Chcek the username
       REQUESTS.find({
         username:username
       }).sort({date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
       }
 
@@ -388,13 +449,13 @@ exports.viewstatus = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -406,14 +467,20 @@ exports.viewstatus = function(req,res){
       // Render all images if admin and sort from the earliest at the front of the list
       // sort the unaddressed at the top and then sort by date
       REQUESTS.find({}).sort({status:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
     } else{
       // Chcek the username
       REQUESTS.find({
         username:username
       }).sort({status:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
       }
 
@@ -446,7 +513,7 @@ exports.viewwho = function(req,res){
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -458,14 +525,20 @@ exports.viewwho = function(req,res){
       // Render all images if admin and sort from the earliest at the front of the list
       // sort the unaddressed at the top and then sort by date
       REQUESTS.find({}).sort({who:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
     } else{
       // Chcek the username
       REQUESTS.find({
         username:username
       }).sort({who:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
       }
 
@@ -492,13 +565,13 @@ exports.viewcategory = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -510,14 +583,20 @@ exports.viewcategory = function(req,res){
       // Render all images if admin and sort from the earliest at the front of the list
       // sort the unaddressed at the top and then sort by date
       REQUESTS.find({}).sort({category:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
     } else{
       // Chcek the username
       REQUESTS.find({
         username:username
       }).sort({category:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
       }
 
@@ -544,13 +623,13 @@ exports.viewpriority = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -561,15 +640,21 @@ exports.viewpriority = function(req,res){
     if(authority == 'admin'){
       // Render all images if admin and sort from the earliest at the front of the list
       // sort the unaddressed at the top and then sort by date
-      REQUESTS.find({}).sort({priority:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+      REQUESTS.find({}).sort({priority:1, date:1}).exec(function(err, requests) {
+          return res.send({
+            success:true,
+            requests
+          });
         });
     } else{
       // Chcek the username
       REQUESTS.find({
         username:username
-      }).sort({priority:-1, date:1}).exec(function(err, requests) {
-          return res.send(requests);
+      }).sort({priority:1, date:1}).exec(function(err, requests) {
+          return res.send({
+            success:true,
+            requests
+          });
         });
       }
 
@@ -590,12 +675,15 @@ exports.viewreq = function(req,res){
       if(err){
         return res.send({
           success: false,
-          message: 'Error: First Server error'
+          message: 'Error: First Server error, request collection'
         });
       }
       var oneReq = requests[0];
       var chatsOnly = oneReq.chat;
-      return res.send(chatsOnly);
+      return res.send({
+        success: true,
+        chatsOnly
+      });
     });
 }
 
@@ -616,12 +704,14 @@ exports.adminhandle = function(req,res){
   } = body;
   if(!admin_id){
     return res.send({
-      "error":"front-end please send admin's id"
+      success: false,
+      message: 'Error: Admin ID not sent'
     });
   }
   if(!request_id){
     return res.send({
-      "error":"front-end please send request's id"
+      success: false,
+      message:"Error: Requests id not sent"
     });
   }
 
@@ -638,7 +728,7 @@ exports.adminhandle = function(req,res){
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -652,7 +742,8 @@ exports.adminhandle = function(req,res){
        }, {
          $set:{
            who:username,
-           status:"addressing"
+           status:"addressing",
+           dateTaken: Date.now()
          }
      }, null,(err,sessions) => {
          if(err){
@@ -664,7 +755,7 @@ exports.adminhandle = function(req,res){
          }
        return res.send({
            success: true,
-           message: 'done',
+           message: 'request is being handled',
            adminHandle: username // Send back the user id which is used later
        });
      });
@@ -686,12 +777,14 @@ exports.admincomplete = function(req,res){
   } = body;
   if(!admin_id){
     return res.send({
-      "error":"front-end please send admin's id"
+      success: false,
+      message: 'Error: Admin ID not sent'
     });
   }
   if(!request_id){
     return res.send({
-      "error":"front-end please send request's id"
+      success: false,
+      message:"Error: Requests id not sent"
     });
   }
 
@@ -702,13 +795,13 @@ exports.admincomplete = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -721,19 +814,20 @@ exports.admincomplete = function(req,res){
          _id: request_id,
        }, {
          $set:{
-           status:"finished"
+           status:"finished",
+           dateComplete: Date.now()
          }
      }, null,(err,sessions) => {
          if(err){
              console.log(err);
              return res.send({
                  success:false,
-                 message:'Error: Server error'
+                 message:'Error: Server error, requests collection'
              });
          }
        return res.send({
            success: true,
-           message: 'done',
+           message: 'request is completed',
            adminComplete: username // Send back the user id which is used later
        });
      });
@@ -761,13 +855,13 @@ exports.adminview = function(req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: account does not exist'
       });
     }
     const user = users[0]; // users is an array of users that share the same username
@@ -778,10 +872,16 @@ exports.adminview = function(req,res){
     if(authority == 'admin'){  // Extra verification step
       // Render only requests associated with the admin
       REQUESTS.find({who:username}).sort({date:1}).exec(function(err, requests) {
-          return res.send(requests);
+          return res.send({
+            success:true,
+            requests
+          });
         });
     } else{
-      return res.send("This is possibly malicious and not an admin")
+      return res.send({
+        success: false,
+        message: "This is possibly malicious and not an admin"
+      });
     }
 
     });

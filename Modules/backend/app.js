@@ -33,10 +33,6 @@ app.use('/user', USER_MAN);
 // To test just use localhost:1234/portal/test
 app.use('/portal', REQUESTS)
 
-// local testing
-// const host = 'localhost';
-// const port = 1234;
-
 // For heroku
 const host = '0.0.0.0';
 const port = process.env.PORT || 1234;

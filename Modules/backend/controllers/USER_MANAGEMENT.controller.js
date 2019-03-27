@@ -2,41 +2,11 @@ const USERSESSION =  require('../models/USER_SESS.model');
 const USER = require('../models/USER_MANAGEMENT.model');
 //const USERSESSION =  require('../models/USER_SESS.model');
 var Isemail = require('isemail'); // Checks for valid email
-var nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || "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");
 
-// var transporter = nodemailer.createTransport({
-//   service: 'temp-mail',
-//   auth: {
-//     user: 'juwatedoc@gift-link.com',//'courier50003esc@gmail.com',
-//     pass: ''//'courier50003!'
-//   }
-// });
 
-// var smtpConfig = {
-//     host: 'smtp.gmail.com',
-//     port: 465,
-//     secure: true, // use SSL
-//     auth: {
-//         user: 'courier50003esc@gmail.com',
-//         pass: 'courier50003!'
-//     }
-// };
-// var transporter = nodemailer.createTransport(smtpConfig);
-//
-// var mailOptions = {
-//   from: 'courier50003esc@gmail.com',
-//   to: 'glennchia7@gmail.com',
-//   subject: 'Registration to ACNAPI Courier is successful',
-//   text: 'Thank you for signing up with us, we loook forward to working closely with you'
-// };
-//
-// transporter.sendMail(mailOptions, function(error, info){
-// if (error) {
-//   console.log(error);
-// } else {
-//   console.log('Email sent: ' + info.response);
-// }
-// });
+
 
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
@@ -50,42 +20,55 @@ exports.signup = function (req, res) {
   const{
     name,
     password,
-    contact_num,
-    type
+    contact_num
   } = body;
   let{
     username, // if we want to make it not case sensitive
     email
   }=body;
 
+    if(!name){
+      return res.send({
+        sucess: false,
+        message:"Error: Name field is empty"
+      });
+    }
+
     if(!username){
       return res.send({
-        "error":"Username field is empty"
+        success: false,
+        message:"Error: Username field is empty"
       });
     }
 
     if(!password){
       return res.send({
-        "error":"Password field is empty"
+        success: false,
+        message:"Error: Password field is empty"
       });
     }
 
     if(!email){
       return res.send({
-        "error":"email field is empty"
+        success: false,
+        message:"Error: email field is empty"
       });
     }
 
     if(!contact_num){
       return res.send({
-        "error":"Contact Number field is empty"
+        success:false,
+        message:"Error: Contact Number field is empty"
       });
     }
 
     email = email.toLowerCase();
 
     if (Isemail.validate(req.body.email) == false){
-      return res.send({"error":"Invalid Email"});
+      return res.send({
+        success: false,
+        message:"Error: Invalid Email"
+      });
     }
 
     // verify that the database does not have that username or email
@@ -93,17 +76,29 @@ exports.signup = function (req, res) {
       email:email
     }, (err,previousUsers) => {
       if(err){
-        return res.send('error:server')
+        return res.send({
+          sucess: false,
+          message:'Error: FIRST server error, USER MANAGEMENT COLLECTION EMAIL'
+        });
       } else if (previousUsers.length>0){
-        return res.send('error:Email already used')
+        return res.send({
+          success: false,
+          message:"Error: Email already in use"
+        });
       } else {
         USER.find({
           username:username
         }, (error, previousUser1)=>{
           if(error){
-            return res.send('error:server')
+            return res.send({
+              sucess: false,
+              message:'Error: server error, USER MANAGEMENT collection USERNAME'
+            });
           } else if (previousUser1.length>0){
-            return res.send('error:Username already exists')
+            return res.send({
+              sucess:false,
+              message:"Error: Username already in use"
+            });
           }
           if(email.includes("@accenture.com")){
             authority = "admin";
@@ -123,20 +118,34 @@ exports.signup = function (req, res) {
                 if (err) {
                     return next(err);
                 }
-                //mailOptions.to = email;
-              //   transporter.sendMail(mailOptions, function(error, info){
-              //   if (error) {
-              //     console.log(error);
-              //   } else {
-              //     console.log('Email sent: ' + info.response);
-              //   }
-              // });
+                // const msg = {
+                //   to: email,
+                //   from: 'courier50003esc@courier.com',
+                //   subject: 'Thanks for signing up with Courier',
+                //   text: `
+                //   Dear Sir/Mdm,
+                //
+                //
+                //   Thanks for signing up with Courier. We look forward to serving you on our brand new platform.
+                //
+                //
+                //   Yours sincerely,
+                //   Team Courier
+                //   `
+                //   //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                // };
+                // sgMail.send(msg);
+
                 return res.send({
                   success: true,
-                  error: false,
-                  message: 'successful registration'
-                })
-            })
+                  message: 'successful registration',
+                  name:name,
+                  username: username,
+                  email: email,
+                  contact_num: contact_num,
+                  authority: authority
+                });
+            });
         });
       }
     }); // closes the => and the first find
@@ -157,13 +166,13 @@ exports.login = function (req,res){
   if(!email){
     return res.send({
       success: false,
-      message: 'Error: email cannot be blank'
+      message: "Error: email field is empty"
     });
   }
   if(!password){
     return res.send({
       success: false,
-      message: 'Error: password cannot be blank'
+      message: 'Error: Password field is empty'
     });
   }
 
@@ -175,13 +184,13 @@ exports.login = function (req,res){
     if(err){
       return res.send({
         success: false,
-        message: 'Error: First Server error'
+        message: 'Error: First Server error, user collection'
       });
     }
     if(users.length != 1){
       return res.send({
         success: false,
-        message: 'Error: Invalid too many users or no user'
+        message: 'Error: account does not exist'
       });
     }
     console.log(users);
@@ -190,7 +199,7 @@ exports.login = function (req,res){
     if(!user.validPassword(password)){
       return res.send({
         success: false,
-        message: 'error:invalid password'
+        message: 'Error:invalid password'
       });
     }
     //const userSession = new USERSESSION();
@@ -204,15 +213,16 @@ exports.login = function (req,res){
       if(err){
         return res.send({
           success: false,
-          message: 'Error: Second Server error'
+          message: 'Error: Second Server error, user session collection'
         });
       }
       return res.send({
         success:true,
         message: 'Valid sign in',
-        token: doc._id, // points back to the user id
-        authority: user.authority
-        // username: doc.username
+        token: user._id, // this is the real ID upon creation
+        //token: doc._id, // points back to the user id which is the token
+        authority: user.authority //
+        // username: user.username
       });
     });
   });
@@ -224,7 +234,7 @@ exports.logout = function(req,res){
   const { token } = query;
 
   USERSESSION.findOneAndUpdate({
-        _id: token,
+        userId: token,
         isDeleted: false
       }, {
         $set:{isDeleted:true}
@@ -233,13 +243,12 @@ exports.logout = function(req,res){
             console.log(err);
             return res.send({
                 success:false,
-                message:'Error: Server error'
+                message:'Error: First Server error, user session collection'
             });
         }
       return res.send({
           success: true,
-          message: 'done',
-          id: _id // Send back the user id which is used later
+          message: 'successful logout',
       });
     });
 }
