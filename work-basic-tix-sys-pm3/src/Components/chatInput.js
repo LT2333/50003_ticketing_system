@@ -68,8 +68,9 @@ class ChatInput extends Component {
     reqpost.type("json");
     reqpost.send({
       requestor_id: "5c9b1de27653c06600c44686",
-      request_id: "5c94b0ca88ae70000426f10a",
-      conversastion: "Hello world i am testing again and again"
+      // request_id: "5c94b0ca88ae70000426f10a",
+      request_id: "5c946495471b590004e5fd01",
+      conversastion: this.state.chatInput
     });
 
     reqpost.end(res => {
