@@ -38,6 +38,9 @@ class HeaderBar extends Component {
             <NavLink href="/contactus">Contact Us</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink href="/idcontactus">Contact Us (Login-ed)</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink href="/messagepage">Message Page</NavLink>
           </NavItem>
           <NavItem>

@@ -50,15 +50,12 @@ const topics = [
   { label: "Other", value: 26 }
 ];
 
-class ContactUs extends Component {
+class IdContactUs extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
 
-      name: "",
-      email: "",
-      contactnum: "",
       title: "",
       problem: "",
       relatedtags: null
@@ -90,12 +87,6 @@ class ContactUs extends Component {
     });
     console.log(
       "Form Details: \n" +
-        "name: " +
-        this.state.name +
-        "\nemail: " +
-        this.state.email +
-        "\ncontactnum: " +
-        this.state.contactnum +
         "\ntitle: " +
         this.state.title +
         "\nproblem:" +
@@ -104,56 +95,32 @@ class ContactUs extends Component {
         this.state.relatedtags
     );
 
-    //   var unirest = require("unirest");
+    // var unirest = require("unirest");
 
-    //   var req = unirest("POST", "http://localhost:3000/form");
+    // var req = unirest(
+    //   "POST",
+    //   "https://courier50003.herokuapp.com/portal/usersubmit"
+    // );
 
-    //   req.headers({
-    //     "cache-control": "no-cache",
-    //     "Content-Type": "application/json"
-    //   });
+    // req.headers({
+    //   "cache-control": "no-cache",
+    //   "content-type": "application/json"
+    // });
 
-    //   req.type("json");
-    //   req.send({
-    //     Username: this.state.name,
-    //     Email: this.state.email,
-    //     Contact_Number: this.state.contactnum,
-    //     Topic_Chosen: this.state.relatedtags,
-    //     Message: this.state.problem
-    //   });
+    // req.type("json");
+    // req.send({
+    //   email: this.state.email,
+    //   contact_num: this.state.contactnum,
+    //   message: this.state.problem,
+    //   category: this.state.relatedtags
+    // });
 
-    //   req.end(function(res) {
-    //     if (res.error) throw new Error(res.error);
+    // req.end(function(res) {
+    //   if (res.error) throw new Error(res.error);
 
-    //     console.log(res.body);
-    //   });
-    var unirest = require("unirest");
-
-    var req = unirest(
-      "POST",
-      "https://courier50003.herokuapp.com/portal/usersubmit"
-    );
-
-    req.headers({
-      "cache-control": "no-cache",
-      "content-type": "application/json"
-    });
-
-    req.type("json");
-    req.send({
-      email: this.state.email,
-      contact_num: this.state.contactnum,
-      message: this.state.problem,
-      category: this.state.relatedtags
-    });
-
-    req.end(function(res) {
-      if (res.error) throw new Error(res.error);
-
-      console.log(res.body);
-    });
+    //   console.log(res.body);
+    // });
   }
-
   render() {
     const { open } = this.state;
     return (
@@ -165,33 +132,6 @@ class ContactUs extends Component {
             <Row>
               <Col>
                 <Form>
-                  <FormGroup>
-                    <label>Name</label>
-                    <FormInput
-                      name="name"
-                      onChange={this.handleChange}
-                      size="sm"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <label>Email</label>
-                    <FormInput
-                      name="email"
-                      onChange={this.handleChange}
-                      size="sm"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <label>Contact Number</label>
-                    <FormInput
-                      name="contactnum"
-                      onChange={this.handleChange}
-                      size="sm"
-                    />
-                  </FormGroup>
-
                   <FormGroup>
                     <label>Title</label>
                     <FormInput
@@ -244,4 +184,4 @@ class ContactUs extends Component {
   }
 }
 
-export default ContactUs;
+export default IdContactUs;

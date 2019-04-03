@@ -19,6 +19,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import SideBar from "./Components/sideBar";
 import { Container } from "shards-react";
 import adminHeaderBar from "./Components/adminHeaderBar";
+import IdContactUs from "./Components/idContactUsForm";
 
 class App extends Component {
   render() {
@@ -36,6 +37,7 @@ class App extends Component {
           <Switch>
             <Route path="/login" component={LoginCreds} />
             <Route path="/contactus" component={ContactUs} />
+            <Route path="/idcontactus" component={IdContactUs} />
             <Route path="/signup" component={SignupCreds} />
             <Route path="/messagepage" component={MessagePage} />
             <Route path="/individualmessage" component={IndMes} />
