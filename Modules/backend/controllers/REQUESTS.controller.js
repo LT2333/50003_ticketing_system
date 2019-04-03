@@ -680,10 +680,13 @@ exports.viewreq = function(req,res){
       }
       var oneReq = requests[0];
       var chatsOnly = oneReq.chat;
-      return res.send({
-        success: true,
+      // return res.send({
+      //   success: true,
+      //   chatsOnly
+      // });
+      return res.send(
         chatsOnly
-      });
+      );
     });
 }
 

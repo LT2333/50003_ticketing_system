@@ -11,6 +11,16 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY || "SG.LbEWngPGST2PFrXy3b8YpA.u5Fl
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
     res.send('This is the USER_MANAGEMENT Test controller!');
+    const msg = {
+      to: "irene.chiatan@gmail.com",
+      from: 'irene.chiatan@gmail.com',
+      subject: 'Hello',
+      text: `
+      See it works
+      `
+      //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    };
+    sgMail.send(msg);
 };
 
 // User sign-ups
