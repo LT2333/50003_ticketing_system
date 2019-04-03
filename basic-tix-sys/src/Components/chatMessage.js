@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ChatMessage from "./chatMessage";
 import { Button, Row, Container } from "shards-react";
 import "./chatMessages.css";
+import { gray } from "ansi-colors";
 
 class ChatMessages extends Component {
   constructor(props) {
@@ -59,10 +60,10 @@ class ChatMessages extends Component {
     const messages = messageInfoArray.map(m => {
       return (
         <div>
+          
           <Container>
             <Row className="chatuser">{m.name}</Row>
             <Row className="msgbody">{m.message}</Row>
-
             {/* <ChatMessage
             key={m.chat}
             username={m.chat.name}
