@@ -25,6 +25,7 @@ exports.usersubmit = function (req, res) {
   const{ // Things that the user keys in on the form
     name,
     contact_num,
+    title,
     message,
     img,
     category
@@ -37,6 +38,13 @@ exports.usersubmit = function (req, res) {
       return res.send({
         success: false,
         error:"name field is blank"
+      });
+    }
+
+    if(!title){
+      return res.send({
+        success: false,
+        error:"title field is blank"
       });
     }
 
@@ -95,6 +103,7 @@ exports.usersubmit = function (req, res) {
         name: name,
         email: email,
         contact_num: contact_num,
+        title: title,
         message: message,
         category: category,
         img:img,
@@ -130,6 +139,7 @@ exports.usersubmit = function (req, res) {
           name: name,
           email: email,
           contact_num: contact_num,
+          title: title,
           message: message,
           category: category,
           img:img,
@@ -147,6 +157,7 @@ exports.usersubmitacc = function(req,res){
   const{body} = req;
   const{ // We have all the data in the usermanagement database
     id,  // This is passed on the front-end. Store global var
+    title,
     message,
     imageURL,
     category
@@ -156,6 +167,13 @@ exports.usersubmitacc = function(req,res){
     return res.send({
       success:false,
       error:"front-end please send the id"
+    });
+  }
+
+  if(!title){
+    return res.send({
+      success: false,
+      error:"title field is blank"
     });
   }
 
@@ -207,6 +225,7 @@ exports.usersubmitacc = function(req,res){
         email: user.email,
         name: user.name,
         contact_num: user.contact_num,
+        title: title,
         message: message,
         category: category,
         imageURL:imageURL,
@@ -224,6 +243,7 @@ exports.usersubmitacc = function(req,res){
           email: user.email,
           name: user.name,
           contact_num: user.contact_num,
+          title: title,
           message: message,
           category: category,
           imageURL:imageURL,

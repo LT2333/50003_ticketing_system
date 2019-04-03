@@ -14,6 +14,7 @@ let RequestsSchema = new Schema({
     email: {type: String}, //, required: true},
     contact_num: {type: Number}, //require: true},
     date: {type: Date, default:Date.now}, // auto-generated
+    title:{type: String},
     message:{type: String}, // user-typed
     //imageURL: {type: String, default: ''}, // retrieved from Amazon
     img : { data: Buffer, contentType: String },  // use fs for testing
