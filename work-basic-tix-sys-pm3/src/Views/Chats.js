@@ -50,9 +50,4 @@ class Chats extends Component {
   }
 }
 
-//app
-//chatinput - input box
-//messages - shows list of messages
-//message - show individual message
-
 export default Chats;
