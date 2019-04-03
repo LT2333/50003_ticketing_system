@@ -21,7 +21,6 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "./widgets.css";
-import IndMes from "./individualMessage";
 import MessageBox from "../Components/messageBox";
 import ListIcon from "semantic-ui-react";
 import ListItem from "semantic-ui-react";
@@ -58,7 +57,7 @@ class MessagePage extends Component {
         email: "glenn11@gmail.com",
         contact_num: 1234,
         message: "Help witsh thiss api",
-        date: "2019-03-17T10:59:00.278Z",
+        date: Date.now(),
         chat: [],
         __v: 0
       }
@@ -75,9 +74,39 @@ class MessagePage extends Component {
     };
     this.handleBug = this.handleBug.bind(this);
   }
+  componentDidMount() {
+    //Do stuff here
+    this.setState({
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"});
+
+    var unirest = require("unirest");
+
+    var req = unirest(
+      "GET",
+      this.state.filterEndpoint
+    );
+
+    req.query({
+      token: "5c94643a471b590004e5fd00"
+      // this.state.token
+    });
+
+    req.headers({
+      "cache-control": "no-cache"
+    });
+
+    req.end(res => {
+      console.log("res.body [messagePage]: ", res.body);
+      console.log("token passed [messagePage]: ", this.state.token);
+      if (res.error) throw new Error(res.error);
+      this.setState({
+        messageInfoArray: res.body.requests});
+      });
+  }
   handleBug(event) {
     console.log("Props from clientMes to messagePage: ", this.props)
   }
+
   handleFilter (event){
     console.log("Event [messagePage]: ", event.target.id);
     //Do stuff here
@@ -144,7 +173,7 @@ class MessagePage extends Component {
                       <Col>Requester</Col>
                       <Col>Requested</Col>
                       <Col>Type</Col>
-                      <Col>Priority</Col>
+                      <Col>Status</Col>
                     </Row>
                   </Container>
                 </ListGroupItemHeading>

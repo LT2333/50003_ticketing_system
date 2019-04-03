@@ -6,7 +6,6 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "../Views/widgets.css";
-import IndMes from "../Views/individualMessage";
 // library.add(faIgloo);
 import { ListGroup, ListGroupItem } from "shards-react";
 
@@ -15,6 +14,7 @@ const month = new Date().getMonth() + 1; //Current Month
 const year = new Date().getFullYear(); //Current Year
 const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
+var current = Date.now();
 
 class MessageBox extends Component {
   constructor(props) {
@@ -48,7 +48,7 @@ class MessageBox extends Component {
     return (
         <Link
           to={{
-            pathname: "/cmessagepage/individualmessage" ,
+            pathname: "/cmessagepage/cindividualmessage" ,
             messageInfo: this.props.messageInfo
           }}
         >
@@ -57,9 +57,9 @@ class MessageBox extends Component {
               <Row>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.username}</Col>
-                <Col>{this.props.messageInfo.date}</Col>
+                <Col>{current}-{this.props.messageInfo.date}</Col>
                 <Col>{this.props.messageInfo.category}</Col>
-                <Col>{this.props.messageInfo.priority}</Col>
+                <Col>{this.props.messageInfo.status}</Col>
               </Row>
             </Container>
           </ListGroupItem>

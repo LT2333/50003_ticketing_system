@@ -5,7 +5,7 @@ import adminHeaderBar from "../Components/adminHeaderBar";
 import ContactUs from "../Components/contactUsForm";
 import HeaderBar from "../Components/headerBar";
 import MessagePage from "./messagePage";
-import IndMes from "./individualMessage";
+import AIndMes from "./adminIndividualMessage";
 import Chats from "./Chats";
 import MyJobs from "./myJobs";
 import Ahistory from "./historyAdmin";
@@ -44,13 +44,13 @@ class AdminMessage extends Component {
 
           <Router>
               <Switch>
-                  <Route path="/individualmessage" component={IndMes} />
-                  <Route path="/main" render={(props) => <MessagePage {...props} token={this.state.token}/>}/>
-                  <Route path="/chats" render={(props) => <Chats {...props} token={this.state.token}/>}/>
-                  <Route path="/ahistory" render={(props) => <Ahistory {...props} token={this.state.token}/>}/>
-                  <Route path="/profileedit" render={(props) => <ProfileEdit {...props} token={this.state.token} />}/>
-                  <Route path="/profiledisp" render={(props) => <ProfileDisp {...props} token={this.state.token} />}/>
-                  <Route path="/myjobs" render={(props) => <MyJobs {...props} token={this.state.token}/>}/>
+                  <Route path="/amessagepage/aindividualmessage" component={AIndMes} />
+                  <Route path="/amessagepage/main" render={(props) => <MessagePage {...props} token={this.state.token}/>}/>
+                  <Route path="/amessagepage/chats" render={(props) => <Chats {...props} token={this.state.token}/>}/>
+                  <Route path="/amessagepage/ahistory" render={(props) => <Ahistory {...props} token={this.state.token}/>}/>
+                  <Route path="/amessagepage/profileedit" render={(props) => <ProfileEdit {...props} token={this.state.token} />}/>
+                  <Route path="/amessagepage/profiledisp" render={(props) => <ProfileDisp {...props} token={this.state.token} />}/>
+                  <Route path="/amessagepage/myjobs" render={(props) => <MyJobs {...props} token={this.state.token}/>}/>
               </Switch>
           </Router>
         </Container>

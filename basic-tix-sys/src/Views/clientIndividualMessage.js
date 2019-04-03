@@ -20,7 +20,7 @@ const year = new Date().getFullYear(); //Current Year
 const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 
-class IndMes extends Component {
+class CIndMes extends Component {
   constructor(props) {
     super(props);
 
@@ -60,4 +60,4 @@ class IndMes extends Component {
   }
 }
 
-export default IndMes;
+export default CIndMes;

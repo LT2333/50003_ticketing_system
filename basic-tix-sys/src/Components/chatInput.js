@@ -33,6 +33,26 @@ class ChatInput extends Component {
     // Stop the form from refreshing the page on submit
     event.preventDefault();
 
+    // var unirest = require("unirest");
+
+    // var reqpost = unirest(
+    //   "POST",
+    //   "https://courier50003.herokuapp.com/portal/chats"
+    // );
+
+    // reqpost.headers({
+    //   "cache-control": "no-cache",
+    //   "content-type": "application/json"
+    // });
+
+    // reqpost.type("json");
+    // reqpost.send({
+    //   // admin_id: "5c94643a471b590004e5fd00",
+    //   admin_id: "5c9b1de27653c06600c44686",
+    //   request_id: "5c946495471b590004e5fd01",
+    //   conversastion: this.state.chatInput
+    // });
+
     var unirest = require("unirest");
 
     var reqpost = unirest(
@@ -47,9 +67,9 @@ class ChatInput extends Component {
 
     reqpost.type("json");
     reqpost.send({
-      admin_id: "5c94643a471b590004e5fd00",
-      request_id: "5c946495471b590004e5fd01",
-      conversastion: this.state.chatInput
+      requestor_id: "5c9b1de27653c06600c44686",
+      request_id: "5c94b0ca88ae70000426f10a",
+      conversastion: "Hello world i am testing again and again"
     });
 
     reqpost.end(res => {
