@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {ReactRouter} from "react";
 import {
   Card,
   CardHeader,
@@ -49,10 +50,10 @@ class IndMes extends Component {
             );
           })}
           <hr />
-          <Button href="/chats">Chat Now</Button>
-          <Button href="/messagepage" theme="dark">
+          <Button href="/cmessagepage/chats">Chat Now</Button>
+          {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
             Go Back
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     );

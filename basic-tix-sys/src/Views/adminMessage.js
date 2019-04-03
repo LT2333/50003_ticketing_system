@@ -24,7 +24,7 @@ class AdminMessage extends Component {
     render() {
       return (
         <Container>
-          <Nav pills>
+          <Nav tabs>
             <NavItem>
               <NavLink href="/amessagepage/profile">Profile</NavLink>
             </NavItem>

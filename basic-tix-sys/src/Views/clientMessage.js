@@ -6,6 +6,7 @@ import ContactUs from "../Components/contactUsForm";
 import MessagePage from "./messagePage";
 import IndMes from "./individualMessage";
 import MyReqs from "./myReqs";
+import Chats from "./Chats";
 import { Nav, NavItem, NavLink } from "shards-react";
 
 class ClientMessage extends Component {
@@ -18,7 +19,7 @@ class ClientMessage extends Component {
         this.handleBug = this.handleBug.bind(this);
       }
     handleBug(event) {
-      console.log("token from redirect: ", this.state.token,
+      console.log("token from redirect [clientMessage]: ", this.state.token,
     " props from redirect: ", this.props.location)
     }
     render() {
@@ -26,7 +27,7 @@ class ClientMessage extends Component {
         <Container>
           {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
 
-          <Nav pills>
+          <Nav tabs>
             <NavItem>
               <NavLink href="/cmessagepage/contactus">Contact Us</NavLink>
             </NavItem>
@@ -42,6 +43,7 @@ class ClientMessage extends Component {
               <Switch>
                 <Route path="/cmessagepage/contactus" component={ContactUs}/>
                 <Route path="/cmessagepage/individualmessage" component={IndMes} />
+                <Route path="/cmessagepage/chats" component={Chats} />
                 <Route path="/cmessagepage/main" render={(routeProps) => <MessagePage {...routeProps} token={this.state.token}/>}/>
                 <Route path="/cmessagepage/myreqs" render={(routeProps) => <MyReqs {...routeProps} token={this.state.token}/>}/>
               </Switch>

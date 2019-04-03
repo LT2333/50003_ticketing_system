@@ -9,6 +9,9 @@ import {
   CardSubtitle,
   Button,
   FormGroup,
+  ListGroup,
+  ListGroupItemHeading,
+  ButtonGroup
 } from "shards-react";
 import Select from "react-select";
 import { Badge } from "shards-react";
@@ -20,6 +23,8 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import "./widgets.css";
 import IndMes from "./individualMessage";
 import MessageBox from "../Components/messageBox";
+import ListIcon from "semantic-ui-react";
+import ListItem from "semantic-ui-react";
 // library.add(faIgloo);
 
 const date = new Date().getDate(); //Current Date
@@ -74,10 +79,10 @@ class MessagePage extends Component {
     console.log("Props from clientMes to messagePage: ", this.props)
   }
   handleFilter (event){
-    console.log("Event: ", event);
+    console.log("Event [messagePage]: ", event.target.id);
     //Do stuff here
     this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.value});
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.target.id});
 
     var unirest = require("unirest");
 
@@ -96,11 +101,11 @@ class MessagePage extends Component {
     });
 
     req.end(res => {
-      console.log("res.body: ", res.body);
-      console.log("token passed: ", this.state.token);
+      console.log("res.body [messagePage]: ", res.body);
+      console.log("token passed [messagePage]: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
-        messageInfoArray: res.body});
+        messageInfoArray: res.body.requests});
       });
     
   };
@@ -108,25 +113,46 @@ class MessagePage extends Component {
   render() {
     return (
       <div>
-        <Container>
+        <Container className="MessagePage">
           {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
           <Row>
-            <FormGroup>
+            {/* <FormGroup>
               <label>
-                Chose your filter
+                Choose your filter
               </label>
               <Select
                 multiple={false}
                 options={filterOptions}
                 onChange={this.handleFilter}
               />
-            </FormGroup>
-          </Row>
-          <Row>
-            {/* <MessageBox messageInfo={this.state.messageInfo} /> */}
-            {this.state.messageInfoArray.map(messageInfoArray => {
-              return <MessageBox messageInfo={messageInfoArray} />;
-            })}
+            </FormGroup> */}
+            <Col>
+              <ButtonGroup vertical className="SideBar">
+                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Sort by status</Button>
+                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Sort by date</Button>
+                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
+                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
+                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
+              </ButtonGroup>
+            </Col>
+            <Col>
+              <ListGroup>
+                <ListGroupItemHeading>
+                  <Container>
+                    <Row>
+                      <Col>Subject</Col>
+                      <Col>Requester</Col>
+                      <Col>Requested</Col>
+                      <Col>Type</Col>
+                      <Col>Priority</Col>
+                    </Row>
+                  </Container>
+                </ListGroupItemHeading>
+                {this.state.messageInfoArray.map(messageInfoArray => {
+                  return <MessageBox messageInfo={messageInfoArray} />;
+                })}
+              </ListGroup>
+            </Col>
           </Row>
         </Container>
       </div>
