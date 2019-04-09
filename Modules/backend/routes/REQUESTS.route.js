@@ -5,6 +5,7 @@ const router = express.Router();
 // Controller 1: User management
 const REQUESTS_controller = require('../controllers/REQUESTS.controller');
 
+router.post('/profile-img-upload', REQUESTS_controller.imageupload);
 //===========//
 // PART B: FOR USER REQUESTS
 //===========//

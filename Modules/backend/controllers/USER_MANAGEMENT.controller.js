@@ -11,16 +11,6 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY || "SG.LbEWngPGST2PFrXy3b8YpA.u5Fl
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
     res.send('This is the USER_MANAGEMENT Test controller!');
-    const msg = {
-      to: "irene.chiatan@gmail.com",
-      from: 'irene.chiatan@gmail.com',
-      subject: 'Hello',
-      text: `
-      See it works
-      `
-      //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-    };
-    sgMail.send(msg);
 };
 
 // User sign-ups
@@ -215,7 +205,7 @@ exports.login = function (req,res){
     //const userSession = new USERSESSION();
     let userSession = new USERSESSION( // Match the require path
       {
-        userId: user._id
+        userId: user._id  // This is the id used to fetch the other data, We need to get it from the token in all paths
       });
     console.log(user._id);
     console.log(userSession.userId);
@@ -229,8 +219,8 @@ exports.login = function (req,res){
       return res.send({
         success:true,
         message: 'Valid sign in',
-        token: user._id, // this is the real ID upon creation
-        //token: doc._id, // points back to the user id which is the token
+        // token: user._id, // this is the real ID upon creation
+        token: doc._id, // This is the id of the user session
         authority: user.authority //
         // username: user.username
       });
@@ -242,18 +232,19 @@ exports.login = function (req,res){
 exports.logout = function(req,res){
   const { query } = req;
   const { token } = query;
+  console.log(token);
 
   USERSESSION.findOneAndUpdate({
-        userId: token,
-        isDeleted: false
+        _id: token
+        //isDeleted: false
       }, {
         $set:{isDeleted:true}
-    }, null,(err,sessions) => {
+    }, null, (err,sessions) => {
         if(err){
-            console.log(err);
+            // console.log(err);
             return res.send({
-                success:false,
-                message:'Error: First Server error, user session collection'
+              success: false,
+              message: 'Invalid token used'
             });
         }
       return res.send({

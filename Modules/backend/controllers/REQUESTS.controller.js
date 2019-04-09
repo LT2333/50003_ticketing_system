@@ -1,13 +1,87 @@
 const REQUESTS = require('../models/REQUESTS.model');
 const USER = require('../models/USER_MANAGEMENT.model');
+const USERSESSION = require('../models/USER_SESS.model');
 var retext = require('retext');
 var keywords = require('retext-keywords')
 var toString = require('nlcst-to-string')
 var Sentiment = require('sentiment');
-
 var Isemail = require('isemail'); // Checks for valid email for users with no account
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "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");
+
+// Packages for uplaoding an image
+const aws = require( 'aws-sdk' );
+const multerS3 = require( 'multer-s3' );
+const multer = require('multer');
+const path = require( 'path' );
+
+// Amazon S3 Instantiation
+const s3 = new aws.S3({
+    accessKeyId: 'AKIATIS5GSCGAEGJ2MVO',
+    secretAccessKey: '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',
+    Bucket: 'esc-images-lt'
+   });
+
+//Single upload -- Upload only 1 image
+const profileImgUpload = multer({
+   storage: multerS3({
+    s3: s3,
+    bucket: 'esc-images-lt',
+    acl: 'public-read',
+    key: function (req, file, cb) {
+     cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
+    } // create the filename
+   }),
+   //limits:{ fileSize: 2000000 }, // In bytes: 2000000 bytes = 2 MB
+   fileFilter: function( req, file, cb ){
+    checkFileType( file, cb );
+   }
+  }).single('profileImage');
+
+/**
+* Check File Type
+* @param file
+* @param cb
+* @return {*}
+*/
+function checkFileType( file, cb ){
+   // Allowed ext
+   const filetypes = /jpeg|jpg|png|gif/;
+   // Check ext
+   const extname = filetypes.test( path.extname( file.originalname ).toLowerCase());
+   // Check mime
+   const mimetype = filetypes.test( file.mimetype );
+  if( mimetype && extname ){
+    return cb( null, true );
+   } else {
+    cb( 'Error: Images Only!' );
+   }
+}
+
+exports.imageupload = function ( req, res ){
+    profileImgUpload( req, res, ( error ) => {
+       console.log( 'error', error );
+      if( error ){
+       console.log( 'errors', error );
+       res.json( { error: error } );
+      } else {
+       // If File not found
+       if( req.file === undefined ){
+        console.log( 'Error: No File Selected!' );
+        res.json( 'Error: No File Selected' );
+       } else {
+        // If Success
+        const imageName = req.file.key;
+        const imageLocation = req.file.location;
+    // Save the file name into database into profile model
+    res.json( {
+         image: imageName,
+         location: imageLocation
+        } );
+       }
+      }
+     });
+    }
 
 //===============//
 // User APIs
@@ -159,11 +233,13 @@ exports.usersubmitacc = function(req,res){
     id,  // This is passed on the front-end. Store global var
     title,
     message,
-    imageURL,
-    category
+    category,
+    image
   } = body;
 
+  console.log(id);
   if(!id){
+    //console.log(req);
     return res.send({
       success:false,
       error:"front-end please send the id"
@@ -203,8 +279,25 @@ exports.usersubmitacc = function(req,res){
   var priority = sentiment.analyze(message).score;
 
   // Find based on the username/id
+  USERSESSION.find({
+      _id:id
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id:id
+    _id:user_id
   }, (err, users)=>{
     if(err){
       return res.send({
@@ -228,7 +321,7 @@ exports.usersubmitacc = function(req,res){
         title: title,
         message: message,
         category: category,
-        imageURL:imageURL,
+        imageURL:imageLocation,
         tags:tags,
         priority: priority
       });
@@ -252,6 +345,7 @@ exports.usersubmitacc = function(req,res){
         });
       });
   });
+});
 }
 
 //===============//
@@ -268,8 +362,25 @@ exports.viewmessage = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -311,7 +422,7 @@ exports.viewmessage = function(req,res){
     }
 
   });
-
+});
 }
 
 // Chat function
@@ -342,10 +453,26 @@ exports.chats = function(req,res){
       message: 'Error: conversastion cannot be blank'
     });
   }
-
+  USERSESSION.find({
+      _id:requestor_id
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   // Search for the admin's username
   USER.find({
-    _id: requestor_id,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -386,10 +513,11 @@ exports.chats = function(req,res){
       return res.send({
         success: true,
         message: 'Chat sent successfully',
-        requester_id: requestor_id,
+        requester_id: requestor_id, // session id
         request_id: request_id
       });
     });
+  });
 });
 }
 
@@ -406,8 +534,25 @@ exports.viewdate = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -447,7 +592,7 @@ exports.viewdate = function(req,res){
       }
 
     });
-
+  });
 }
 
 // filter by stauts and after that datat
@@ -463,8 +608,25 @@ exports.viewstatus = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -505,6 +667,7 @@ exports.viewstatus = function(req,res){
       }
 
     });
+  });
 
 }
 
@@ -521,8 +684,25 @@ exports.viewwho = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -563,6 +743,7 @@ exports.viewwho = function(req,res){
       }
 
     });
+  });
 
 }
 
@@ -579,8 +760,25 @@ exports.viewcategory = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -621,6 +819,7 @@ exports.viewcategory = function(req,res){
       }
 
     });
+  });
 
 }
 
@@ -637,8 +836,25 @@ exports.viewpriority = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -679,6 +895,7 @@ exports.viewpriority = function(req,res){
       }
 
     });
+  });
 
 }
 
@@ -737,10 +954,26 @@ exports.adminhandle = function(req,res){
       message:"Error: Requests id not sent"
     });
   }
-
+  USERSESSION.find({
+      _id:admin_id
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   // Search for the admin's username
   USER.find({
-    _id: admin_id,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -783,6 +1016,7 @@ exports.adminhandle = function(req,res){
        });
      });
   });
+});
 
 }
 
@@ -810,10 +1044,27 @@ exports.admincomplete = function(req,res){
       message:"Error: Requests id not sent"
     });
   }
+  USERSESSION.find({
+      _id:admin_id
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
 
   // Search for the admin's username
   USER.find({
-    _id: admin_id,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -855,6 +1106,7 @@ exports.admincomplete = function(req,res){
        });
      });
   });
+});
 
 }
 
@@ -872,8 +1124,25 @@ exports.adminview = function(req,res){
   console.log(token);
   // Retrieve the type
   console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
   USER.find({
-    _id: token,
+    _id: user_id,
   }, (err, users)=> {
     if(err){
       return res.send({
@@ -908,5 +1177,5 @@ exports.adminview = function(req,res){
     }
 
     });
-
+});
 }
