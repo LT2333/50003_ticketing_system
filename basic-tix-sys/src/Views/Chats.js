@@ -25,20 +25,6 @@ class Chats extends Component {
     // this.sendHandler = this.sendHandler.bind(this);
   }
 
-  // sendHandler(message) {
-  //   const messageObject = {
-  //     username: this.props.username,
-  //     message
-  //   };
-  // }
-
-  // addMessage(message) {
-  //   // Append the message to the component state
-  //   const messages = this.state.messages;
-  //   messages.push(message);
-  //   this.setState({ messages });
-  // }
-
   handleNewUserMessage = newMessage => {
     console.log(`New message incoming! ${newMessage}`);
     // Now send the message throught the backend API
@@ -70,29 +56,38 @@ class Chats extends Component {
         addResponseMessage("You might consider");
       }
     });
-
-    // var reqget = unirest(
-    //   "GET",
-    //   "https://courier50003.herokuapp.com/portal/viewreq"
-    // );
-
-    // reqget.query({
-    //   token: "5c946495471b590004e5fd01"
-    //   //token: "5c94643a471b590004e5fd00"
-    // });
-
-    // reqget.headers({
-    //   "cache-control": "no-cache"
-    // });
-
-    // reqget.end(res => {
-    //   if (res.error) throw new Error(res.error);
-
-    //   console.log(res.body);
-    //   console.log(res.body["9"].message);
-    //   addResponseMessage(res.body["9"].message);
-    // });
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.messages !== prevState.messages) {
+      console.log("componentdidupdate");
+      // var unirest = require("unirest");
+
+      // var req = unirest(
+      //   "GET",
+      //   "https://courier50003.herokuapp.com/portal/viewreq"
+      // );
+
+      // req.query({
+      //   token: "5c946495471b590004e5fd01"
+      //   //token: "5c94643a471b590004e5fd00"
+      // });
+
+      // req.headers({
+      //   "cache-control": "no-cache"
+      // });
+
+      // req.end(res => {
+      //   if (res.error) throw new Error(res.error);
+
+      //   this.setState({
+      //     messageInfoArray: res.body
+      //   });
+
+      //   console.log(res.body);
+      // });
+    }
+  }
 
   render() {
     console.log("test");

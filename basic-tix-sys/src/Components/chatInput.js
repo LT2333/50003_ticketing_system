@@ -33,26 +33,6 @@ class ChatInput extends Component {
     // Stop the form from refreshing the page on submit
     event.preventDefault();
 
-    // var unirest = require("unirest");
-
-    // var reqpost = unirest(
-    //   "POST",
-    //   "https://courier50003.herokuapp.com/portal/chats"
-    // );
-
-    // reqpost.headers({
-    //   "cache-control": "no-cache",
-    //   "content-type": "application/json"
-    // });
-
-    // reqpost.type("json");
-    // reqpost.send({
-    //   // admin_id: "5c94643a471b590004e5fd00",
-    //   admin_id: "5c9b1de27653c06600c44686",
-    //   request_id: "5c946495471b590004e5fd01",
-    //   conversastion: this.state.chatInput
-    // });
-
     var unirest = require("unirest");
 
     var reqpost = unirest(
@@ -78,15 +58,13 @@ class ChatInput extends Component {
 
       console.log(res.body);
 
-      this.setState({ chatInput: "" });
+      this.setState({
+        chatInput: ""
+      });
+
       console.log("not here");
-      console.log(this.state.chatInput);
+      console.log("current chat input in res end: " + this.state.chatInput);
     });
-
-    // Call the onSend callback with the chatInput message
-    // this.props.onSend(this.state.chatInput);
-
-    // Clear the input box
   }
 
   render() {

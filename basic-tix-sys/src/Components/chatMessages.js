@@ -8,8 +8,7 @@ class ChatMessages extends Component {
     super(props);
 
     this.state = {
-      messageInfoArray: [],
-      align: "sideleft"
+      messageInfoArray: []
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -50,37 +49,6 @@ class ChatMessages extends Component {
   //   objDiv.scrollTop = objDiv.scrollHeight;
   // }
 
-  componentDidUpdate(prevState) {
-    if (this.state.messageInfoArray !== prevState.messageInfoArray) {
-      console.log("componentdidupdate");
-      // var unirest = require("unirest");
-
-      // var req = unirest(
-      //   "GET",
-      //   "https://courier50003.herokuapp.com/portal/viewreq"
-      // );
-
-      // req.query({
-      //   token: "5c946495471b590004e5fd01"
-      //   //token: "5c94643a471b590004e5fd00"
-      // });
-
-      // req.headers({
-      //   "cache-control": "no-cache"
-      // });
-
-      // req.end(res => {
-      //   if (res.error) throw new Error(res.error);
-
-      //   this.setState({
-      //     messageInfoArray: res.body
-      //   });
-
-      //   console.log(res.body);
-      // });
-    }
-  }
-
   handleRefresh() {
     var unirest = require("unirest");
 
@@ -108,6 +76,40 @@ class ChatMessages extends Component {
       console.log(res.body);
     });
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   // Typical usage (don't forget to compare props):
+  //   console.log("prevstate: " + prevState.messageInfoArray);
+  //   console.log("this.state: " + this.state.messageInfoArray);
+  //   if (this.props !== prevState.props) {
+  //     console.log("message list has been updated!");
+  // var unirest = require("unirest");
+
+  // var req = unirest(
+  //   "GET",
+  //   "https://courier50003.herokuapp.com/portal/viewreq"
+  // );
+
+  // req.query({
+  //   token: "5c946495471b590004e5fd01"
+  //   //token: "5c94643a471b590004e5fd00"
+  // });
+
+  // req.headers({
+  //   "cache-control": "no-cache"
+  // });
+
+  // req.end(res => {
+  //   if (res.error) throw new Error(res.error);
+
+  //   this.setState({
+  //     messageInfoArray: res.body
+  //   });
+
+  //   console.log(res.body);
+  // });
+  //   }
+  // }
 
   render() {
     var messageInfoArray = this.state.messageInfoArray;
