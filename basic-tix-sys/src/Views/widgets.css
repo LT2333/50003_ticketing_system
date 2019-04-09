@@ -20,16 +20,16 @@
   height: 100px;
 }
 
-/* Message Page */
-.MessageCard {
-  position: relative;
-  text-align: left;
-  margin-top: 50px;
-  margin-left: 100px;
-  margin-right: 50px;
-  height: 350px;
-  width: 900px;
-  /* overflow: hidden; */
+/* MessageBox */
+.MessageBox {
+  width: 850px;
+  font-size: 6px;
+  overflow: hidden;
+}
+
+/* MessagePage */
+.MessagePage {
+  margin-top: 25px;
 }
 
 .MessageText {
@@ -76,4 +76,8 @@
 #Click {
   color: #707070;
   hover: #707070;
+}
+
+/* ButtonGroup */
+.SideBar {
 }

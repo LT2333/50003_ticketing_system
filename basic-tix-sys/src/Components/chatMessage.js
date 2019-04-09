@@ -1,55 +1,94 @@
-import React from "react";
+import React, { Component } from "react";
+import ChatMessage from "./chatMessage";
+import { Button, Row, Container } from "shards-react";
+import "./chatMessages.css";
+import { gray } from "ansi-colors";
 
-const dict = [
-  {
-    username: "Mark Tan",
-    priority: -4,
-    status: "unaddressed",
-    who: "unaddressed",
-    tags: ["problem", "API", "service", "request", "answer"],
-    category: "test",
-    _id: "5c945241f67fe258683e982f",
-    email: "mark@gmail.com",
-    contact_num: 1234,
-    message:
-      "I have a problem with my API service request that I could not solve. When can you get back to me with an answer. This is not so urgent",
-    date: "2019-03-22T03:10:57.274Z",
-    chat: [
-      {
-        date: "2019-03-22T03:14:16.105Z",
-        _id: "5c9453084f3c6f0004860156",
-        name: "admin1",
-        message: "Hello world i am testing again"
-      },
-      {
-        date: "2019-03-22T03:14:23.737Z",
-        _id: "5c94530f4f3c6f0004860157",
-        name: "admin1",
-        message: "Hello world i am testing again and again"
-      }
-    ],
-    __v: 0
+class ChatMessages extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      messageInfoArray: []
+    };
+
+    this.handleRefresh = this.handleRefresh.bind(this);
   }
-];
 
-class ChatMessage extends React.Component {
+  // componentDidUpdate() {
+  //   // There is a new message in the state, scroll to bottom of list
+  //   const objDiv = document.getElementById("messageList");
+  //   objDiv.scrollTop = objDiv.scrollHeight;
+  // }
+
+  handleRefresh() {
+    var unirest = require("unirest");
+
+    var req = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/viewreq"
+    );
+
+    req.query({
+      token: "5c946495471b590004e5fd01"
+      //token: "5c94643a471b590004e5fd00"
+    });
+
+    req.headers({
+      "cache-control": "no-cache"
+    });
+
+    req.end(res => {
+      if (res.error) throw new Error(res.error);
+
+      this.setState({
+        messageInfoArray: res.body
+      });
+
+      console.log(res.body);
+
+      //console.log(this.state.messageInfoArray);
+      //console.log(this.state.messageInfoArray[0].chat[1]);
+    });
+  }
+
   render() {
-    // Was the message sent by the current user. If so, add a css class
-    const fromMe = this.props.fromMe ? "from-me" : "";
+    var messageInfoArray = this.state.messageInfoArray;
+    console.log(messageInfoArray);
+
+    // // Loop through all the messages in the state and create a Message component
+    const messages = messageInfoArray.map(m => {
+      return (
+        <div>
+          
+          <Container>
+            <Row className="chatuser">{m.name}</Row>
+            <Row className="msgbody">{m.message}</Row>
+            {/* <ChatMessage
+            key={m.chat}
+            username={m.chat.name}
+            message-body={m.chat.message}
+            //fromMe={messageInfoArray.fromMe}
+          /> */}
+          </Container>
+        </div>
+      );
+    });
+
+    // const browserHistory = require("react-router-dom/BrowserHistory").default;
 
     return (
-      <div className={`message ${fromMe}`}>
-        <div className="username">{this.props.username}</div>
-        <div className="message-body">{this.props.message}</div>
+      <div className="messages" id="messageList">
+        {/* <Button onClick={browserHistory.goBack}>Go Back</Button> */}
+        <Button onClick={this.handleRefresh}>Refresh</Button>
+        {messages}
       </div>
     );
   }
 }
 
-ChatMessage.defaultProps = {
-  message: "",
-  username: "",
-  fromMe: false
+ChatMessages.defaultProps = {
+  messages: []
 };
 
-export default ChatMessage;
+export default ChatMessages;

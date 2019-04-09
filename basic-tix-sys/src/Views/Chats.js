@@ -44,15 +44,10 @@ class Chats extends Component {
       <div>
         <h1 className="title">Chat</h1>
         <ChatMessages messages={this.state.messages} />
-        <ChatInput onSend={this.sendHandler} />
+        <ChatInput />
       </div>
     );
   }
 }
-
-//app
-//chatinput - input box
-//messages - shows list of messages
-//message - show individual message
 
 export default Chats;

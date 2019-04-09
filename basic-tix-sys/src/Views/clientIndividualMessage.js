@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {ReactRouter} from "react";
 import {
   Card,
   CardHeader,
@@ -19,7 +20,7 @@ const year = new Date().getFullYear(); //Current Year
 const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 
-class IndMes extends Component {
+class CIndMes extends Component {
   constructor(props) {
     super(props);
 
@@ -49,13 +50,14 @@ class IndMes extends Component {
             );
           })}
           <hr />
-          <Button href="/messagepage" theme="dark">
+          <Button href="/cmessagepage/chats">Chat Now</Button>
+          {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
             Go Back
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     );
   }
 }
 
-export default IndMes;
+export default CIndMes;

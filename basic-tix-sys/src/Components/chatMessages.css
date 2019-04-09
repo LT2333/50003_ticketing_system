@@ -1,9 +1,8 @@
 .chatuser {
-  font-size: 15px;
-  margin-left: 250px;
-  margin-right: 250px;
+  font-size: 13px;
+  color:#007BFF;
 }
 
 .msgbody {
-  font-size: 20px;
+  font-size: 18px;
 }

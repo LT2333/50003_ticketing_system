@@ -16,7 +16,6 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "./widgets.css";
-import IndMes from "./individualMessage";
 import MessageBox from "../Components/messageBox";
 // library.add(faIgloo);
 
