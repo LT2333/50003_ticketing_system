@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {ReactRouter} from "react";
+import { ReactRouter } from "react";
 import {
   Card,
   CardHeader,
@@ -28,6 +28,7 @@ class CIndMes extends Component {
       messageInfo: props.location.messageInfo
     };
   }
+
   render() {
     return (
       <Card className="IndCard">

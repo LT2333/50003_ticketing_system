@@ -10,7 +10,7 @@ import {
   Button,
   FormGroup,
   ListGroup,
-  ListGroupItemHeading,
+  ListGroupItemHeading
 } from "shards-react";
 import Select from "react-select";
 import { Badge } from "shards-react";
@@ -32,12 +32,12 @@ const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 
 const filterOptions = [
-  {label: "Sort by status", value: "viewstatus" },
-  {label: "Sort by date", value: "viewdate" },
-  {label: "Sort by who", value: "viewwho" },
-  {label: "Sort by category", value: "viewcategory" },
-  {label: "Sort by priority", value: "viewpriority" },
-]
+  { label: "Sort by status", value: "viewstatus" },
+  { label: "Sort by date", value: "viewdate" },
+  { label: "Sort by who", value: "viewwho" },
+  { label: "Sort by category", value: "viewcategory" },
+  { label: "Sort by priority", value: "viewpriority" }
+];
 
 class MyReqs extends Component {
   constructor(props) {
@@ -74,20 +74,18 @@ class MyReqs extends Component {
     this.handleBug = this.handleBug.bind(this);
   }
   handleBug(event) {
-    console.log("Props from clientMes to messagePage: ", this.props)
+    console.log("Props from clientMes to messagePage: ", this.props);
   }
-  handleFilter (event){
+  handleFilter(event) {
     console.log("Event [messagePage]: ", event);
     //Do stuff here
     this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.value});
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.value
+    });
 
     var unirest = require("unirest");
 
-    var req = unirest(
-      "GET",
-      this.state.filterEndpoint
-    );
+    var req = unirest("GET", this.state.filterEndpoint);
 
     req.query({
       token: "5c94643a471b590004e5fd00"
@@ -103,10 +101,10 @@ class MyReqs extends Component {
       console.log("token passed [messagePage]: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
-        messageInfoArray: res.body.requests});
+        messageInfoArray: res.body.requests
       });
-    
-  };
+    });
+  }
 
   render() {
     return (
@@ -115,9 +113,7 @@ class MyReqs extends Component {
           {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
           <Row>
             <FormGroup>
-              <label>
-                Chose your filter
-              </label>
+              <label>Chose your filter</label>
               <Select
                 multiple={false}
                 options={filterOptions}

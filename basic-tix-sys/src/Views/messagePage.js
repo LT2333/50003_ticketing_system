@@ -8,14 +8,10 @@ import {
   CardFooter,
   CardSubtitle,
   Button,
-<<<<<<< HEAD
-  FormGroup
-=======
   FormGroup,
   ListGroup,
   ListGroupItemHeading,
   ButtonGroup
->>>>>>> 5b0c877200eb7f83bd4bf98ceea419c7e47ba01a
 } from "shards-react";
 import Select from "react-select";
 import { Badge } from "shards-react";
@@ -81,50 +77,8 @@ class MessagePage extends Component {
   componentDidMount() {
     //Do stuff here
     this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"});
-
-    var unirest = require("unirest");
-
-    var req = unirest(
-      "GET",
-      this.state.filterEndpoint
-    );
-
-    req.query({
-      token: "5c94643a471b590004e5fd00"
-      // this.state.token
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"
     });
-
-    req.headers({
-      "cache-control": "no-cache"
-    });
-
-    req.end(res => {
-      console.log("res.body [messagePage]: ", res.body);
-      console.log("token passed [messagePage]: ", this.state.token);
-      if (res.error) throw new Error(res.error);
-      this.setState({
-        messageInfoArray: res.body.requests});
-      });
-  }
-  handleBug(event) {
-    console.log("Props from clientMes to messagePage: ", this.props);
-  }
-<<<<<<< HEAD
-  handleFilter(event) {
-    console.log("Event: ", event);
-    //Do stuff here
-    this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.value
-    });
-=======
-
-  handleFilter (event){
-    console.log("Event [messagePage]: ", event.target.id);
-    //Do stuff here
-    this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.target.id});
->>>>>>> 5b0c877200eb7f83bd4bf98ceea419c7e47ba01a
 
     var unirest = require("unirest");
 
@@ -144,11 +98,41 @@ class MessagePage extends Component {
       console.log("token passed [messagePage]: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
-<<<<<<< HEAD
-        messageInfoArray: res.body
-=======
-        messageInfoArray: res.body.requests});
->>>>>>> 5b0c877200eb7f83bd4bf98ceea419c7e47ba01a
+        messageInfoArray: res.body.requests
+      });
+    });
+  }
+  handleBug(event) {
+    console.log("Props from clientMes to messagePage: ", this.props);
+  }
+
+  handleFilter(event) {
+    console.log("Event [messagePage]: ", event.target.id);
+    //Do stuff here
+    this.setState({
+      filterEndpoint:
+        "https://courier50003.herokuapp.com/portal/" + event.target.id
+    });
+
+    var unirest = require("unirest");
+
+    var req = unirest("GET", this.state.filterEndpoint);
+
+    req.query({
+      token: "5c94643a471b590004e5fd00"
+      // this.state.token
+    });
+
+    req.headers({
+      "cache-control": "no-cache"
+    });
+
+    req.end(res => {
+      console.log("res.body [messagePage]: ", res.body);
+      console.log("token passed [messagePage]: ", this.state.token);
+      if (res.error) throw new Error(res.error);
+      this.setState({
+        messageInfoArray: res.body.requests
       });
     });
   }
@@ -159,15 +143,10 @@ class MessagePage extends Component {
         <Container className="MessagePage">
           {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
           <Row>
-<<<<<<< HEAD
-            <FormGroup>
-              <label>Chose your filter</label>
-=======
             {/* <FormGroup>
               <label>
                 Choose your filter
               </label>
->>>>>>> 5b0c877200eb7f83bd4bf98ceea419c7e47ba01a
               <Select
                 multiple={false}
                 options={filterOptions}
@@ -176,11 +155,46 @@ class MessagePage extends Component {
             </FormGroup> */}
             <Col>
               <ButtonGroup vertical className="SideBar">
-                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Sort by status</Button>
-                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Sort by date</Button>
-                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
-                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
-                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
+                <Button
+                  squared
+                  theme="light"
+                  id="viewstatus"
+                  onClick={this.handleFilter}
+                >
+                  Sort by status
+                </Button>
+                <Button
+                  squared
+                  theme="light"
+                  id="viewdate"
+                  onClick={this.handleFilter}
+                >
+                  Sort by date
+                </Button>
+                <Button
+                  squared
+                  theme="light"
+                  id="viewwho"
+                  onClick={this.handleFilter}
+                >
+                  Sort by who
+                </Button>
+                <Button
+                  squared
+                  theme="light"
+                  id="viewcategory"
+                  onClick={this.handleFilter}
+                >
+                  Sort by category
+                </Button>
+                <Button
+                  squared
+                  theme="light"
+                  id="viewpriority"
+                  onClick={this.handleFilter}
+                >
+                  Sort by priority
+                </Button>
               </ButtonGroup>
             </Col>
             <Col>

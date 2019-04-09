@@ -8,7 +8,8 @@ class ChatMessages extends Component {
     super(props);
 
     this.state = {
-      messageInfoArray: []
+      messageInfoArray: [],
+      align: "sideleft"
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -40,9 +41,6 @@ class ChatMessages extends Component {
       });
 
       console.log(res.body);
-
-      //console.log(this.state.messageInfoArray);
-      //console.log(this.state.messageInfoArray[0].chat[1]);
     });
   }
 
@@ -108,9 +106,6 @@ class ChatMessages extends Component {
       });
 
       console.log(res.body);
-
-      //console.log(this.state.messageInfoArray);
-      //console.log(this.state.messageInfoArray[0].chat[1]);
     });
   }
 
@@ -138,7 +133,7 @@ class ChatMessages extends Component {
     });
 
     // const browserHistory = require("react-router-dom/BrowserHistory").default;
-
+    console.log(messages);
     return (
       <div className="messages" id="messageList">
         {/* <Button onClick={browserHistory.goBack}>Go Back</Button> */}
