@@ -12,7 +12,6 @@ import {
   Badge
 } from "shards-react";
 import "./widgets.css";
-import MessageBox from "./messagePage";
 
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
@@ -25,8 +24,60 @@ class AIndMes extends Component {
     super(props);
 
     this.state = {
-      messageInfo: props.location.messageInfo
+      messageInfo: props.location.messageInfo,
+      token: props.location.token
     };
+
+    this.handleTake = this.handleTake.bind(this);
+    this.handleComplete = this.handleComplete.bind(this);
+  }
+
+  handleComplete(event) {
+    var unirest = require("unirest");
+
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/admincomplete");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      "admin_id": this.state.token,
+      "request_id": this.state.messageInfo._id
+    });
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+  }
+
+  handleTake(event) {
+    console.log("admin_id: ", this.state.token,
+      "request_id: ", this.state.messageInfo._id)
+
+    var unirest = require("unirest");
+
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/adminhandle");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      "admin_id": this.state.token,
+      "request_id": this.state.messageInfo._id
+    });
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      console.log(res.body);
+    });
   }
   render() {
     return (
@@ -50,10 +101,12 @@ class AIndMes extends Component {
             );
           })}
           <hr />
-          <Button href="/cmessagepage/chats">Chat Now</Button>
-          <Button onClick={this.handleTake} theme="dark">
-            Take it
-          </Button>
+          <Button className="ThreeButtons" href="/amessagepage/chats">Chat Now</Button>
+          <Button className="ThreeButtons" onClick={this.handleTake}>Take it</Button>
+          <Button className="ThreeButtons" onClick={this.handleComplete}>Complete</Button>
+          {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
+            Go Back
+          </Button> */}
         </CardFooter>
       </Card>
     );

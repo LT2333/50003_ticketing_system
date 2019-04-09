@@ -15,7 +15,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
-import MessageBox from "../Components/messageBox";
+import AMessageBox from "../Components/adminMessageBox";
 import "./widgets.css";
 // library.add(faIgloo);
 
@@ -44,7 +44,7 @@ class MyJobs extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={this.state.messageInfo} />
+              <AMessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>

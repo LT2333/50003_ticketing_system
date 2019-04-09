@@ -83,14 +83,6 @@ class LoginCreds extends Component {
             state: this.state.token
         }}/> )
     }
-    
-    if (this.state.canlogin && this.state.type === "unaddressed") {
-      return (
-        <Redirect to = {{
-            pathname: '/amessagepage',
-            state: this.state.token
-        }}/> )
-    }
 
     return (
       <div class="w-50 mx-auto">

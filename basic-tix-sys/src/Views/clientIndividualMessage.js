@@ -12,7 +12,6 @@ import {
   Badge
 } from "shards-react";
 import "./widgets.css";
-import MessageBox from "./messagePage";
 
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month

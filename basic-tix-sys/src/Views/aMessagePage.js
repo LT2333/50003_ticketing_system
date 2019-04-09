@@ -21,7 +21,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "./widgets.css";
-import MessageBox from "../Components/messageBox";
+import AMessageBox from "../Components/adminMessageBox";
 import ListIcon from "semantic-ui-react";
 import ListItem from "semantic-ui-react";
 // library.add(faIgloo);
@@ -40,7 +40,7 @@ const filterOptions = [
   {label: "Sort by priority", value: "viewpriority" },
 ]
 
-class MessagePage extends Component {
+class AMessagePage extends Component {
   constructor(props) {
     super(props);
 
@@ -87,8 +87,8 @@ class MessagePage extends Component {
     );
 
     req.query({
-      token: "5c94643a471b590004e5fd00"
-      // this.state.token
+      token:this.state.token
+      //"5c94643a471b590004e5fd00"
     });
 
     req.headers({
@@ -121,8 +121,8 @@ class MessagePage extends Component {
     );
 
     req.query({
-      token: "5c94643a471b590004e5fd00"
-      // this.state.token
+      token: this.state.token
+      //"5c94643a471b590004e5fd00"
     });
 
     req.headers({
@@ -143,7 +143,7 @@ class MessagePage extends Component {
     return (
       <div>
         <Container className="MessagePage">
-          {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
+          {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Row>
             {/* <FormGroup>
               <label>
@@ -162,6 +162,7 @@ class MessagePage extends Component {
                 <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
                 <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
                 <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
+                <Button squared theme="light" id= "adminview" onClick={this.handleFilter}>My Jobs</Button>
               </ButtonGroup>
             </Col>
             <Col>
@@ -178,7 +179,7 @@ class MessagePage extends Component {
                   </Container>
                 </ListGroupItemHeading>
                 {this.state.messageInfoArray.map(messageInfoArray => {
-                  return <MessageBox messageInfo={messageInfoArray} />;
+                  return <AMessageBox messageInfo={messageInfoArray} token={this.state.token}/>;
                 })}
               </ListGroup>
             </Col>
@@ -189,4 +190,4 @@ class MessagePage extends Component {
   }
 }
 
-export default MessagePage;
+export default AMessagePage;

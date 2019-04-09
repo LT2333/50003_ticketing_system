@@ -5,7 +5,6 @@ import LoginCreds from "./Views/loginPage";
 import Homepage from "./Views/homePage";
 import ContactUs from "./Components/contactUsForm";
 import HeaderBar from "./Components/headerBar";
-import MessagePage from "./Views/messagePage";
 import clientHeaderBar from "./Components/clientHeaderBar";
 import Chats from "./Views/Chats";
 import MyJobs from "./Views/myJobs";

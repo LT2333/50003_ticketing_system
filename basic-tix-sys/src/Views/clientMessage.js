@@ -3,7 +3,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Button, Container } from "shards-react";
 import clientHeaderBar from "../Components/clientHeaderBar";
 import ContactUs from "../Components/contactUsForm";
-import MessagePage from "./messagePage";
+import CMessagePage from "./cMessagePage";
 import CIndMes from "./clientIndividualMessage";
 import MyReqs from "./myReqs";
 import Chats from "./Chats";
@@ -25,9 +25,8 @@ class ClientMessage extends Component {
     render() {
       return (
         <Container>
-          {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
-
-          <Nav tabs>
+          {/* <Button onClick={this.handleBug}>Debugger</Button> */}
+          {/* <Nav tabs>
             <NavItem>
               <NavLink href="/cmessagepage/contactus">Contact Us</NavLink>
             </NavItem>
@@ -35,16 +34,16 @@ class ClientMessage extends Component {
               <NavLink href="/cmessagepage/myreqs">My Request</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/cmessagepage/main">Main</NavLink>
+              <NavLink href="/cmessagepage/">Main</NavLink>
             </NavItem>
-          </Nav>
+          </Nav> */}
 
           <Router>
               <Switch>
                 <Route path="/cmessagepage/contactus" component={ContactUs}/>
                 <Route path="/cmessagepage/cindividualmessage" component={CIndMes} />
                 <Route path="/cmessagepage/chats" component={Chats} />
-                <Route path="/cmessagepage" render={(routeProps) => <MessagePage {...routeProps} token={this.state.token}/>}/>
+                <Route path="/cmessagepage/" render={(routeProps) => <CMessagePage {...routeProps} token={this.state.token}/>}/>
                 <Route path="/cmessagepage/myreqs" render={(routeProps) => <MyReqs {...routeProps} token={this.state.token}/>}/>
               </Switch>
           </Router>

@@ -16,7 +16,7 @@ const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 var current = Date.now();
 
-class MessageBox extends Component {
+class CMessageBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,4 +68,4 @@ class MessageBox extends Component {
   }
 }
 
-export default MessageBox;
+export default CMessageBox;
