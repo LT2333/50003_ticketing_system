@@ -41,7 +41,7 @@ class HeaderBar extends Component {
             <NavLink href="/amessagepage">Message Page</NavLink>
           </NavItem> */}
           <NavItem>
-            <NavLink href="/chats">Chats</NavLink>
+            <NavLink href="/iframe">Iframe</NavLink>
           </NavItem>
         </Nav>
 

@@ -19,6 +19,7 @@ import "shards-ui/dist/css/shards.min.css";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import SideBar from "./Components/sideBar";
 import { Container } from "shards-react";
+import TestIframe from "./Components/testIframe";
 
 class App extends Component {
   render() {
@@ -37,6 +38,7 @@ class App extends Component {
             <Route path="/amessagepage" component={AdminMessage} />
             <Route path="/cmessagepage" component={ClientMessage} />
             <Route path="/chats" component={Chats} />
+            <Route path="/iframe" component={TestIframe} />
           </Switch>
         </div>
       </Router>

@@ -32,6 +32,8 @@ import {
   addUserMessage
 } from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
+import Iframe from "react-iframe";
+// import ReactDOM from "react-dom";
 
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
@@ -46,6 +48,30 @@ const filterOptions = [
   { label: "Sort by category", value: "viewcategory" },
   { label: "Sort by priority", value: "viewpriority" }
 ];
+
+// const ComponentIframe = React.createClass({
+//   iframe: function() {
+//     return {
+//       __html: this.props.iframe
+//     };
+//   },
+
+//   render: function() {
+//     return (
+//       <div>
+//         <div dangerouslySetInnerHTML={this.iframe()} />
+//       </div>
+//     );
+//   }
+// });
+
+// const iframe =
+//   '<iframe allow="microphone;" width="350" height="430" src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"></iframe>';
+
+// ReactDOM.render(
+//   <ComponentIframe iframe={iframe} />,
+//   document.getElementById("container")
+// );
 
 class AMessagePage extends Component {
   constructor(props) {
