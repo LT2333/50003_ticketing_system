@@ -59,6 +59,10 @@ class LoginCreds extends Component {
         this.setState({ canlogin: true });
         this.setState({token: res.body.token});
         this.setState({type: res.body.authority});
+
+        localStorage.setItem("token", res.body.token);
+        localStorage.setItem("authority", res.body.authority);
+
       } else {
         this.setState({ errormsg: res.body.message });
       }

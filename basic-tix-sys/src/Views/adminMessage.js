@@ -48,11 +48,13 @@ class AdminMessage extends Component {
           <Router>
               <Switch>
                   <Route path="/amessagepage/aindividualmessage" component={AIndMes} />
+                  <Route path="/amessagepage/chats" component={Chats} />
+                  {/* <Route path="/amessagepage/chats" component={Chats} /> */}
                   <Route path="/amessagepage/" render={(routeProps) => <AMessagePage {...routeProps} token={this.state.token}/>}/>
-                  <Route path="/amessagepage/ahistory" render={(routeProps) => <Ahistory {...routeProps} token={this.state.token}/>}/>
+                  {/* <Route path="/amessagepage/ahistory" render={(routeProps) => <Ahistory {...routeProps} token={this.state.token}/>}/>
                   <Route path="/amessagepage/profileedit" render={(routeProps) => <ProfileEdit {...routeProps} token={this.state.token} />}/>
                   <Route path="/amessagepage/profiledisp" render={(routeProps) => <ProfileDisp {...routeProps} token={this.state.token} />}/>
-                  <Route path="/amessagepage/myjobs" render={(routeProps) => <MyJobs {...routeProps} token={this.state.token}/>}/>
+                  <Route path="/amessagepage/myjobs" render={(routeProps) => <MyJobs {...routeProps} token={this.state.token}/>}/> */}
               </Switch>
           </Router>
         </Container>

@@ -36,6 +36,8 @@ class AIndMes extends Component {
 
     this.handleTake = this.handleTake.bind(this);
     this.handleComplete = this.handleComplete.bind(this);
+    this.handleChat = this.handleChat.bind(this);
+
   }
 
   handleComplete(event) {
@@ -62,6 +64,10 @@ class AIndMes extends Component {
 
       console.log(res.body);
     });
+  }
+
+  handleChat(event) {
+    localStorage.setItem("id",this.state.messageInfo._id);
   }
 
   handleTake(event) {
@@ -115,13 +121,19 @@ class AIndMes extends Component {
             );
           })}
           <hr />
-          <Link
+          {/* <Link
           to={{
             pathname: "/amessagepage/chats" ,
             token: this.state.token,
             id: this.state.messageInfo._id
           }}
-          >Chat Now!</Link>
+          >Chat Now!</Link> */}
+          <Link
+          to={"/amessagepage/chats"}
+          onClick={this.handleChat}
+            >
+          Chat Now!
+          </Link>
           <Button className="ThreeButtons" onClick={this.handleTake}>Take it</Button>
           <Button className="ThreeButtons" onClick={this.handleComplete}>Complete</Button>
 

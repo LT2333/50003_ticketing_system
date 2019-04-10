@@ -28,6 +28,10 @@ class CIndMes extends Component {
       messageInfo: props.location.messageInfo,
       token: props.location.token
     };
+    this.handleChat = this.handleChat.bind(this);
+  }
+  handleChat(event) {
+    localStorage.setItem("id",this.state.messageInfo._id);
   }
   render() {
     return (
@@ -51,13 +55,19 @@ class CIndMes extends Component {
             );
           })}
           <hr />
-          <Link
+          {/* <Link
           to={{
             pathname: "/cmessagepage/chats" ,
             token: this.state.token,
             id: this.state.messageInfo._id
           }}
-          >Chat Now!</Link>
+          >Chat Now!</Link> */}
+          <Link
+          to={"/cmessagepage/chats"}
+          onClick={this.handleChat}
+            >
+          Chat Now!
+          </Link>
           {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
             Go Back
           </Button> */}
