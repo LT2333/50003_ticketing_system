@@ -68,8 +68,6 @@ class ChatInput extends Component {
   }
 
   render() {
-    console.log("test");
-
     return (
       <div>
         <InputGroup>

@@ -14,6 +14,7 @@ import ChatMessages from "../Components/chatMessages";
 import ChatInput from "../Components/chatInput";
 import { Widget, addResponseMessage } from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
+import "../Components/chatMessages.css";
 
 class Chats extends Component {
   constructor(props) {
@@ -58,36 +59,36 @@ class Chats extends Component {
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.messages !== prevState.messages) {
-      console.log("componentdidupdate");
-      // var unirest = require("unirest");
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.messages !== prevState.messages) {
+  //     console.log("componentdidupdate");
+  // var unirest = require("unirest");
 
-      // var req = unirest(
-      //   "GET",
-      //   "https://courier50003.herokuapp.com/portal/viewreq"
-      // );
+  // var req = unirest(
+  //   "GET",
+  //   "https://courier50003.herokuapp.com/portal/viewreq"
+  // );
 
-      // req.query({
-      //   token: "5c946495471b590004e5fd01"
-      //   //token: "5c94643a471b590004e5fd00"
-      // });
+  // req.query({
+  //   token: "5c946495471b590004e5fd01"
+  //   //token: "5c94643a471b590004e5fd00"
+  // });
 
-      // req.headers({
-      //   "cache-control": "no-cache"
-      // });
+  // req.headers({
+  //   "cache-control": "no-cache"
+  // });
 
-      // req.end(res => {
-      //   if (res.error) throw new Error(res.error);
+  // req.end(res => {
+  //   if (res.error) throw new Error(res.error);
 
-      //   this.setState({
-      //     messageInfoArray: res.body
-      //   });
+  //   this.setState({
+  //     messageInfoArray: res.body
+  //   });
 
-      //   console.log(res.body);
-      // });
-    }
-  }
+  //   console.log(res.body);
+  // });
+  //   }
+  // }
 
   render() {
     console.log("test");
