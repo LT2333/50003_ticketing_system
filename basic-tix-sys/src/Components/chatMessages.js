@@ -26,8 +26,8 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: this.state.id
-      //token: "5c94643a471b590004e5fd00"
+      // token: this.state.id
+      token: "5c9464d4471b590004e5fd05"
     });
 
     req.headers({
@@ -60,7 +60,7 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: "5c946495471b590004e5fd01"
+      token: "5c9464d4471b590004e5fd05"
       //token: "5c94643a471b590004e5fd00"
     });
 
@@ -79,39 +79,39 @@ class ChatMessages extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // Typical usage (don't forget to compare props):
-    console.log("prevstate: " + prevState.messageInfoArray);
-    console.log("this.state: " + this.state.messageInfoArray);
-    if (this.state.messageInfoArray !== prevState.messageInfoArray) {
-      console.log("message list has been updated!");
-      // var unirest = require("unirest");
+  // componentDidUpdate(prevProps, prevState) {
+  //   // Typical usage (don't forget to compare props):
+  //   console.log("prevstate: " + prevState.messageInfoArray);
+  //   console.log("this.state: " + this.state.messageInfoArray);
+  //   if (this.state.messageInfoArray !== prevState.messageInfoArray) {
+  //     console.log("message list has been updated!");
+  // var unirest = require("unirest");
 
-      // var req = unirest(
-      //   "GET",
-      //   "https://courier50003.herokuapp.com/portal/viewreq"
-      // );
+  // var req = unirest(
+  //   "GET",
+  //   "https://courier50003.herokuapp.com/portal/viewreq"
+  // );
 
-      // req.query({
-      //   token: "5c946495471b590004e5fd01"
-      //   //token: "5c94643a471b590004e5fd00"
-      // });
+  // req.query({
+  //   token: "5c946495471b590004e5fd01"
+  //   //token: "5c94643a471b590004e5fd00"
+  // });
 
-      // req.headers({
-      //   "cache-control": "no-cache"
-      // });
+  // req.headers({
+  //   "cache-control": "no-cache"
+  // });
 
-      // req.end(res => {
-      //   if (res.error) throw new Error(res.error);
+  // req.end(res => {
+  //   if (res.error) throw new Error(res.error);
 
-      //   this.setState({
-      //     messageInfoArray: res.body
-      //   });
+  //   this.setState({
+  //     messageInfoArray: res.body
+  //   });
 
-      //   console.log(res.body);
-      // });
-    }
-  }
+  //   console.log(res.body);
+  // });
+  //   }
+  // }
 
   render() {
     var messageInfoArray = this.state.messageInfoArray;

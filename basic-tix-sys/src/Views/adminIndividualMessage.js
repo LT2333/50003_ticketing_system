@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {ReactRouter} from "react";
+import { ReactRouter } from "react";
 import {
   Card,
   CardHeader,
@@ -44,7 +44,10 @@ class AIndMes extends Component {
     });
     var unirest = require("unirest");
 
-    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/admincomplete");
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/admincomplete"
+    );
 
     req.headers({
       "cache-control": "no-cache",
@@ -53,11 +56,11 @@ class AIndMes extends Component {
 
     req.type("json");
     req.send({
-      "admin_id": this.state.token,
-      "request_id": this.state.messageInfo._id
+      admin_id: this.state.token,
+      request_id: this.state.messageInfo._id
     });
 
-    req.end(function (res) {
+    req.end(function(res) {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
@@ -65,17 +68,23 @@ class AIndMes extends Component {
   }
 
   handleTake(event) {
-
     this.setState({
       openTake: !this.state.openTake
     });
 
-    console.log("admin_id: ", this.state.token,
-      "request_id: ", this.state.messageInfo._id)
+    console.log(
+      "admin_id: ",
+      this.state.token,
+      "request_id: ",
+      this.state.messageInfo._id
+    );
 
     var unirest = require("unirest");
 
-    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/adminhandle");
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/adminhandle"
+    );
 
     req.headers({
       "cache-control": "no-cache",
@@ -84,11 +93,11 @@ class AIndMes extends Component {
 
     req.type("json");
     req.send({
-      "admin_id": this.state.token,
-      "request_id": this.state.messageInfo._id
+      admin_id: this.state.token,
+      request_id: this.state.messageInfo._id
     });
 
-    req.end(function (res) {
+    req.end(function(res) {
       if (res.error) throw new Error(res.error);
       console.log(res.body);
     });
@@ -116,28 +125,34 @@ class AIndMes extends Component {
           })}
           <hr />
           <Link
-          to={{
-            pathname: "/amessagepage/chats" ,
-            token: this.state.token,
-            id: this.state.messageInfo._id
-          }}
-          >Chat Now!</Link>
-          <Button className="ThreeButtons" onClick={this.handleTake}>Take it</Button>
-          <Button className="ThreeButtons" onClick={this.handleComplete}>Complete</Button>
+            to={{
+              pathname: "/amessagepage/chats",
+              token: this.state.token,
+              id: this.state.messageInfo._id
+            }}
+          >
+            Chat Now!
+          </Link>
+          <Button className="ThreeButtons" onClick={this.handleTake}>
+            Take it
+          </Button>
+          <Button className="ThreeButtons" onClick={this.handleComplete}>
+            Complete
+          </Button>
 
           <Modal open={this.state.openComplete} toggle={this.handleComplete}>
             <ModalHeader>Complete!</ModalHeader>
             <ModalBody>
-              This request has been completed by you and 
-              its status has been changed to completed!
+              This request has been completed by you and its status has been
+              changed to completed!
             </ModalBody>
           </Modal>
 
           <Modal open={this.state.openTake} toggle={this.handleTake}>
             <ModalHeader>Take it!</ModalHeader>
             <ModalBody>
-              This request has been taken by you successfully and 
-              its status has been changed to addressed!
+              This request has been taken by you successfully and its status has
+              been changed to addressed!
             </ModalBody>
           </Modal>
           {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">

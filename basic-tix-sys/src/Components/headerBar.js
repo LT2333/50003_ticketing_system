@@ -39,10 +39,10 @@ class HeaderBar extends Component {
           </NavItem>
           {/* <NavItem>
             <NavLink href="/amessagepage">Message Page</NavLink>
-          </NavItem>
+          </NavItem> */}
           <NavItem>
             <NavLink href="/chats">Chats</NavLink>
-          </NavItem> */}
+          </NavItem>
         </Nav>
 
         <Nav navbar className="ml-auto">

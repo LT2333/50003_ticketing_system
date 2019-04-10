@@ -125,10 +125,10 @@ class SignupCreds extends Component {
         console.log(res);
         console.log(res.body);
 
-        if (res.body.error == false) {
+        if (res.body.success == true) {
           this.setState({ cansignup: true });
         } else {
-          this.setState({ errormsg: res.body.error });
+          this.setState({ errormsg: res.body.message });
         }
       });
     } else {

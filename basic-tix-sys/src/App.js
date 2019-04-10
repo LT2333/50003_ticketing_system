@@ -36,6 +36,7 @@ class App extends Component {
             <Route path="/signup" component={SignupCreds} />
             <Route path="/amessagepage" component={AdminMessage} />
             <Route path="/cmessagepage" component={ClientMessage} />
+            <Route path="/chats" component={Chats} />
           </Switch>
         </div>
       </Router>
