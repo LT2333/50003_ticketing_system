@@ -430,503 +430,513 @@ exports.viewmessage = function(req,res){
 // Pre-condition: object id, request id
 // Post condition: Messages are in the form of name and message
 exports.chats = function(req,res){
-  const{body} = req;
-  const{
-    requestor_id,  // Who the admin is
-    request_id,  // for us to search the request and update the who field
-    conversastion
-  } = body;
-  if(!requestor_id){
-    return res.send({
-      success: false,
-      message: 'Error: Requestor ID not sent'
-    });
-  }
-  if(!request_id){
-    return res.send({
-      success: false,
-      message: 'Error: Request ID not sent'
-    });
-  }
-  if(!conversastion){
-    return res.send({
-      success: false,
-      message: 'Error: conversastion cannot be blank'
-    });
-  }
-  USERSESSION.find({
-      _id:requestor_id
-  }, (err, usersess)=>{
-    if(err){
+    const{body} = req;
+    const{
+      requestor_id,  // Who the admin is
+      request_id,  // for us to search the request and update the who field
+      conversastion
+    } = body;
+    if(!requestor_id){
       return res.send({
         success: false,
-        message: 'Error: Server error, usersession collection'
+        message: 'Error: Requestor ID not sent'
       });
     }
-    if(usersess.length != 1){
+    if(!request_id){
       return res.send({
         success: false,
-        message: 'Error: session does not exist'
+        message: 'Error: Request ID not sent'
       });
     }
-    const usersess1 = usersess[0];
-    let user_id = usersess1.userId;  // get the user ID to search
-  // Search for the admin's username
-  USER.find({
-    _id: user_id,
-  }, (err, users)=> {
-    if(err){
+    if(!conversastion){
       return res.send({
         success: false,
-        message: 'Error: First Server error, user collection'
+        message: 'Error: conversastion cannot be blank'
       });
     }
-    if(users.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: account does not exist'
-      });
-    }
-    const user = users[0]; // users is an array of users that share the same username
-    username = user.username;  // Then we can change the field name
-    console.log(username);
-
-
-   // Serach for the specific request
-   REQUESTS.findByIdAndUpdate(request_id,
-    { "$push": {
-      "chat": {
-        name:username,
-        message:conversastion
-        }
-      }
-    },
-    { "new": true, "upsert": true },
-    function (err, updateRequest) {
-      if(err){
-          console.log(err);
-          return res.send({
-              success:false,
-              message:'Error: Server error, requests collection'
-          });
-      }
-      console.log(updateRequest);
-      return res.send({
-        success: true,
-        message: 'Chat sent successfully',
-        requester_id: requestor_id, // session id
-        request_id: request_id
-      });
-    });
-  });
-});
-}
-
-// Sort by date
-// Pre-condition: Object id (Used to determine admin or user)
-// Post-condition: JSON List of Requests (requests are JSON)
-exports.viewdate = function(req,res){
-  const { query } = req;
-  // with the token issued at login we will search for the type in User collection
-  // Once the user is found we will get the type and the Username
-  // type is used to check if admin or user
-  // username to render specific messages
-  const { token } = query;
-  console.log(token);
-  // Retrieve the type
-  console.log("finding");
-  USERSESSION.find({
-      _id:token
-  }, (err, usersess)=>{
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: Server error, usersession collection'
-      });
-    }
-    if(usersess.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: session does not exist'
-      });
-    }
-    const usersess1 = usersess[0];
-    let user_id = usersess1.userId;  // get the user ID to search
-  USER.find({
-    _id: user_id,
-  }, (err, users)=> {
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: First Server error, user collection'
-      });
-    }
-    if(users.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: account does not exist'
-      });
-    }
-    const user = users[0]; // users is an array of users that share the same username
-    authority = user.authority;
-    console.log(authority);
-    username = user.username;
-    console.log(username);
-    if(authority == 'admin'){
-      // Render all images if admin and sort from the earliest at the front of the list
-      REQUESTS.find({}).sort({date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-    } else{
-      // Chcek the username
-      REQUESTS.find({
-        username:username
-      }).sort({date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-      }
-
-    });
-  });
-}
-
-// filter by stauts and after that datat
-// Pre-condition: Object id (Used to determine admin or user)
-// Post-condition: JSON List of Requests sorted by status then date (requests are JSON)
-exports.viewstatus = function(req,res){
-  const { query } = req;
-  // with the token issued at login we will search for the type in User collection
-  // Once the user is found we will get the type and the Username
-  // type is used to check if admin or user
-  // username to render specific messages
-  const { token } = query;
-  console.log(token);
-  // Retrieve the type
-  console.log("finding");
-  USERSESSION.find({
-      _id:token
-  }, (err, usersess)=>{
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: Server error, usersession collection'
-      });
-    }
-    if(usersess.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: session does not exist'
-      });
-    }
-    const usersess1 = usersess[0];
-    let user_id = usersess1.userId;  // get the user ID to search
-  USER.find({
-    _id: user_id,
-  }, (err, users)=> {
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: First Server error, user collection'
-      });
-    }
-    if(users.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: account does not exist'
-      });
-    }
-    const user = users[0]; // users is an array of users that share the same username
-    authority = user.authority;
-    console.log(authority);
-    username = user.username;
-    console.log(username);
-    if(authority == 'admin'){
-      // Render all images if admin and sort from the earliest at the front of the list
-      // sort the unaddressed at the top and then sort by date
-      REQUESTS.find({}).sort({status:-1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-    } else{
-      // Chcek the username
-      REQUESTS.find({
-        username:username
-      }).sort({status:-1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-      }
-
-    });
-  });
-
-}
-
-// filter by who is handling the cases
-// Pre-condition: Object id (used to determine admin or user)
-// Post-condition: JSON list of requests sorted by post conditon
-exports.viewwho = function(req,res){
-  const { query } = req;
-  // with the token issued at login we will search for the type in User collection
-  // Once the user is found we will get the type and the Username
-  // type is used to check if admin or user
-  // username to render specific messages
-  const { token } = query;
-  console.log(token);
-  // Retrieve the type
-  console.log("finding");
-  USERSESSION.find({
-      _id:token
-  }, (err, usersess)=>{
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: Server error, usersession collection'
-      });
-    }
-    if(usersess.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: session does not exist'
-      });
-    }
-    const usersess1 = usersess[0];
-    let user_id = usersess1.userId;  // get the user ID to search
-  USER.find({
-    _id: user_id,
-  }, (err, users)=> {
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: First Server error'
-      });
-    }
-    if(users.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: account does not exist'
-      });
-    }
-    const user = users[0]; // users is an array of users that share the same username
-    authority = user.authority;
-    console.log(authority);
-    username = user.username;
-    console.log(username);
-    if(authority == 'admin'){
-      // Render all images if admin and sort from the earliest at the front of the list
-      // sort the unaddressed at the top and then sort by date
-      REQUESTS.find({}).sort({who:-1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-    } else{
-      // Chcek the username
-      REQUESTS.find({
-        username:username
-      }).sort({who:-1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-      }
-
-    });
-  });
-
-}
-
-// filter by category
-// Pre-condition: Object id (used to determine admin or user)
-// Post-condition: JSON list of requests sorted by post conditon
-exports.viewcategory = function(req,res){
-  const { query } = req;
-  // with the token issued at login we will search for the type in User collection
-  // Once the user is found we will get the type and the Username
-  // type is used to check if admin or user
-  // username to render specific messages
-  const { token } = query;
-  console.log(token);
-  // Retrieve the type
-  console.log("finding");
-  USERSESSION.find({
-      _id:token
-  }, (err, usersess)=>{
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: Server error, usersession collection'
-      });
-    }
-    if(usersess.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: session does not exist'
-      });
-    }
-    const usersess1 = usersess[0];
-    let user_id = usersess1.userId;  // get the user ID to search
-  USER.find({
-    _id: user_id,
-  }, (err, users)=> {
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: First Server error, user collection'
-      });
-    }
-    if(users.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: account does not exist'
-      });
-    }
-    const user = users[0]; // users is an array of users that share the same username
-    authority = user.authority;
-    console.log(authority);
-    username = user.username;
-    console.log(username);
-    if(authority == 'admin'){
-      // Render all images if admin and sort from the earliest at the front of the list
-      // sort the unaddressed at the top and then sort by date
-      REQUESTS.find({}).sort({category:-1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-    } else{
-      // Chcek the username
-      REQUESTS.find({
-        username:username
-      }).sort({category:-1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-      }
-
-    });
-  });
-
-}
-
-// filter by priority
-// Pre-condition: Object id (used to determine admin or user)
-// Post-condition: JSON list of requests sorted by post conditon
-exports.viewpriority = function(req,res){
-  const { query } = req;
-  // with the token issued at login we will search for the type in User collection
-  // Once the user is found we will get the type and the Username
-  // type is used to check if admin or user
-  // username to render specific messages
-  const { token } = query;
-  console.log(token);
-  // Retrieve the type
-  console.log("finding");
-  USERSESSION.find({
-      _id:token
-  }, (err, usersess)=>{
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: Server error, usersession collection'
-      });
-    }
-    if(usersess.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: session does not exist'
-      });
-    }
-    const usersess1 = usersess[0];
-    let user_id = usersess1.userId;  // get the user ID to search
-  USER.find({
-    _id: user_id,
-  }, (err, users)=> {
-    if(err){
-      return res.send({
-        success: false,
-        message: 'Error: First Server error, user collection'
-      });
-    }
-    if(users.length != 1){
-      return res.send({
-        success: false,
-        message: 'Error: account does not exist'
-      });
-    }
-    const user = users[0]; // users is an array of users that share the same username
-    authority = user.authority;
-    console.log(authority);
-    username = user.username;
-    console.log(username);
-    if(authority == 'admin'){
-      // Render all images if admin and sort from the earliest at the front of the list
-      // sort the unaddressed at the top and then sort by date
-      REQUESTS.find({}).sort({priority:1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-    } else{
-      // Chcek the username
-      REQUESTS.find({
-        username:username
-      }).sort({priority:1, date:1}).exec(function(err, requests) {
-          return res.send({
-            success:true,
-            requests
-          });
-        });
-      }
-
-    });
-  });
-
-}
-
-// View a specific requests (The chats)
-// Pre-condition: request_id
-// post-condition: see the full details of a request
-exports.viewreq = function(req,res){
-  const { query } = req;
-  const { token } = query;
-  console.log(token);
-  REQUESTS.find({
-    _id:token
-  }, function(err, requests) {
+    USERSESSION.find({
+        _id:requestor_id
+    }, (err, usersess)=>{
       if(err){
         return res.send({
           success: false,
-          message: 'Error: First Server error, request collection'
+          message: 'Error: Server error, usersession collection'
         });
       }
-      var oneReq = requests[0];
-      var chatsOnly = oneReq.chat;
-      // return res.send({
-      //   success: true,
-      //   chatsOnly
-      // });
-      return res.send(
-        chatsOnly
-      );
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    // Search for the admin's username
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error, user collection'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      username = user.username;  // Then we can change the field name
+      console.log(username);
+
+
+     // Serach for the specific request
+     REQUESTS.findByIdAndUpdate(request_id,
+      { "$push": {
+        "chat": {
+          name:username,
+          message:conversastion
+          }
+        }
+      },
+      { "new": true, "upsert": true },
+      function (err, updateRequest) {
+        if(err){
+            console.log(err);
+            return res.send({
+                success:false,
+                message:'Error: Server error, requests collection'
+            });
+        }
+        console.log(updateRequest);
+        return res.send({
+          success: true,
+          message: 'Chat sent successfully',
+          requester_id: requestor_id, // session id
+          request_id: request_id
+        });
+      });
     });
-}
+  });
+  }
+
+  // Sort by date
+  // Pre-condition: Object id (Used to determine admin or user)
+  // Post-condition: JSON List of Requests (requests are JSON)
+  exports.viewdate = function(req,res){
+    const { query } = req;
+    // with the token issued at login we will search for the type in User collection
+    // Once the user is found we will get the type and the Username
+    // type is used to check if admin or user
+    // username to render specific messages
+    const { token } = query;
+    console.log(token);
+    // Retrieve the type
+    console.log("finding");
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error, user collection'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      authority = user.authority;
+      console.log(authority);
+      username = user.username;
+      console.log(username);
+      if(authority == 'admin'){
+        // Render all images if admin and sort from the earliest at the front of the list
+        REQUESTS.find({}).sort({date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+      } else{
+        // Chcek the username
+        REQUESTS.find({
+          username:username
+        }).sort({date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+        }
+
+      });
+    });
+  }
+
+  // filter by stauts and after that datat
+  // Pre-condition: Object id (Used to determine admin or user)
+  // Post-condition: JSON List of Requests sorted by status then date (requests are JSON)
+  exports.viewstatus = function(req,res){
+    const { query } = req;
+    // with the token issued at login we will search for the type in User collection
+    // Once the user is found we will get the type and the Username
+    // type is used to check if admin or user
+    // username to render specific messages
+    const { token } = query;
+    console.log(token);
+    // Retrieve the type
+    console.log("finding");
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error, user collection'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      authority = user.authority;
+      console.log(authority);
+      username = user.username;
+      console.log(username);
+      if(authority == 'admin'){
+        // Render all images if admin and sort from the earliest at the front of the list
+        // sort the unaddressed at the top and then sort by date
+        REQUESTS.find({}).sort({status:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+      } else{
+        // Chcek the username
+        REQUESTS.find({
+          username:username
+        }).sort({status:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+        }
+
+      });
+    });
+
+  }
+
+  // filter by who is handling the cases
+  // Pre-condition: Object id (used to determine admin or user)
+  // Post-condition: JSON list of requests sorted by post conditon
+  exports.viewwho = function(req,res){
+    const { query } = req;
+    // with the token issued at login we will search for the type in User collection
+    // Once the user is found we will get the type and the Username
+    // type is used to check if admin or user
+    // username to render specific messages
+    const { token } = query;
+    console.log(token);
+    // Retrieve the type
+    console.log("finding");
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      authority = user.authority;
+      console.log(authority);
+      username = user.username;
+      console.log(username);
+      if(authority == 'admin'){
+        // Render all images if admin and sort from the earliest at the front of the list
+        // sort the unaddressed at the top and then sort by date
+        REQUESTS.find({}).sort({who:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+      } else{
+        // Chcek the username
+        REQUESTS.find({
+          username:username
+        }).sort({who:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+        }
+
+      });
+    });
+
+  }
+
+  // filter by category
+  // Pre-condition: Object id (used to determine admin or user)
+  // Post-condition: JSON list of requests sorted by post conditon
+  exports.viewcategory = function(req,res){
+    const { query } = req;
+    // with the token issued at login we will search for the type in User collection
+    // Once the user is found we will get the type and the Username
+    // type is used to check if admin or user
+    // username to render specific messages
+    const { token } = query;
+    console.log(token);
+    // Retrieve the type
+    console.log("finding");
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error, user collection'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      authority = user.authority;
+      console.log(authority);
+      username = user.username;
+      console.log(username);
+      if(authority == 'admin'){
+        // Render all images if admin and sort from the earliest at the front of the list
+        // sort the unaddressed at the top and then sort by date
+        REQUESTS.find({}).sort({category:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+      } else{
+        // Chcek the username
+        REQUESTS.find({
+          username:username
+        }).sort({category:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+        }
+
+      });
+    });
+
+  }
+
+  // filter by priority
+  // Pre-condition: Object id (used to determine admin or user)
+  // Post-condition: JSON list of requests sorted by post conditon
+  exports.viewpriority = function(req,res){
+    const { query } = req;
+    // with the token issued at login we will search for the type in User collection
+    // Once the user is found we will get the type and the Username
+    // type is used to check if admin or user
+    // username to render specific messages
+    const { token } = query;
+    console.log(token);
+    // Retrieve the type
+    console.log("finding");
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error, user collection'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      authority = user.authority;
+      console.log(authority);
+      username = user.username;
+      console.log(username);
+      if(authority == 'admin'){
+        // Render all images if admin and sort from the earliest at the front of the list
+        // sort the unaddressed at the top and then sort by date
+        REQUESTS.find({}).sort({priority:1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+      } else{
+        // Chcek the username
+        REQUESTS.find({
+          username:username
+        }).sort({priority:1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+        }
+
+      });
+    });
+
+  }
+
+  // View a specific requests (The chats)
+  // Pre-condition: request_id
+  // post-condition: see the full details of a request
+  exports.viewreq = function(req,res){
+    const { query } = req;
+    const { token } = query;
+    console.log(token);
+    REQUESTS.find({
+      _id:token
+    }, function(err, requests) {
+        if(err){
+          return res.send({
+            success: false,
+            message: 'Error: First Server error, request collection'
+          });
+        }
+        var emptyChat = [];
+        if(requests[0]){
+          var oneReq = requests[0];
+          var chatsOnly = oneReq.chat;
+          // return res.send({
+          //   success: true,
+          //   chatsOnly
+          // });
+          return res.send(
+            chatsOnly
+          );
+        }
+        else{
+          return res.send(
+            emptyChat
+          );
+        }
+
+      });
+  }
+
 
 //===============//
 // ADMIN APIs
