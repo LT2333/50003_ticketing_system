@@ -84,8 +84,8 @@ class Chats extends Component {
     reqpost.send({
       // requestor_id: "5cade319ee7ddb000494a61e",
       // request_id: "5c9464d4471b590004e5fd05",
-      requestor_id: localStorage.getItem("id"),
-      request_id: localStorage.getItem("token"),
+      requestor_id: localStorage.getItem("token"),
+      request_id: localStorage.getItem("id"),
       conversastion: this.state.chatInput
     });
 
@@ -107,8 +107,8 @@ class Chats extends Component {
       );
 
       reqget.query({
-        token: localStorage.getItem("token")
-        //token: "5c94643a471b590004e5fd00"
+        token: localStorage.getItem("id")
+        //token: "5c94b94b88ae70000426f10e"
       });
 
       reqget.headers({
