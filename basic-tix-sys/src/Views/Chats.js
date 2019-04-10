@@ -105,7 +105,6 @@ class Chats extends Component {
       // id: this.props.id
     };
 
-    this.handleRefresh = this.handleRefresh.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -135,7 +134,11 @@ class Chats extends Component {
       });
 
       console.log(res.body);
+      window.scrollTo(0, document.body.scrollHeight);
     });
+
+    console.log(localStorage.getItem("token"));
+    console.log(localStorage.getItem("request_id"));
   }
 
   handleChange(event) {
@@ -160,9 +163,10 @@ class Chats extends Component {
 
     reqpost.type("json");
     reqpost.send({
-      requestor_id: "5cade319ee7ddb000494a61e",
-      // request_id: "5c94b0ca88ae70000426f10a",
-      request_id: "5c9464d4471b590004e5fd05",
+      // requestor_id: "5cade319ee7ddb000494a61e",
+      // request_id: "5c9464d4471b590004e5fd05",
+      requestor_id: localStorage.getItem("request_id"),
+      request_id: localStorage.getItem("token"),
       conversastion: this.state.chatInput
     });
 
@@ -200,35 +204,8 @@ class Chats extends Component {
         });
 
         console.log(res.body);
+        window.scrollTo(0, document.body.scrollHeight);
       });
-    });
-  }
-
-  handleRefresh() {
-    var unirest = require("unirest");
-
-    var req = unirest(
-      "GET",
-      "https://courier50003.herokuapp.com/portal/viewreq"
-    );
-
-    req.query({
-      token: "5c9464d4471b590004e5fd05"
-      //token: "5c94643a471b590004e5fd00"
-    });
-
-    req.headers({
-      "cache-control": "no-cache"
-    });
-
-    req.end(res => {
-      if (res.error) throw new Error(res.error);
-
-      this.setState({
-        messageInfoArray: res.body
-      });
-
-      console.log(res.body);
     });
   }
 
@@ -257,8 +234,8 @@ class Chats extends Component {
     // console.log(messages);
     return (
       <div className="messages" id="messageList">
-        {/* <Button onClick={browserHistory.goBack}>Go Back</Button> */}
-        <Button onClick={this.handleRefresh}>Refresh</Button>
+        <h1 className="title">Chat</h1>
+        {/* <Button onClick={this.handleRefresh}>Refresh</Button> */}
         {messages}
         <InputGroup>
           <FormInput

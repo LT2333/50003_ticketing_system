@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Button, NavLink } from "shards-react";
 import "./signupPage.css";
-import { Redirect,  Router } from "react-router-dom";
+import { Redirect, Router } from "react-router-dom";
 
 class LoginCreds extends Component {
   constructor(props) {
@@ -57,8 +57,15 @@ class LoginCreds extends Component {
 
       if (res.body.success === true) {
         this.setState({ canlogin: true });
-        this.setState({token: res.body.token});
-        this.setState({type: res.body.authority});
+        this.setState({ token: res.body.token });
+        this.setState({ type: res.body.authority });
+
+        localStorage.setItem("token", "5cade319ee7ddb000494a61e");
+        localStorage.setItem("type", res.body.type);
+        localStorage.setItem("request_id", "5c9464d4471b590004e5fd05");
+
+        //   requestor_id: "5cade319ee7ddb000494a61e",
+        // request_id: "5c9464d4471b590004e5fd05",
       } else {
         this.setState({ errormsg: res.body.message });
       }
@@ -70,18 +77,24 @@ class LoginCreds extends Component {
   render() {
     if (this.state.canlogin && this.state.type === "admin") {
       return (
-        <Redirect to = {{
-            pathname: '/amessagepage',
+        <Redirect
+          to={{
+            pathname: "/amessagepage",
             state: this.state.token
-        }}/> )
+          }}
+        />
+      );
     }
 
     if (this.state.canlogin && this.state.type === "user") {
       return (
-        <Redirect to = {{
-            pathname: '/cmessagepage',
+        <Redirect
+          to={{
+            pathname: "/cmessagepage",
             state: this.state.token
-        }}/> )
+          }}
+        />
+      );
     }
 
     return (
