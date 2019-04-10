@@ -12,6 +12,7 @@ import {
   Badge
 } from "shards-react";
 import "./widgets.css";
+import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
@@ -24,7 +25,8 @@ class CIndMes extends Component {
     super(props);
 
     this.state = {
-      messageInfo: props.location.messageInfo
+      messageInfo: props.location.messageInfo,
+      token: props.location.token
     };
   }
   render() {
@@ -49,7 +51,13 @@ class CIndMes extends Component {
             );
           })}
           <hr />
-          <Button href="/cmessagepage/chats">Chat Now</Button>
+          <Link
+          to={{
+            pathname: "/cmessagepage/chats" ,
+            token: this.state.token,
+            id: this.state.messageInfo._id
+          }}
+          >Chat Now!</Link>
           {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
             Go Back
           </Button> */}

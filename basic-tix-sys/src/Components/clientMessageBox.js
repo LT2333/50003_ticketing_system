@@ -49,7 +49,8 @@ class CMessageBox extends Component {
         <Link
           to={{
             pathname: "/cmessagepage/cindividualmessage" ,
-            messageInfo: this.props.messageInfo
+            messageInfo: this.props.messageInfo,
+            token: this.props.token
           }}
         >
           <ListGroupItem className="MessageBox">
@@ -57,7 +58,7 @@ class CMessageBox extends Component {
               <Row>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.username}</Col>
-                <Col>{current}-{this.props.messageInfo.date}</Col>
+                <Col>{this.props.messageInfo.date}</Col>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.status}</Col>
               </Row>

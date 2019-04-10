@@ -9,9 +9,13 @@ import {
   CardFooter,
   CardSubtitle,
   Button,
-  Badge
+  Badge,
+  Modal,
+  ModalBody,
+  ModalHeader
 } from "shards-react";
 import "./widgets.css";
+import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 
 const date = new Date().getDate(); //Current Date
 const month = new Date().getMonth() + 1; //Current Month
@@ -25,7 +29,9 @@ class AIndMes extends Component {
 
     this.state = {
       messageInfo: props.location.messageInfo,
-      token: props.location.token
+      token: props.location.token,
+      openComplete: false,
+      openTake: false
     };
 
     this.handleTake = this.handleTake.bind(this);
@@ -33,6 +39,9 @@ class AIndMes extends Component {
   }
 
   handleComplete(event) {
+    this.setState({
+      openComplete: !this.state.openComplete
+    });
     var unirest = require("unirest");
 
     var req = unirest("POST", "https://courier50003.herokuapp.com/portal/admincomplete");
@@ -56,6 +65,11 @@ class AIndMes extends Component {
   }
 
   handleTake(event) {
+
+    this.setState({
+      openTake: !this.state.openTake
+    });
+
     console.log("admin_id: ", this.state.token,
       "request_id: ", this.state.messageInfo._id)
 
@@ -101,9 +115,31 @@ class AIndMes extends Component {
             );
           })}
           <hr />
-          <Button className="ThreeButtons" href="/amessagepage/chats">Chat Now</Button>
+          <Link
+          to={{
+            pathname: "/amessagepage/chats" ,
+            token: this.state.token,
+            id: this.state.messageInfo._id
+          }}
+          >Chat Now!</Link>
           <Button className="ThreeButtons" onClick={this.handleTake}>Take it</Button>
           <Button className="ThreeButtons" onClick={this.handleComplete}>Complete</Button>
+
+          <Modal open={this.state.openComplete} toggle={this.handleComplete}>
+            <ModalHeader>Complete!</ModalHeader>
+            <ModalBody>
+              This request has been completed by you and 
+              its status has been changed to completed!
+            </ModalBody>
+          </Modal>
+
+          <Modal open={this.state.openTake} toggle={this.handleTake}>
+            <ModalHeader>Take it!</ModalHeader>
+            <ModalBody>
+              This request has been taken by you successfully and 
+              its status has been changed to addressed!
+            </ModalBody>
+          </Modal>
           {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
             Go Back
           </Button> */}

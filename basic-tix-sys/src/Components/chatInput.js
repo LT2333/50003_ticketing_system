@@ -18,7 +18,9 @@ class ChatInput extends Component {
     super(props);
 
     this.state = {
-      chatInput: ""
+      chatInput: "",
+      token: this.props.token,
+      id: this.props.id
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -67,9 +69,9 @@ class ChatInput extends Component {
 
     reqpost.type("json");
     reqpost.send({
-      requestor_id: "5c9b1de27653c06600c44686",
+      requestor_id: this.state.token,
       // request_id: "5c94b0ca88ae70000426f10a",
-      request_id: "5c946495471b590004e5fd01",
+      request_id: this.state.id,
       conversastion: this.state.chatInput
     });
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Button, Container } from "shards-react";
 import clientHeaderBar from "../Components/clientHeaderBar";
-import ContactUs from "../Components/contactUsForm";
+import IdContactUs from "../Components/idContactUsForm";
 import CMessagePage from "./cMessagePage";
 import CIndMes from "./clientIndividualMessage";
 import MyReqs from "./myReqs";
@@ -26,21 +26,21 @@ class ClientMessage extends Component {
       return (
         <Container>
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
-          {/* <Nav tabs>
+          <Nav tabs>
             <NavItem>
               <NavLink href="/cmessagepage/contactus">Contact Us</NavLink>
             </NavItem>
-            <NavItem>
+            {/* <NavItem>
               <NavLink href="/cmessagepage/myreqs">My Request</NavLink>
-            </NavItem>
+            </NavItem> */}
             <NavItem>
               <NavLink href="/cmessagepage/">Main</NavLink>
             </NavItem>
-          </Nav> */}
+          </Nav>
 
           <Router>
               <Switch>
-                <Route path="/cmessagepage/contactus" component={ContactUs}/>
+                <Route path="/cmessagepage/contactus" component={IdContactUs}/>
                 <Route path="/cmessagepage/cindividualmessage" component={CIndMes} />
                 <Route path="/cmessagepage/chats" component={Chats} />
                 <Route path="/cmessagepage/" render={(routeProps) => <CMessagePage {...routeProps} token={this.state.token}/>}/>

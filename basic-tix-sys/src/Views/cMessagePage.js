@@ -178,7 +178,7 @@ class CMessagePage extends Component {
                   </Container>
                 </ListGroupItemHeading>
                 {this.state.messageInfoArray.map(messageInfoArray => {
-                  return <CMessageBox messageInfo={messageInfoArray} />;
+                  return <CMessageBox messageInfo={messageInfoArray} token={this.state.token}/>;
                 })}
               </ListGroup>
             </Col>

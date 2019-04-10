@@ -18,7 +18,9 @@ class Chats extends Component {
     super(props);
 
     this.state = {
-      messages: []
+      messages: [],
+      token: this.props.token,
+      id: this.props.id
     };
     // this.sendHandler = this.sendHandler.bind(this);
   }
@@ -43,8 +45,8 @@ class Chats extends Component {
     return (
       <div>
         <h1 className="title">Chat</h1>
-        <ChatMessages messages={this.state.messages} />
-        <ChatInput />
+        <ChatMessages messages={this.state.messages} token={this.state.token} id={this.state.id}/>
+        <ChatInput token={this.state.token} id={this.state.id}/>
       </div>
     );
   }

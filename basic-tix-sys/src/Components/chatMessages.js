@@ -8,7 +8,9 @@ class ChatMessages extends Component {
     super(props);
 
     this.state = {
-      messageInfoArray: []
+      messageInfoArray: [],
+      token: this.props.token,
+      id: this.props.id
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -24,7 +26,7 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: "5c946495471b590004e5fd01"
+      token: this.state.id
       //token: "5c94643a471b590004e5fd00"
     });
 
@@ -92,7 +94,7 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: "5c946495471b590004e5fd01"
+      token: this.state.id
       //token: "5c94643a471b590004e5fd00"
     });
 
