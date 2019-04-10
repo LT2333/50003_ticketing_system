@@ -25,7 +25,8 @@ router.post('/adminhandle', REQUESTS_controller.adminhandle);
 router.post('/admincomplete', REQUESTS_controller.admincomplete);
 // 3) Admins should be able to see their own messages
 router.get('/adminview', REQUESTS_controller.adminview);
-
+// 4) Admins view the messages that they have taken but sorted by completed
+router.get('/adminviewstatus', REQUESTS_controller.adminviewstatus);
 
 //===========//
 // PART D: FOR SHARED APIs with conditionals
@@ -46,6 +47,10 @@ router.get('/viewcategory', REQUESTS_controller.viewcategory);
 router.get('/viewpriority', REQUESTS_controller.viewpriority);
 // View specific RequestsSchema
 router.get('/viewreq', REQUESTS_controller.viewreq);
+
+router.post('/bot',REQUESTS_controller.bot);
+
+
 module.exports = router;
 
 

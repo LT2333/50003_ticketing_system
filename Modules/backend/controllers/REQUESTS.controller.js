@@ -5,6 +5,7 @@ var retext = require('retext');
 var keywords = require('retext-keywords')
 var toString = require('nlcst-to-string')
 var Sentiment = require('sentiment');
+
 var Isemail = require('isemail'); // Checks for valid email for users with no account
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "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");
@@ -101,7 +102,7 @@ exports.usersubmit = function (req, res) {
     contact_num,
     title,
     message,
-    img,
+    imageurl,
     category
   } = body;
   let{ // Need these to check later
@@ -180,7 +181,7 @@ exports.usersubmit = function (req, res) {
         title: title,
         message: message,
         category: category,
-        img:img,
+        imageURL:imageurl,
         tags:tags,
         priority: priority
       });
@@ -216,7 +217,7 @@ exports.usersubmit = function (req, res) {
           title: title,
           message: message,
           category: category,
-          img:img,
+          imageURL:imageurl,
           tags:tags,
           priority: priority
         });
@@ -234,7 +235,7 @@ exports.usersubmitacc = function(req,res){
     title,
     message,
     category,
-    image
+    imageurl
   } = body;
 
   console.log(id);
@@ -321,7 +322,7 @@ exports.usersubmitacc = function(req,res){
         title: title,
         message: message,
         category: category,
-        imageURL:imageLocation,
+        imageURL:imageurl,
         tags:tags,
         priority: priority
       });
@@ -339,7 +340,7 @@ exports.usersubmitacc = function(req,res){
           title: title,
           message: message,
           category: category,
-          imageURL:imageURL,
+          imageURL:imageurl,
           tags:tags,
           priority: priority
         });
@@ -899,7 +900,7 @@ exports.viewpriority = function(req,res){
 
 }
 
-// View a specific requests
+// View a specific requests (The chats)
 // Pre-condition: request_id
 // post-condition: see the full details of a request
 exports.viewreq = function(req,res){
@@ -1178,4 +1179,85 @@ exports.adminview = function(req,res){
 
     });
 });
+}
+
+
+// admin view the messages that he has according to their status
+// Pre-condition: admin_id (identify admin)
+// middle: Get the username of the admin and search the who of request
+// Post-condition: Admin gets the messages that are associated with his username and sorted
+exports.adminviewstatus = function(req,res){
+  const { query } = req;
+  // with the token issued at login we will search for the type in User collection
+  // Once the user is found we will get the type and the Username
+  // type is used to check if admin or user
+  // username to render specific messages
+  const { token } = query;
+  console.log(token);
+  // Retrieve the type
+  console.log("finding");
+  USERSESSION.find({
+      _id:token
+  }, (err, usersess)=>{
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: Server error, usersession collection'
+      });
+    }
+    if(usersess.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: session does not exist'
+      });
+    }
+    const usersess1 = usersess[0];
+    let user_id = usersess1.userId;  // get the user ID to search
+  USER.find({
+    _id: user_id,
+  }, (err, users)=> {
+    if(err){
+      return res.send({
+        success: false,
+        message: 'Error: First Server error, user collection'
+      });
+    }
+    if(users.length != 1){
+      return res.send({
+        success: false,
+        message: 'Error: account does not exist'
+      });
+    }
+    const user = users[0]; // users is an array of users that share the same username
+    authority = user.authority;
+    console.log(authority);
+    username = user.username;
+    console.log(username);
+    if(authority == 'admin'){  // Extra verification step
+      // Render only requests associated with the admin
+      REQUESTS.find({who:username}).sort({status:-1, date:1}).exec(function(err, requests) {
+          return res.send({
+            success:true,
+            requests
+          });
+        });
+    } else{
+      return res.send({
+        success: false,
+        message: "This is possibly malicious and not an admin"
+      });
+    }
+
+    });
+});
+}
+
+
+exports.bot = function(req,res){
+  const talk = req.body.queryResult.queryText;
+  //var speech = req.body.queryResult.fulfillmentMessages[0].text.text[0];
+  // The bot response is from req.body.fulfillmentMessages
+  return res.send({
+    test:talk
+  });
 }
