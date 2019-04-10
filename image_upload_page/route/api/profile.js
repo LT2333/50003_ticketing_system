@@ -7,8 +7,8 @@ const path = require( 'path' );
 const router = express.Router();
 
 const s3 = new aws.S3({
-    accessKeyId: 'AKIATIS5GSCGAEGJ2MVO',
-    secretAccessKey: '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',
+    accessKeyId: '',
+    secretAccessKey: '',
     Bucket: 'esc-images-lt'
    });
 
