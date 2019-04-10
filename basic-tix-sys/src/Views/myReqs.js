@@ -20,7 +20,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "./widgets.css";
-import MessageBox from "../Components/messageBox";
+import CMessageBox from "../Components/clientMessageBox";
 import ListIcon from "semantic-ui-react";
 import ListItem from "semantic-ui-react";
 // library.add(faIgloo);
@@ -88,8 +88,9 @@ class MyReqs extends Component {
     var req = unirest("GET", this.state.filterEndpoint);
 
     req.query({
-      token: "5c94643a471b590004e5fd00"
-      // this.state.token
+      token: 
+      //"5c94643a471b590004e5fd00"
+      this.state.token
     });
 
     req.headers({
@@ -135,7 +136,7 @@ class MyReqs extends Component {
                 </Container>
               </ListGroupItemHeading>
               {this.state.messageInfoArray.map(messageInfoArray => {
-                return <MessageBox messageInfo={messageInfoArray} />;
+                return <CMessageBox messageInfo={messageInfoArray} />;
               })}
             </ListGroup>
           </Row>

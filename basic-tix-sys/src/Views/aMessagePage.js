@@ -21,7 +21,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "./widgets.css";
-import MessageBox from "../Components/messageBox";
+import AMessageBox from "../Components/adminMessageBox";
 import ListIcon from "semantic-ui-react";
 import ListItem from "semantic-ui-react";
 // library.add(faIgloo);
@@ -33,14 +33,14 @@ const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 
 const filterOptions = [
-  { label: "Sort by status", value: "viewstatus" },
-  { label: "Sort by date", value: "viewdate" },
-  { label: "Sort by who", value: "viewwho" },
-  { label: "Sort by category", value: "viewcategory" },
-  { label: "Sort by priority", value: "viewpriority" }
-];
+  {label: "Sort by status", value: "viewstatus" },
+  {label: "Sort by date", value: "viewdate" },
+  {label: "Sort by who", value: "viewwho" },
+  {label: "Sort by category", value: "viewcategory" },
+  {label: "Sort by priority", value: "viewpriority" },
+]
 
-class MessagePage extends Component {
+class AMessagePage extends Component {
   constructor(props) {
     super(props);
 
@@ -77,16 +77,18 @@ class MessagePage extends Component {
   componentDidMount() {
     //Do stuff here
     this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"
-    });
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"});
 
     var unirest = require("unirest");
 
-    var req = unirest("GET", this.state.filterEndpoint);
+    var req = unirest(
+      "GET",
+      this.state.filterEndpoint
+    );
 
     req.query({
-      token: "5c94643a471b590004e5fd00"
-      // this.state.token
+      token:this.state.token
+      //"5c94643a471b590004e5fd00"
     });
 
     req.headers({
@@ -98,29 +100,29 @@ class MessagePage extends Component {
       console.log("token passed [messagePage]: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
-        messageInfoArray: res.body.requests
+        messageInfoArray: res.body.requests});
       });
-    });
   }
   handleBug(event) {
-    console.log("Props from clientMes to messagePage: ", this.props);
+    console.log("Props from clientMes to messagePage: ", this.props)
   }
 
-  handleFilter(event) {
+  handleFilter (event){
     console.log("Event [messagePage]: ", event.target.id);
     //Do stuff here
     this.setState({
-      filterEndpoint:
-        "https://courier50003.herokuapp.com/portal/" + event.target.id
-    });
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.target.id});
 
     var unirest = require("unirest");
 
-    var req = unirest("GET", this.state.filterEndpoint);
+    var req = unirest(
+      "GET",
+      this.state.filterEndpoint
+    );
 
     req.query({
-      token: "5c94643a471b590004e5fd00"
-      // this.state.token
+      token: this.state.token
+      //"5c94643a471b590004e5fd00"
     });
 
     req.headers({
@@ -132,16 +134,16 @@ class MessagePage extends Component {
       console.log("token passed [messagePage]: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
-        messageInfoArray: res.body.requests
+        messageInfoArray: res.body.requests});
       });
-    });
-  }
+    
+  };
 
   render() {
     return (
       <div>
         <Container className="MessagePage">
-          {/* <Button onClick={this.handleBug}>Dubugger</Button> */}
+          {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Row>
             {/* <FormGroup>
               <label>
@@ -155,46 +157,12 @@ class MessagePage extends Component {
             </FormGroup> */}
             <Col>
               <ButtonGroup vertical className="SideBar">
-                <Button
-                  squared
-                  theme="light"
-                  id="viewstatus"
-                  onClick={this.handleFilter}
-                >
-                  Sort by status
-                </Button>
-                <Button
-                  squared
-                  theme="light"
-                  id="viewdate"
-                  onClick={this.handleFilter}
-                >
-                  Sort by date
-                </Button>
-                <Button
-                  squared
-                  theme="light"
-                  id="viewwho"
-                  onClick={this.handleFilter}
-                >
-                  Sort by who
-                </Button>
-                <Button
-                  squared
-                  theme="light"
-                  id="viewcategory"
-                  onClick={this.handleFilter}
-                >
-                  Sort by category
-                </Button>
-                <Button
-                  squared
-                  theme="light"
-                  id="viewpriority"
-                  onClick={this.handleFilter}
-                >
-                  Sort by priority
-                </Button>
+                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Sort by status</Button>
+                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Sort by date</Button>
+                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
+                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
+                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
+                <Button squared theme="light" id= "adminview" onClick={this.handleFilter}>My Jobs</Button>
               </ButtonGroup>
             </Col>
             <Col>
@@ -211,7 +179,7 @@ class MessagePage extends Component {
                   </Container>
                 </ListGroupItemHeading>
                 {this.state.messageInfoArray.map(messageInfoArray => {
-                  return <MessageBox messageInfo={messageInfoArray} />;
+                  return <AMessageBox messageInfo={messageInfoArray} token={this.state.token}/>;
                 })}
               </ListGroup>
             </Col>
@@ -222,4 +190,4 @@ class MessagePage extends Component {
   }
 }
 
-export default MessagePage;
+export default AMessagePage;

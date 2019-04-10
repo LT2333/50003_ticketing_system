@@ -16,7 +16,7 @@ const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 var current = Date.now();
 
-class MessageBox extends Component {
+class AMessageBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,8 +48,9 @@ class MessageBox extends Component {
     return (
         <Link
           to={{
-            pathname: "/cmessagepage/cindividualmessage" ,
-            messageInfo: this.props.messageInfo
+            pathname: "/amessagepage/aindividualmessage" ,
+            messageInfo: this.props.messageInfo,
+            token: this.props.token
           }}
         >
           <ListGroupItem className="MessageBox">
@@ -57,7 +58,7 @@ class MessageBox extends Component {
               <Row>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.username}</Col>
-                <Col>{current}-{this.props.messageInfo.date}</Col>
+                <Col>{this.props.messageInfo.date}</Col>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.status}</Col>
               </Row>
@@ -68,4 +69,4 @@ class MessageBox extends Component {
   }
 }
 
-export default MessageBox;
+export default AMessageBox;

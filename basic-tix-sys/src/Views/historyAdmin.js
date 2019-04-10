@@ -16,7 +16,7 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faIgloo } from '@fortawesome/free-solid-svg-icons';
 import "./widgets.css";
-import MessageBox from "../Components/messageBox";
+import AMessageBox from "../Components/adminMessageBox";
 // library.add(faIgloo);
 
 const date = new Date().getDate(); //Current Date
@@ -71,7 +71,7 @@ class Ahistory extends Component {
                 View Messages
               </Button></Row>
             <Row>
-              <MessageBox messageInfo={this.state.messageInfo} />
+              <AMessageBox messageInfo={this.state.messageInfo} />
             </Row>
           </Container>
       </div>
