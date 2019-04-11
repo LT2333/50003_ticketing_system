@@ -11,7 +11,8 @@ import {
   FormGroup,
   ListGroup,
   ListGroupItemHeading,
-  ButtonGroup
+  ButtonGroup,
+  Popover, PopoverBody, PopoverHeader 
 } from "shards-react";
 import Select from "react-select";
 import { Badge } from "shards-react";
@@ -66,13 +67,20 @@ class CMessagePage extends Component {
     this.messageInfoArray = messageInfoArray;
     // this.viewMessages = this.viewMessages.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.toggle = this.toggle.bind(this);
 
     this.state = {
       messageInfoArray: this.messageInfoArray,
       token: this.props.token,
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate"
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate",
+      open: false,
     };
     this.handleBug = this.handleBug.bind(this);
+  }
+  toggle() {
+    this.setState({
+      open: !this.state.open
+    });
   }
   componentDidMount() {
     //Do stuff here
@@ -143,6 +151,24 @@ class CMessagePage extends Component {
     return (
       <div>
         <Container className="MessagePage">
+        <Button id="popover-1" onClick={this.toggle} className="ChatBot">
+          ChatBot
+        </Button>
+        <Popover
+          placement="bottom"
+          open={this.state.open}
+          toggle={this.toggle}
+          target="#popover-1"
+        >
+          <PopoverBody>
+            <iframe
+              allow="microphone;"
+              width="250"
+              height="330"
+              src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
+            />
+          </PopoverBody>
+        </Popover>
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Row>
             {/* <FormGroup>

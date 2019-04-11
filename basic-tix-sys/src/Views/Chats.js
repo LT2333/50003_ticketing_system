@@ -168,6 +168,7 @@ class Chats extends Component {
             </Button>
           </InputGroupAddon>
         </InputGroup>
+
       </div>
     );
   }

@@ -11,7 +11,7 @@ import {
   FormGroup,
   ListGroup,
   ListGroupItemHeading,
-  ButtonGroup
+  ButtonGroup,
 } from "shards-react";
 import Select from "react-select";
 import { Badge } from "shards-react";
@@ -70,7 +70,7 @@ class AMessagePage extends Component {
     this.state = {
       messageInfoArray: this.messageInfoArray,
       token: this.props.token,
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate"
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate",
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -87,7 +87,8 @@ class AMessagePage extends Component {
     );
 
     req.query({
-      token:this.state.token
+      token: localStorage.getItem("token")
+      // token:this.state.token
       //"5c94643a471b590004e5fd00"
     });
 
@@ -186,6 +187,7 @@ class AMessagePage extends Component {
             </Col>
           </Row>
         </Container>
+        
       </div>
     );
   }
