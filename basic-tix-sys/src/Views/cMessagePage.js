@@ -161,12 +161,12 @@ class CMessagePage extends Component {
           target="#popover-1"
         >
           <PopoverBody>
-            <iframe
+          <iframe
               allow="microphone;"
-              width="250"
-              height="330"
-              src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
-            />
+              width="350"
+              height="430"
+              src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1">
+          </iframe>
           </PopoverBody>
         </Popover>
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
