@@ -30,7 +30,7 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: "5c946495471b590004e5fd01"
+      token: localStorage.getItem("token")
       //token: "5c94643a471b590004e5fd00"
     });
 

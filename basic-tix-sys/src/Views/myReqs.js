@@ -90,9 +90,9 @@ class MyReqs extends Component {
     );
 
     req.query({
-      token: 
+      token: localStorage.getItem("token")
       //"5c94643a471b590004e5fd00"
-      this.state.token
+      // this.state.token
     });
 
     req.headers({

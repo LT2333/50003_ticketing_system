@@ -162,7 +162,8 @@ class AMessagePage extends Component {
                 <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
                 <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
                 <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
-                <Button squared theme="light" id= "adminview" onClick={this.handleFilter}>My Jobs</Button>
+                <Button squared theme="light" id= "adminview" onClick={this.handleFilter}>All my jobs</Button>
+                <Button squared theme="light" id= "adminviewstatus" onClick={this.handleFilter}>My jobs sorted by status</Button>
               </ButtonGroup>
             </Col>
             <Col>

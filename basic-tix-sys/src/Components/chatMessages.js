@@ -26,7 +26,8 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: this.state.id
+      token: localStorage.getItem("id")
+      // token: this.state.id
       //token: "5c94643a471b590004e5fd00"
     });
 
@@ -94,7 +95,8 @@ class ChatMessages extends Component {
     );
 
     req.query({
-      token: this.state.id
+      token: localStorage.getItem("id")
+      // token: this.state.id
       //token: "5c94643a471b590004e5fd00"
     });
 

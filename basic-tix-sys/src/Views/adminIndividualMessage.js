@@ -55,8 +55,10 @@ class AIndMes extends Component {
 
     req.type("json");
     req.send({
-      "admin_id": this.state.token,
-      "request_id": this.state.messageInfo._id
+      "admin_id": localStorage.getItem("token"),
+      "request_id": localStorage.getItem("id")
+      // "admin_id": this.state.token,
+      // "request_id": this.state.messageInfo._id
     });
 
     req.end(function (res) {
@@ -90,8 +92,10 @@ class AIndMes extends Component {
 
     req.type("json");
     req.send({
-      "admin_id": this.state.token,
-      "request_id": this.state.messageInfo._id
+      "admin_id": localStorage.getItem("token"),
+      "request_id": localStorage.getItem("id")
+      // "admin_id": this.state.token,
+      // "request_id": this.state.messageInfo._id
     });
 
     req.end(function (res) {
