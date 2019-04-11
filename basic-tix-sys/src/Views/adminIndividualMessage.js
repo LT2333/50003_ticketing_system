@@ -140,6 +140,11 @@ class AIndMes extends Component {
           </Link>
           <Button className="ThreeButtons" onClick={this.handleTake}>Take it</Button>
           <Button className="ThreeButtons" onClick={this.handleComplete}>Complete</Button>
+          <Link
+          to={"/amessagepage"}
+            >
+          Back
+          </Link>
 
           <Modal open={this.state.openComplete} toggle={this.handleComplete}>
             <ModalHeader>Complete!</ModalHeader>

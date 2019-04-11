@@ -68,6 +68,11 @@ class CIndMes extends Component {
             >
           Chat Now!
           </Link>
+          <Link
+          to={"/cmessagepage"}
+            >
+          Back
+          </Link>
           {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">
             Go Back
           </Button> */}
