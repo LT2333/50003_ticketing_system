@@ -243,6 +243,24 @@ class AMessagePage extends Component {
       <div>
         <Container className="MessagePage">
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
+          <Button id="popover-1" onClick={this.toggle}>
+            ChatBot
+          </Button>
+          <Popover
+            placement="bottom"
+            open={this.state.open}
+            toggle={this.toggle}
+            target="#popover-1"
+          >
+            <PopoverBody>
+              <iframe
+                allow="microphone;"
+                width="250"
+                height="330"
+                src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
+              />
+            </PopoverBody>
+          </Popover>
           <Row>
             {/* <FormGroup>
               <label>
@@ -305,30 +323,6 @@ class AMessagePage extends Component {
                   My Jobs
                 </Button>
               </ButtonGroup>
-              <Button id="popover-1" onClick={this.toggle}>
-                Toggle
-              </Button>
-              <Popover
-                placement="bottom"
-                open={this.state.open}
-                toggle={this.toggle}
-                target="#popover-1"
-              >
-                <iframe
-                  allow="microphone;"
-                  width="250"
-                  height="330"
-                  src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
-                />
-                {/* <PopoverBody>
-                  <iframe
-                    allow="microphone;"
-                    width="250"
-                    height="330"
-                    src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
-                  />
-                </PopoverBody> */}
-              </Popover>
             </Col>
             <Col>
               <ListGroup>

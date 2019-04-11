@@ -22,9 +22,10 @@
 
 /* MessageBox */
 .MessageBox {
-  width: 850px;
-  font-size: 6px;
+  width: 160%;
+  height: 60%;
   overflow: hidden;
+  left: -310px;
 }
 
 /* MessagePage */
@@ -33,7 +34,7 @@
 }
 
 .MessageText {
-  height: 80px;
+  height: 50px;
   overflow: hidden;
 }
 
@@ -80,9 +81,31 @@
 
 /* ButtonGroup */
 .SideBar {
+  /* margin: 0px;
+  padding: 0px; */
+  left: -178px;
 }
 
 /* Three Buttons  */
 .ThreeButtons {
   margin: 15px;
+}
+
+.Header {
+  align-content: flex-end;
+  width: 135%;
+}
+
+div.container {
+  margin: 25px;
+}
+
+div.col {
+  align-content: flex-start;
+  margin: 0px;
+  padding: 0px;
+}
+
+.stick {
+  position: sticky;
 }

@@ -20,7 +20,7 @@ class TestIframe extends Component {
     return (
       <div>
         <Button id="popover-1" onClick={this.toggle}>
-          Toggle
+          ChatBot
         </Button>
         <Popover
           placement="bottom"
@@ -31,8 +31,8 @@ class TestIframe extends Component {
           <PopoverBody>
             <iframe
               allow="microphone;"
-              width="150"
-              height="230"
+              width="250"
+              height="330"
               src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
             />
           </PopoverBody>
