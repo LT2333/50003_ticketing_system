@@ -95,7 +95,7 @@ class CMessagePage extends Component {
     );
 
     req.query({
-      token:this.state.token
+      token:localStorage.getItem("token")
       //"5c94643a471b590004e5fd00"
     });
 
@@ -129,7 +129,7 @@ class CMessagePage extends Component {
     );
 
     req.query({
-      token: this.state.token
+      token: localStorage.getItem("token")
       //"5c94643a471b590004e5fd00"
     });
 

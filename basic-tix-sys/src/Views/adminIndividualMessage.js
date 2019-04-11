@@ -115,6 +115,10 @@ class AIndMes extends Component {
           </p>
           <hr />
           <p>{this.state.messageInfo.message}</p>
+          <img 
+            src={this.state.messageInfo.imageURL}
+            alt=""
+            />
         </CardBody>
         <CardFooter>
           {this.state.messageInfo.tags.map(tags => {
