@@ -38,7 +38,7 @@ class Chats extends Component {
 
     req.query({
       // token: this.state.id
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("id")
     });
 
     req.headers({

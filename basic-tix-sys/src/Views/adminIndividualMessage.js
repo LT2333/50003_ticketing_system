@@ -106,7 +106,7 @@ class AIndMes extends Component {
   render() {
     return (
       <Card className="IndCard">
-        <CardHeader>Title</CardHeader>
+        <CardHeader>{this.state.messageInfo.title}</CardHeader>
         <CardBody>
           <h6>from {this.state.messageInfo.username}</h6>
           <p>
