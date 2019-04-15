@@ -1,7 +1,19 @@
 var request = require("request");
 let chai = require("chai");
 var assert = chai.assert;
+//var base_url = "localhost:1234";
 var base_url = "https://courier50003.herokuapp.com";
+var unique_username = "goldilocks";
+var unique_email = "goldilocks@gmail.com";
+var fake_password = "qwertty";
+var duplicate_username_1 = "john";
+var duplicate_username_2 = "mark";
+var duplicate_email_1 = "john@gmail.com";
+var duplicate_email_2 = "mark@gmail.com";
+var real_acccount_email = "mark@gmail.com";
+var real_password = "test";
+var hp_num = 1234;
+
 
 //=========================//
 // For testing of user management SIGNUPS
@@ -36,24 +48,23 @@ describe("User Management SIGN UPS", function() {
   describe("POST /users/signup", function() {
     it("username is blank sign up", function(done) {
       var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+        url: base_url + '/user/signup',
         headers:
          {
            'cache-control': 'no-cache',
            'content-type': 'application/json' },
         body:
          { username: '',
-           name: 'jjjj',
-           password: 'test',
-           email: 'jjjj@gmail.com',
-           contact_num: 1234 },
+           password: fake_password,
+           email: unique_email,
+           contact_num: hp_num },
         json: true };
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        console.log(body.error);
-        assert.equal("Username field is empty", body.error);
+        console.log(body.message);
+        assert.equal("Error: Username field is empty", body.message);
         done();
       });
       });
@@ -62,23 +73,23 @@ describe("User Management SIGN UPS", function() {
   describe("POST /users/signup", function() {
     it("username is used sign up", function(done) {
       var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+        url: base_url + '/user/signup',
         headers:
          { 'cache-control': 'no-cache',
            'content-type': 'application/json' },
         body:
-         { username: 'eunice',
-           name:"eunice",
-           password: 'test',
-           email: 'hello@gmail.com',
-           contact_num: 1234 },
+         { username: duplicate_username_1,
+           password: fake_password,
+           email: unique_email,
+           contact_num: hp_num
+          },
         json: true };
 
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        assert.equal('error:Username already exists', body)
+        assert.equal("Error: Username already in use", body.message)
         done();
       });
     });
@@ -88,24 +99,23 @@ describe("User Management SIGN UPS", function() {
   describe("POST /users/signup", function() {
     it("email is blank sign up", function(done) {
       var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+        url: base_url + '/user/signup',
         headers:
          {
            'cache-control': 'no-cache',
            'content-type': 'application/json' },
         body:
-         { username: 'tom hanks',
-           name:'tom',
-           password: 'test',
+         { username: unique_username,
+           password: fake_password,
            email: '',
-           contact_num: 1234 },
+           contact_num: hp_num },
         json: true };
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        console.log(body.error);
-        assert.equal("email field is empty", body.error);
+        console.log(body.message);
+        assert.equal("Error: email field is empty", body.message);
         done();
       });
     });
@@ -115,24 +125,23 @@ describe("User Management SIGN UPS", function() {
   describe("POST /users/signup", function() {
     it("email is invalid sign up", function(done) {
       var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+        url: base_url + '/user/signup',
         headers:
          {
            'cache-control': 'no-cache',
            'content-type': 'application/json' },
         body:
-         { username: 'loo hanks',
-           name: 'loo',
-           password: 'test',
+         { username: unique_username,
+           password: fake_password,
            email: 'abcd',
-           contact_num: 1234 },
+           contact_num: hp_num },
         json: true };
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        console.log(body.error);
-        assert.equal("Invalid Email", body.error);
+        console.log(body.message);
+        assert.equal("Error: Invalid Email", body.message);
         done();
       });
     });
@@ -142,24 +151,23 @@ describe("User Management SIGN UPS", function() {
   describe("POST /users/signup", function() {
     it("email is used sign up", function(done) {
       var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+        url: base_url + '/user/signup',
         headers:
          {
            'cache-control': 'no-cache',
            'content-type': 'application/json' },
         body:
-         { username: 'looew hanks',
-           name: 'looew',
-           password: 'test',
-           email: 'rohit@accenture.com',
-           contact_num: 1234 },
+         { username: unique_username,
+           password: fake_password,
+           email: duplicate_email_1,
+           contact_num: hp_num },
         json: true };
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        console.log(body.error);
-        assert.equal('error:Email already used', body);
+        console.log(body.message);
+        assert.equal("Error: Email already in use", body.message);
         done();
       });
     });
@@ -169,59 +177,33 @@ describe("User Management SIGN UPS", function() {
   describe("POST /users/signup", function() {
     it("Password is blank sign up", function(done) {
       var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
+        url: base_url + '/user/signup',
         headers:
          {
            'cache-control': 'no-cache',
            'content-type': 'application/json' },
         body:
-         { username: 'loosew hanks',
-           name:'loosew',
+         { username: unique_username,
            password: '',
-           email: 'rohisst@accenture.com',
+           email: unique_email,
            contact_num: 1234 },
         json: true };
       request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-        console.log(body.error);
-        assert.equal("Password field is empty", body.error);
+        console.log(body.message);
+        assert.equal("Error: Password field is empty", body.message);
         done();
       });
     });
   });
-  // name blank
-  describe("POST /users/signup", function() {
-    it("Password is blank sign up", function(done) {
-      var options = { method: 'POST',
-        url: 'https://courier50003.herokuapp.com/user/signup',
-        headers:
-         {
-           'cache-control': 'no-cache',
-           'content-type': 'application/json' },
-        body:
-         { username: 'loosew hanks',
-           name:'',
-           password: 'test',
-           email: 'rohisst@accenture.com',
-           contact_num: 1234 },
-        json: true };
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
 
-        console.log(body);
-        console.log(body.error);
-        assert.equal("Name field is empty", body.error);
-        done();
-      });
-    });
-  });
   // successful signup
   // describe("POST /users/signup", function() {
   //   it("Successful sign up", function(done) {
   //     var options = { method: 'POST',
-  //       url: 'https://courier50003.herokuapp.com/user/signup',
+  //       url: base_url + '/user/signup',
   //       headers:
   //        {
   //          'cache-control': 'no-cache',
@@ -235,7 +217,7 @@ describe("User Management SIGN UPS", function() {
   //     request(options, function (error, response, body) {
   //       if (error) throw new Error(error);
   //
-  //       assert.equal("false", body.error);
+  //       assert.equal("true", body.success);
   //       done();
   //     });
   //   });

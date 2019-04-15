@@ -3,7 +3,7 @@ let chai = require("chai");
 var assert = chai.assert;
 
 //=========================//
-// For testing of user management SIGNUPS
+// For testing of user management REQUESTS
 //========================//
 describe("View requests by token", function() {
   //test to see a request

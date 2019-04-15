@@ -8,7 +8,7 @@ var Sentiment = require('sentiment');
 
 var Isemail = require('isemail'); // Checks for valid email for users with no account
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || "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");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
 
 // Packages for uplaoding an image
 const aws = require( 'aws-sdk' );
@@ -18,9 +18,9 @@ const path = require( 'path' );
 
 // Amazon S3 Instantiation
 const s3 = new aws.S3({
-    accessKeyId: 'AKIATIS5GSCGAEGJ2MVO',
-    secretAccessKey: '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',
-    Bucket: 'esc-images-lt'
+    accessKeyId: '',
+    secretAccessKey: '',
+    Bucket: ''
    });
 
 //Single upload -- Upload only 1 image

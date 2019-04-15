@@ -3,7 +3,7 @@ const USER = require('../models/USER_MANAGEMENT.model');
 //const USERSESSION =  require('../models/USER_SESS.model');
 var Isemail = require('isemail'); // Checks for valid email
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || "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");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || "123");
 
 
 
@@ -18,7 +18,7 @@ exports.test = function (req, res) {
 exports.signup = function (req, res) {
   const{body} = req;
   const{
-    name,
+    //name,
     password,
     contact_num
   } = body;
@@ -27,12 +27,12 @@ exports.signup = function (req, res) {
     email
   }=body;
 
-    if(!name){
-      return res.send({
-        sucess: false,
-        message:"Error: Name field is empty"
-      });
-    }
+    // if(!name){
+    //   return res.send({
+    //     sucess: false,
+    //     message:"Error: Name field is empty"
+    //   });
+    // }
 
     if(!username){
       return res.send({
@@ -247,10 +247,22 @@ exports.logout = function(req,res){
               message: 'Invalid token used'
             });
         }
-      return res.send({
-          success: true,
-          message: 'successful logout',
-      });
+        if(!sessions[0]){
+          return res.send({
+            success: false,
+            message: 'Invalid token used'
+          });
+        }
+        else{
+
+          return res.send({
+            success: true,
+            message: 'valid logout'
+          });
+        }
+
+
+
     });
 }
 
