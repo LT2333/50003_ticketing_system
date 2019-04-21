@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import axios from "axios"; //here
+
 import {
   ListGroup,
   ListGroupItem,
@@ -20,7 +22,7 @@ import {
   ModalHeader
 } from "shards-react";
 import "./contactUsForm.css";
-
+var my_precious_url = "";
 const topics = [
   { label: "API DevOps", value: 1 },
   { label: "Chart as a Service", value: 2 },
@@ -62,13 +64,12 @@ class ContactUs extends Component {
       title: "",
       problem: "",
       relatedtags: null,
-
-      Body:[],
-      solution: "",
+      selectedFile: null //Here
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeSelect = this.handleChangeSelect.bind(this);
+    this.singleFileChangedHandler = this.singleFileChangedHandler.bind(this); //Here
   }
 
   handleChange(event) {
@@ -88,6 +89,9 @@ class ContactUs extends Component {
   };
 
   toggle() {
+    this.setState({
+      open: !this.state.open
+    });
     console.log(
       "Form Details: \n" +
         "name: " +
@@ -101,7 +105,9 @@ class ContactUs extends Component {
         "\nproblem:" +
         this.state.problem +
         "\nrealtedtags: " +
-        this.state.relatedtags
+        this.state.relatedtags +
+        "\nuploadedImage: " +
+        this.state.selectedFile //Here
     );
 
     //   var unirest = require("unirest");
@@ -127,60 +133,70 @@ class ContactUs extends Component {
 
     //     console.log(res.body);
     //   });
+
+    //Image starts here
+    const data = new FormData();
+    // If file selected
+    if (this.state.selectedFile) {
+      data.append("profileImage", this.state.selectedFile); //, this.state.selectedFile.name
+      axios
+        .post(
+          "https://courier50003.herokuapp.com/portal/profile-img-upload",
+          data,
+          {
+            //axios.post( 'http://localhost:5000/api/profile-img-upload',data, {
+            headers: {
+              accept: "application/json",
+              "Accept-Language": "en-US,en;q=0.8"
+            } //'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+          }
+        )
+        .then(function(response) {
+          console.log("Yes yes!");
+          if (200 === response.status) {
+            my_precious_url = response.data.location;
+          }
+        });
+    }
+
+    console.log("my url is:" + my_precious_url);
+    //image parts end here
+
     var unirest = require("unirest");
 
-    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/usersubmitacc");
-    
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/usersubmit"
+    );
+
     req.headers({
       "cache-control": "no-cache",
       "content-type": "application/json"
     });
-    
+
     req.type("json");
     req.send({
-      "title": "problems",
-      "id": localStorage.getItem("token"),
-      "message": "I have a problem with my API service request that I could not solve. When can you get back to me with save me an answer. This is not so urgent",
-      "category": "test",
-      "imageurl": ""
+      email: this.state.email,
+      contact_num: this.state.contactnum,
+      message: this.state.problem,
+      category: this.state.relatedtags,
+      imageURL: my_precious_url //Here
     });
 
     req.end(function(res) {
       if (res.error) throw new Error(res.error);
 
-      this.setState({
-        Body: res.body
-      });
       console.log(res.body);
-    });
-
-
-
-    this.setState({
-      open: !this.state.open
-    });
-
-    var req1 = unirest("POST", "https://courier50003.herokuapp.com/portal/recommended");
-
-    req1.headers({
-      "postman-token": "1f6522ca-9db0-b910-ccda-83be3f2389fd",
-      "cache-control": "no-cache",
-      "content-type": "application/json"
-    });
-
-    req1.type("json");
-    req1.send({
-      "tags": this.state.Body.tags,
-      "category": this.state.Body.category
-    });
-
-    req1.end(function (res) {
-      if (res.error) throw new Error(res.error);
-      this.setState({solution: res.body.solution})
-      console.log(res.body);
-
     });
   }
+
+  //Image
+  singleFileChangedHandler = event => {
+    console.log(event.target.files);
+    this.setState({
+      selectedFile: event.target.files[0]
+    });
+  };
 
   render() {
     const { open } = this.state;
@@ -247,19 +263,31 @@ class ContactUs extends Component {
                       Related Topics and Assets
                     </label>
                     <Select
+                      id="SelectOptions"
                       isMulti
                       options={topics}
                       onChange={this.handleChangeSelect}
                     />
                   </FormGroup>
 
+                  {/*Image Upload here*/}
+                  <div className="card-body">
+                    <p className="card-text">Attachment</p>
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      name="PrettyImage"
+                      onChange={this.singleFileChangedHandler}
+                    />
+                  </div>
+
                   <Button onClick={this.toggle}>Submit Now!</Button>
                   <Modal open={open} toggle={this.toggle}>
                     <ModalHeader>Submitted</ModalHeader>
                     <ModalBody>
-                      Thanks! We have received your request!
-                      Based on our database. These are the top three solutions to your requests:  
-                      {this.state.solution}
+                      Thanks! We have received your request. Meanwhile, you
+                      might want to check out these common problems: help help
+                      help
                     </ModalBody>
                   </Modal>
                 </Form>
