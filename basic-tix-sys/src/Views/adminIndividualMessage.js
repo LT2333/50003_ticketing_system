@@ -35,6 +35,7 @@ class AIndMes extends Component {
       openComplete: false,
       openTake: false,
       summary: "",
+      openTeam: false,
     };
 
     this.handleTake = this.handleTake.bind(this);
@@ -42,6 +43,33 @@ class AIndMes extends Component {
     this.handleChat = this.handleChat.bind(this);
     this.handleSum = this.handleSum.bind(this);
     this.handleSub = this.handleSub.bind(this);
+    this.handleTeam = this.handleTeam.bind(this);
+  }
+
+  handleTeam(event) {
+    this.setState({openTeam: !this.state.openTeam})
+
+    var unirest = require("unirest");
+
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/teamhandle");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      "admin_id": localStorage.getItem("token"),
+      "request_id": localStorage.getItem("id")
+      // "admin_id": this.state.token,
+      // "request_id": this.state.messageInfo._id
+    });
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      console.log(res.body);
+    });
   }
 
   handleComplete(event) {
@@ -176,6 +204,7 @@ class AIndMes extends Component {
           </Link>
           <Button className="ThreeButtons" onClick={this.handleTake}>Take it</Button>
           <Button className="ThreeButtons" onClick={this.handleComplete}>Complete</Button>
+          <Button className="ThreeButtons" onClick={this.handleTeam}>Team handle</Button>
           <Link
           to={"/amessagepage"}
             >
@@ -204,6 +233,12 @@ class AIndMes extends Component {
             <ModalBody>
               This request has been taken by you successfully and 
               its status has been changed to addressed!
+            </ModalBody>
+          </Modal>
+          <Modal open={this.state.openTeam} toggle={this.handleTeam}>
+            <ModalHeader>Handle Team</ModalHeader>
+            <ModalBody>
+              This requests is successfully handled by your team!
             </ModalBody>
           </Modal>
           {/* <Button onClick={ReactRouter.browserHistory.goBack} theme="dark">

@@ -15,6 +15,7 @@ const year = new Date().getFullYear(); //Current Year
 const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 var current = Date.now();
+const date1 = new Date();
 
 class AMessageBox extends Component {
   constructor(props) {
@@ -23,14 +24,17 @@ class AMessageBox extends Component {
       statusColor: "red",
       statusWords: "Unsolved",
       takeWords: "Take it!",
-      priority: "Normal"
+      priority: "Normal",
+      timeDiff: new Date(), 
     };
-
     this.changeStatus = this.changeStatus.bind(this);
     this.handleFinish = this.handleFinish.bind(this);
 
   }
   componentDidMount() {
+    console.log("type of date",typeof this.props.messageInfo.date);
+    // console.log(Math.abs(date1.getTime() - this.props.messageInfo.date.getTime()));
+    // this.setState( {timeDiff: Math.abs(date1.getTime() - this.props.messageInfo.date.getTime())});
     if (this.props.messageInfo.priority<0) {
       this.setState({priority:"High"}) ;
     } 

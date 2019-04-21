@@ -384,20 +384,20 @@ class AMessagePage extends Component {
             <Col>
               <ButtonGroup vertical className="SideBar">
                 {/* Own tickets */}
-                <Button squared theme="light" id= "adminview/uncompleteonly" onClick={this.handleCat}>Your unsolved tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncomplete}</Badge></Button>
-                <Button squared theme="light" id= "adminview/completeonly" onClick={this.handleCat}>Your completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcomplete}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "adminview/uncompleteonly" onClick={this.handleCat}>Your unsolved tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncomplete}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "adminview/completeonly" onClick={this.handleCat}>Your completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcomplete}</Badge></Button>
 
                 {/* Team tickets */}
-                <Button squared theme="light" id= "team/viewall" onClick={this.handleCat}>All requests in my team&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallTeam}</Badge></Button>
-                <Button squared theme="light" id= "team/unassigned" onClick={this.handleCat}>Team's unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedTeam}</Badge></Button>
-                <Button squared theme="light" id= "team/uncomplete" onClick={this.handleCat}>Team's uncompleted tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteTeam}</Badge></Button>
-                <Button squared theme="light" id= "team/complete" onClick={this.handleCat}>Team's completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteTeam}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "team/viewall" onClick={this.handleCat}>All requests in my team&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallTeam}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "team/unassigned" onClick={this.handleCat}>Team's unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedTeam}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "team/uncomplete" onClick={this.handleCat}>Team's uncompleted tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteTeam}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "team/complete" onClick={this.handleCat}>Team's completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteTeam}</Badge></Button>
 
                 {/* All tickets */}
-                <Button squared theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
-                <Button squared theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
-                <Button squared theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
-                <Button squared theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
               </ButtonGroup>
             </Col>
             <Col>

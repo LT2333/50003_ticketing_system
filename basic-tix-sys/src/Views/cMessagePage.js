@@ -259,10 +259,10 @@ class CMessagePage extends Component {
             <Col>
               <ButtonGroup vertical className="SideBar">
                 {/* All tickets */}
-                <Button squared theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
-                <Button squared theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
-                <Button squared theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
-                <Button squared theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
+                <Button className="SideBar" theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
               </ButtonGroup>
             </Col>
             <Col>
