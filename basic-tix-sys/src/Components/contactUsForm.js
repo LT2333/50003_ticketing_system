@@ -61,7 +61,10 @@ class ContactUs extends Component {
       contactnum: "",
       title: "",
       problem: "",
-      relatedtags: null
+      relatedtags: null,
+
+      Body:[],
+      solution: "",
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -85,9 +88,6 @@ class ContactUs extends Component {
   };
 
   toggle() {
-    this.setState({
-      open: !this.state.open
-    });
     console.log(
       "Form Details: \n" +
         "name: " +
@@ -150,7 +150,39 @@ class ContactUs extends Component {
     req.end(function(res) {
       if (res.error) throw new Error(res.error);
 
+      this.setState({
+        Body: res.body
+      });
       console.log(res.body);
+    });
+
+
+
+    this.setState({
+      open: !this.state.open
+    });
+
+    var unirest = require("unirest");
+
+    var req1 = unirest("POST", "https://courier50003.herokuapp.com/portal/recommended");
+
+    req1.headers({
+      "postman-token": "1f6522ca-9db0-b910-ccda-83be3f2389fd",
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req1.type("json");
+    req1.send({
+      "tags": this.state.Body.tags,
+      "category": this.state.Body.category
+    });
+
+    req1.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      this.setState({solution: res.body})
+      console.log(res.body);
+
     });
   }
 
@@ -229,9 +261,9 @@ class ContactUs extends Component {
                   <Modal open={open} toggle={this.toggle}>
                     <ModalHeader>Submitted</ModalHeader>
                     <ModalBody>
-                      Thanks! We have received your request. Meanwhile, you
-                      might want to check out these common problems: help help
-                      help
+                      Thanks! We have received your request!
+                      Based on our database. These are the top three solutions to your requests:  
+                      {this.state.solution}
                     </ModalBody>
                   </Modal>
                 </Form>

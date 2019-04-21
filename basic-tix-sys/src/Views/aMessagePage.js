@@ -67,25 +67,36 @@ class AMessagePage extends Component {
     // this.viewMessages = this.viewMessages.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
     this.handleCat = this.handleCat.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     this.state = {
       messageInfoArray: this.messageInfoArray,
       token: this.props.token,
       filterEndpoint: "https://courier50003.herokuapp.com/portal/",
-      countunassigned: "",
-      countuncomplete: "",
+      //Own
+      countcomplete: 0,
+      countuncomplete: 0,
+      //Team
+      countunassignedTeam: 0,
+      countuncompleteTeam: 0,
+      countcompleteTeam: 0,
+      countallTeam: 0,
+      //All
+      countunassignedAll: 0,
+      countuncompleteAll: 0,
+      countcompleteAll: 0,
+      countallAll: "",
     };
     this.handleBug = this.handleBug.bind(this);
   }
   componentDidMount() {
     //Do stuff here
-    this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/"});
+    let currentComponent = this;
 
     var unirest = require("unirest");
 
     var req = unirest(
       "GET",
-      this.state.filterEndpoint + "viewdate"
+      "https://courier50003.herokuapp.com/portal/viewall"
     );
 
     req.query({
@@ -120,7 +131,7 @@ class AMessagePage extends Component {
 
     reqc1.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countunassignedAll:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -138,7 +149,7 @@ class AMessagePage extends Component {
 
     reqc2.end(function (res) {
       if (res.error) throw new Error(res.error);
-      this.setState({countuncomplete:res.body })
+      currentComponent.setState({countuncompleteAll:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -156,7 +167,7 @@ class AMessagePage extends Component {
 
     reqc10.end(function (res) {
       if (res.error) throw new Error(res.error);
-      this.setState({countuncomplete:res.body })
+      currentComponent.setState({countcompleteAll:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -174,7 +185,7 @@ class AMessagePage extends Component {
 
     reqc3.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countallTeam:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -192,7 +203,7 @@ class AMessagePage extends Component {
 
     reqc4.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countuncompleteTeam:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -210,7 +221,7 @@ class AMessagePage extends Component {
 
     reqc5.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countcompleteTeam:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -228,7 +239,7 @@ class AMessagePage extends Component {
 
     reqc6.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countunassignedTeam:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
@@ -248,6 +259,8 @@ class AMessagePage extends Component {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
+      console.log(res.body.numRequests.toString());
+      currentComponent.setState({countallAll: res.body.numRequests.toString()});
     });
     ////////////////////////////////////////
     //All uncomplete 
@@ -264,11 +277,11 @@ class AMessagePage extends Component {
 
     reqc8.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countuncomplete:res.body.numRequests})
       console.log(res.body);
     });
     ///////////////////////////////////////
-    //
+    //All compelete
     var reqc9 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/admin/complete");
 
     reqc9.query({
@@ -282,7 +295,7 @@ class AMessagePage extends Component {
 
     reqc9.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({countcomplete:res.body.numRequests})
       console.log(res.body);
     });
 
@@ -294,16 +307,18 @@ class AMessagePage extends Component {
   handleFilter (event) {
     var unirest = require("unirest");
 
-    var req = unirest("GET", "https://courier50003.herokuapp.com/portal/"+event);
-
-    req.query({
-      "token": localStorage.getItem("token")
-    });
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/viewstatus");
 
     req.headers({
-      "cache-control": "no-cache"
+      "cache-control": "no-cache",
+      "content-type": "application/json"
     });
 
+    req.type("json");
+    req.send({
+      "token": localStorage.getItem("token"),
+      "meta": "own"
+    });
 
     req.end(function (res) {
       if (res.error) throw new Error(res.error);
@@ -316,14 +331,11 @@ class AMessagePage extends Component {
   handleCat (event){
     console.log("Event [messagePage]: ", event.target.id);
     //Do stuff here
-    this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.target.id});
-
     var unirest = require("unirest");
 
     var req = unirest(
       "GET",
-      this.state.filterEndpoint
+      "https://courier50003.herokuapp.com/portal/"+event.target.id
     );
 
     req.query({
@@ -336,8 +348,9 @@ class AMessagePage extends Component {
     });
 
     req.end(res => {
-      console.log("res.body [messagePage]: ", res.body);
-      console.log("token passed [messagePage]: ", this.state.token);
+      // console.log("res.body [messagePage]: ", res.body);
+      // console.log("token passed [messagePage]: ", this.state.token);
+      console.log("requests",res.body.requests)
       if (res.error) throw new Error(res.error);
       this.setState({
         messageInfoArray: res.body.requests});
@@ -366,20 +379,20 @@ class AMessagePage extends Component {
             <Col>
               <ButtonGroup vertical className="SideBar">
                 {/* Own tickets */}
-                <Button squared theme="light" id= "admin/viewuncompleteonly" onClick={this.handleCat}>Your unsolved tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassigned.numRequests}</Badge></Button>
-                <Button squared theme="light" id= "admin/viewcompleteonly" onClick={this.handleCat}>Your completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassigned}</Badge></Button>
+                <Button squared theme="light" id= "adminview/uncompleteonly" onClick={this.handleCat}>Your unsolved tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncomplete}</Badge></Button>
+                <Button squared theme="light" id= "adminview/completeonly" onClick={this.handleCat}>Your completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcomplete}</Badge></Button>
 
                 {/* Team tickets */}
-                <Button squared theme="light" id= "team/viewall" onClick={this.handleCat}>All requests in my team&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "team/unassigned" onClick={this.handleCat}>Team's unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "team/uncomplete" onClick={this.handleCat}>Team's uncompleted tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "team/complete" onClick={this.handleCat}>Team's completed tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "team/viewall" onClick={this.handleCat}>All requests in my team&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallTeam}</Badge></Button>
+                <Button squared theme="light" id= "team/unassigned" onClick={this.handleCat}>Team's unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedTeam}</Badge></Button>
+                <Button squared theme="light" id= "team/uncomplete" onClick={this.handleCat}>Team's uncompleted tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteTeam}</Badge></Button>
+                <Button squared theme="light" id= "team/complete" onClick={this.handleCat}>Team's completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteTeam}</Badge></Button>
 
                 {/* All tickets */}
-                <Button squared theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncomplete}</Badge></Button>
-                <Button squared theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "viewdate" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
+                <Button squared theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
+                <Button squared theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
+                <Button squared theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
               </ButtonGroup>
             </Col>
             <Col>

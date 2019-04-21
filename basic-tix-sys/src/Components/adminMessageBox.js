@@ -66,7 +66,7 @@ class AMessageBox extends Component {
               <Row>
                 <Col>{this.props.messageInfo.title}</Col>
                 <Col>{this.props.messageInfo.username}</Col>
-                <Col>{this.props.messageInfo.admin}</Col>
+                <Col>{this.props.messageInfo.who}</Col>
                 <Col>{this.props.messageInfo.date}</Col>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.status}</Col>

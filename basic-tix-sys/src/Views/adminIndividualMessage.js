@@ -12,7 +12,9 @@ import {
   Badge,
   Modal,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormGroup,
+  FormInput
 } from "shards-react";
 import "./widgets.css";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
@@ -31,13 +33,15 @@ class AIndMes extends Component {
       messageInfo: props.location.messageInfo,
       token: props.location.token,
       openComplete: false,
-      openTake: false
+      openTake: false,
+      summary: "",
     };
 
     this.handleTake = this.handleTake.bind(this);
     this.handleComplete = this.handleComplete.bind(this);
     this.handleChat = this.handleChat.bind(this);
-
+    this.handleSum = this.handleSum.bind(this);
+    this.handleSub = this.handleSub.bind(this);
   }
 
   handleComplete(event) {
@@ -64,6 +68,34 @@ class AIndMes extends Component {
     req.end(function (res) {
       if (res.error) throw new Error(res.error);
 
+      console.log(res.body);
+    });
+  }
+
+  handleSum(event) {
+    this.setState({ summary: event.target.value });
+  }
+
+  handleSub(event) {
+    var unirest = require("unirest");
+
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/adminarchive");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      "request_id": localStorage.getItem("id"),
+      "solution": this.state.summary,
+    });
+
+    this.setState({openComplete: false})
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
       console.log(res.body);
     });
   }
@@ -155,6 +187,15 @@ class AIndMes extends Component {
             <ModalBody>
               This request has been completed by you and 
               its status has been changed to completed!
+              <FormGroup>
+                <label>Please provide a brief summary of this solution: </label>
+                <FormInput
+                  name="summary"
+                  onChange={this.handleSum}
+                  size="lg"
+                />
+              </FormGroup>
+              <Button onClick={this.handleSub}>Click to submit &rarr;</Button>
             </ModalBody>
           </Modal>
 
