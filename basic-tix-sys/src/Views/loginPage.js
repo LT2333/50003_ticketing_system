@@ -25,9 +25,10 @@ class LoginCreds extends Component {
   }
 
   handleChoose(event) {
+    let currentComponent = this;
     var unirest = require("unirest");
 
-    var req = unirest("POST", "http://localhost:1234/user/team");
+    var req = unirest("POST", "https://courier50003.herokuapp.com/user/team");
 
     req.headers({
       "cache-control": "no-cache",
@@ -44,8 +45,9 @@ class LoginCreds extends Component {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
-
-      this.setState({redirect: true})
+      if (res.body.success === true) {
+        currentComponent.setState({team: res.body.team});
+      }
     });
 
   }
@@ -160,15 +162,23 @@ class LoginCreds extends Component {
         <Modal open={this.state.open} toggle={this.handleSubmit}>
           <ModalHeader>Admin choose your team</ModalHeader>
           <ModalBody>
-            <Card style={{ maxWidth: "300px" }}>
-              <CardHeader>Card header</CardHeader>
-              <CardImg src="https://place-hold.it/300x200" />
+            <Card>
               <CardBody>
-                <CardTitle>API</CardTitle>
-                <p>Lorem ipsum dolor sit amet.</p>
-                <Button onClick={this.handleChoose} id="API">Choose &rarr;</Button>
+                <CardTitle>Multilingual Chatbot</CardTitle>
+                <Button onClick={this.handleChoose} id="Multilingual">Choose &rarr;</Button>
               </CardBody>
-              <CardFooter>Card footer</CardFooter>
+            </Card>
+            <Card>
+              <CardBody>
+                <CardTitle>AI Translator</CardTitle>
+                <Button onClick={this.handleChoose} id="AI">Choose &rarr;</Button>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody>
+                <CardTitle>Digital Butler</CardTitle>
+                <Button onClick={this.handleChoose} id="Digital">Choose &rarr;</Button>
+              </CardBody>
             </Card>
           </ModalBody>
         </Modal>
