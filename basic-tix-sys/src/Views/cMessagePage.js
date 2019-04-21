@@ -269,7 +269,7 @@ class CMessagePage extends Component {
               <ListGroup>
                 <ListGroupItemHeading>
                   <Container>
-                    <Row>
+                    <Row className="MessageBox">
                       <Col>Subject</Col>
                       <Col>Requester</Col>
                       <Col>Requested</Col>

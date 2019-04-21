@@ -129,22 +129,20 @@ class ContactUs extends Component {
     //   });
     var unirest = require("unirest");
 
-    var req = unirest(
-      "POST",
-      "https://courier50003.herokuapp.com/portal/usersubmit"
-    );
-
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/usersubmitacc");
+    
     req.headers({
       "cache-control": "no-cache",
       "content-type": "application/json"
     });
-
+    
     req.type("json");
     req.send({
-      email: this.state.email,
-      contact_num: this.state.contactnum,
-      message: this.state.problem,
-      category: this.state.relatedtags
+      "title": "problems",
+      "id": localStorage.getItem("token"),
+      "message": "I have a problem with my API service request that I could not solve. When can you get back to me with save me an answer. This is not so urgent",
+      "category": "test",
+      "imageurl": ""
     });
 
     req.end(function(res) {
@@ -162,8 +160,6 @@ class ContactUs extends Component {
       open: !this.state.open
     });
 
-    var unirest = require("unirest");
-
     var req1 = unirest("POST", "https://courier50003.herokuapp.com/portal/recommended");
 
     req1.headers({
@@ -180,7 +176,7 @@ class ContactUs extends Component {
 
     req1.end(function (res) {
       if (res.error) throw new Error(res.error);
-      this.setState({solution: res.body})
+      this.setState({solution: res.body.solution})
       console.log(res.body);
 
     });

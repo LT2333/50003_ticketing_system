@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import axios from "axios"; //here
+
 import {
   ListGroup,
   ListGroupItem,
@@ -21,6 +23,7 @@ import {
 } from "shards-react";
 import "./contactUsForm.css";
 
+var my_precious_url = "";
 const topics = [
   { label: "API DevOps", value: 1 },
   { label: "Chart as a Service", value: 2 },
@@ -58,11 +61,13 @@ class IdContactUs extends Component {
 
       title: "",
       problem: "",
-      relatedtags: null
+      relatedtags: null,
+      selectedFile: null //Here
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeSelect = this.handleChangeSelect.bind(this);
+    this.singleFileChangedHandler = this.singleFileChangedHandler.bind(this); //Here
   }
 
   handleChange(event) {
@@ -92,35 +97,75 @@ class IdContactUs extends Component {
         "\nproblem:" +
         this.state.problem +
         "\nrealtedtags: " +
-        this.state.relatedtags
+        this.state.relatedtags +
+        "\nuploadedImage: " +
+        this.state.selectedFile //Here
     );
 
-    // var unirest = require("unirest");
+    //Image starts here
+    const data = new FormData();
+    // If file selected
+    if (this.state.selectedFile) {
+      data.append("profileImage", this.state.selectedFile); //, this.state.selectedFile.name
+      axios
+        .post(
+          "https://courier50003.herokuapp.com/portal/profile-img-upload",
+          data,
+          {
+            //axios.post( 'http://localhost:5000/api/profile-img-upload',data, {
+            headers: {
+              accept: "application/json",
+              "Accept-Language": "en-US,en;q=0.8"
+            } //'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+          }
+        )
+        .then(function(response) {
+          console.log("Yes yes!");
+          if (200 === response.status) {
+            my_precious_url = response.data.location;
+          }
+        });
+    }
 
-    // var req = unirest(
-    //   "POST",
-    //   "https://courier50003.herokuapp.com/portal/usersubmit"
-    // );
+    console.log("my url is:" + my_precious_url);
+    //image parts end here
 
-    // req.headers({
-    //   "cache-control": "no-cache",
-    //   "content-type": "application/json"
-    // });
+    var unirest = require("unirest");
 
-    // req.type("json");
-    // req.send({
-    //   email: this.state.email,
-    //   contact_num: this.state.contactnum,
-    //   message: this.state.problem,
-    //   category: this.state.relatedtags
-    // });
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/usersubmitacc"
+    );
 
-    // req.end(function(res) {
-    //   if (res.error) throw new Error(res.error);
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
 
-    //   console.log(res.body);
-    // });
+    req.type("json");
+    req.send({
+      title: this.state.title,
+      id: localStorage.getItem("token"),
+      message: this.state.problem,
+      category: this.state.relatedtags,
+      imageurl: my_precious_url //Here
+    });
+
+    req.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
   }
+
+  //Image
+  singleFileChangedHandler = event => {
+    console.log(event.target.files);
+    this.setState({
+      selectedFile: event.target.files[0]
+    });
+  };
+
   render() {
     const { open } = this.state;
     return (
@@ -159,11 +204,23 @@ class IdContactUs extends Component {
                       Related Topics and Assets
                     </label>
                     <Select
+                      id="Select"
                       isMulti
                       options={topics}
                       onChange={this.handleChangeSelect}
                     />
                   </FormGroup>
+
+                  {/*Image Upload here*/}
+                  <div className="card-body">
+                    <p className="card-text">Attachment</p>
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      name="PrettyImage"
+                      onChange={this.singleFileChangedHandler}
+                    />
+                  </div>
 
                   <Button onClick={this.toggle}>Submit Now!</Button>
                   <Modal open={open} toggle={this.toggle}>

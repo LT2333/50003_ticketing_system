@@ -29,7 +29,7 @@ class ClientMessage extends Component {
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Nav tabs>
             <NavItem>
-              <NavLink href="/cmessagepage/contactus">Contact Us</NavLink>
+              <NavLink id="SecondContactUs" href="/cmessagepage/contactus">Contact Us</NavLink>
             </NavItem>
             {/* <NavItem>
               <NavLink href="/cmessagepage/myreqs">My Request</NavLink>

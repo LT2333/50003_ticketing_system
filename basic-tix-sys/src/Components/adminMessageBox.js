@@ -25,22 +25,35 @@ class AMessageBox extends Component {
       statusWords: "Unsolved",
       takeWords: "Take it!",
       priority: "Normal",
-      timeDiff: new Date(), 
+      timeDiff: new Date(),
+      color: ""
     };
     this.changeStatus = this.changeStatus.bind(this);
     this.handleFinish = this.handleFinish.bind(this);
-
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    localStorage.setItem("id", this.props.messageInfo._id);
   }
   componentDidMount() {
-    console.log("type of date",typeof this.props.messageInfo.date);
+    console.log("type of date", typeof this.props.messageInfo.date);
     // console.log(Math.abs(date1.getTime() - this.props.messageInfo.date.getTime()));
     // this.setState( {timeDiff: Math.abs(date1.getTime() - this.props.messageInfo.date.getTime())});
-    if (this.props.messageInfo.priority<0) {
-      this.setState({priority:"High"}) ;
-    } 
-    if (this.props.messageInfo.priority>5) {
-      this.setState({priority:"Low"}) ;
-    } 
+    if (this.props.messageInfo.priority < 0) {
+      this.setState({ priority: "High" });
+    }
+    if (this.props.messageInfo.priority > 5) {
+      this.setState({ priority: "Low" });
+    }
+    if (this.props.messageInfo.status === "unaddressed") {
+      this.setState({ color: "danger" });
+    }
+    if (this.props.messageInfo.status === "finished") {
+      this.setState({ color: "success" });
+    }
+    if (this.props.messageInfo.status === "addressing") {
+      this.setState({ color: "warning" });
+    }
   }
 
   changeStatus(event) {
@@ -60,27 +73,32 @@ class AMessageBox extends Component {
   render() {
     console.log("messageInfo [messageBox]: ", this.props.messageInfo);
     return (
-        <Link
-          to={{
-            pathname: "/amessagepage/aindividualmessage" ,
-            messageInfo: this.props.messageInfo,
-            token: this.props.token
-          }}
-        >
-          <ListGroupItem className="MessageBox">
-            <Container>
-              <Row>
-                <Col>{this.props.messageInfo.title}</Col>
-                <Col>{this.props.messageInfo.username}</Col>
-                <Col>{this.props.messageInfo.who}</Col>
-                <Col>{this.props.messageInfo.date}</Col>
-                <Col>{this.props.messageInfo.category}</Col>
-                <Col>{this.props.messageInfo.status}</Col>
-                <Col>{this.state.priority}</Col>
-              </Row>
-            </Container>
-          </ListGroupItem>
-        </Link>
+      <Link
+        to={{
+          pathname: "/amessagepage/aindividualmessage",
+          messageInfo: this.props.messageInfo,
+          token: this.props.token
+        }}
+        onClick={this.handleClick}
+      >
+        <ListGroupItem className="MessageBox">
+          <Container>
+            <Row>
+              <Col>{this.props.messageInfo.title}</Col>
+              <Col>{this.props.messageInfo.username}</Col>
+              <Col>{this.props.messageInfo.who}</Col>
+              <Col>{this.props.messageInfo.date}</Col>
+              <Col>{this.props.messageInfo.category}</Col>
+              <Col>{this.state.priority}</Col>
+              <Col>
+                <Badge className="StatusBox" theme={this.state.color}>
+                  {this.props.messageInfo.status}
+                </Badge>
+              </Col>
+            </Row>
+          </Container>
+        </ListGroupItem>
+      </Link>
     );
   }
 }

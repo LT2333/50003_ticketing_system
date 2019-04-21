@@ -73,18 +73,18 @@ class AMessagePage extends Component {
       token: this.props.token,
       filterEndpoint: "https://courier50003.herokuapp.com/portal/",
       //Own
-      countcomplete: 0,
-      countuncomplete: 0,
+      countcomplete: "",
+      countuncomplete: "",
       //Team
-      countunassignedTeam: 0,
-      countuncompleteTeam: 0,
-      countcompleteTeam: 0,
-      countallTeam: 0,
+      countunassignedTeam: "",
+      countuncompleteTeam: "",
+      countcompleteTeam: "",
+      countallTeam: "",
       //All
-      countunassignedAll: 0,
-      countuncompleteAll: 0,
-      countcompleteAll: 0,
-      countallAll: 0,
+      countunassignedAll: "",
+      countuncompleteAll: "",
+      countcompleteAll: "",
+      countallAll: "",
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -404,14 +404,14 @@ class AMessagePage extends Component {
               <ListGroup>
                 <ListGroupItemHeading>
                   <Container>
-                    <Row>
+                    <Row className="MessageBox">
                       <Col>Subject</Col>
                       <Col>Requester</Col>
                       <Col>Handler</Col>
                       <Col>Requested</Col>
                       <Col>Type</Col>
-                      <Col>Status</Col>
                       <Col>Priority</Col>
+                      <Col>Status</Col>
                     </Row>
                   </Container>
                 </ListGroupItemHeading>

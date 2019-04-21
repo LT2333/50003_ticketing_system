@@ -95,3 +95,10 @@
 .ChatBot {
   margin-bottom: 30px;
 }
+
+.StatusBox {
+  width: 110px;
+}
+.TitleBox {
+  font-size: 80%;
+}

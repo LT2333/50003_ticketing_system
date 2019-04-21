@@ -164,6 +164,12 @@ class LoginCreds extends Component {
           <ModalBody>
             <Card>
               <CardBody>
+                <CardTitle>API DevOps</CardTitle>
+                <Button onClick={this.handleChoose} id="API">Choose &rarr;</Button>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody>
                 <CardTitle>Multilingual Chatbot</CardTitle>
                 <Button onClick={this.handleChoose} id="Multilingual">Choose &rarr;</Button>
               </CardBody>
