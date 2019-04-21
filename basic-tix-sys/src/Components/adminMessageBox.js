@@ -22,11 +22,19 @@ class AMessageBox extends Component {
     this.state = {
       statusColor: "red",
       statusWords: "Unsolved",
-      takeWords: "Take it!"
+      takeWords: "Take it!",
+      priority: "Normal"
     };
 
     this.changeStatus = this.changeStatus.bind(this);
     this.handleFinish = this.handleFinish.bind(this);
+
+    if (this.props.messageInfo.priority<0) {
+      this.setState({priority:"High"}) ;
+    } 
+    if (this.props.messageInfo.priority>5) {
+      this.setState({priority:"Low"}) ;
+    } 
   }
 
   changeStatus(event) {
@@ -58,9 +66,11 @@ class AMessageBox extends Component {
               <Row>
                 <Col>{this.props.messageInfo.title}</Col>
                 <Col>{this.props.messageInfo.username}</Col>
+                <Col>{this.props.messageInfo.admin}</Col>
                 <Col>{this.props.messageInfo.date}</Col>
                 <Col>{this.props.messageInfo.category}</Col>
                 <Col>{this.props.messageInfo.status}</Col>
+                <Col>{this.state.priority}</Col>
               </Row>
             </Container>
           </ListGroupItem>

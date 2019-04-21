@@ -6,7 +6,6 @@ import Homepage from "./Views/homePage";
 import ContactUs from "./Components/contactUsForm";
 import HeaderBar from "./Components/headerBar";
 import clientHeaderBar from "./Components/clientHeaderBar";
-import Chats from "./Views/Chats";
 import MyJobs from "./Views/myJobs";
 import MyReqs from "./Views/myReqs";
 import Ahistory from "./Views/historyAdmin";
@@ -19,6 +18,11 @@ import "shards-ui/dist/css/shards.min.css";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import SideBar from "./Components/sideBar";
 import { Container } from "shards-react";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStroopwafel } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faStroopwafel)
 
 class App extends Component {
   render() {

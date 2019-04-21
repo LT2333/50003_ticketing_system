@@ -2,6 +2,17 @@ import React, { Component } from "react";
 import { Form, FormInput, FormGroup, Container, Button } from "shards-react";
 import "./signupPage.css";
 import { Redirect } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardImg,
+  CardBody,
+  CardFooter,
+  Modal,
+  ModalBody,
+  ModalHeader
+} from "shards-react";
 
 class SignupCreds extends Component {
   constructor(props) {
@@ -13,7 +24,7 @@ class SignupCreds extends Component {
       errormsg: "",
       cansignup: false,
 
-      errors: {}
+      errors: {},
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

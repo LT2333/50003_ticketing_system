@@ -183,11 +183,11 @@ class CMessagePage extends Component {
             </FormGroup> */}
             <Col>
               <ButtonGroup vertical className="SideBar">
-                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Sort by status</Button>
-                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Sort by date</Button>
-                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
-                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
-                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
+                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Requests sorted by status&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Requests sorted by date&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Requests sorted by who&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Requests sorted by category&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Requests sorted by priority&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
               </ButtonGroup>
             </Col>
             <Col>

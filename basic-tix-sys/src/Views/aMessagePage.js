@@ -66,24 +66,26 @@ class AMessagePage extends Component {
     this.messageInfoArray = messageInfoArray;
     // this.viewMessages = this.viewMessages.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
-
+    this.handleCat = this.handleCat.bind(this);
     this.state = {
       messageInfoArray: this.messageInfoArray,
       token: this.props.token,
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate",
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/",
+      countunassigned: "",
+      countuncomplete: "",
     };
     this.handleBug = this.handleBug.bind(this);
   }
   componentDidMount() {
     //Do stuff here
     this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"});
+      filterEndpoint: "https://courier50003.herokuapp.com/portal/"});
 
     var unirest = require("unirest");
 
     var req = unirest(
       "GET",
-      this.state.filterEndpoint
+      this.state.filterEndpoint + "viewdate"
     );
 
     req.query({
@@ -103,12 +105,215 @@ class AMessagePage extends Component {
       this.setState({
         messageInfoArray: res.body.requests});
       });
+    ///////////////////////////////////////
+    //All unassigned
+    var reqc1 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/unassigned");
+
+    reqc1.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc1.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc1.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All uncomplete
+    var reqc2 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/uncomplete");
+
+    reqc2.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc2.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc2.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      this.setState({countuncomplete:res.body })
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All complete
+    var reqc10 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/complete");
+
+    reqc10.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc10.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc10.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      this.setState({countuncomplete:res.body })
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All tickets in the team
+    var reqc3 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/team/all");
+
+    reqc3.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc3.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc3.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //Uncomplete tickets in the team
+    var reqc4 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/team/uncomplete");
+
+    reqc4.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc4.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc4.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //Complete tickets in the team
+    var reqc5 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/team/complete");
+
+    reqc5.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc5.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc5.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //Unassigned tickets in the team
+    var reqc6 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/team/unassigned");
+
+    reqc6.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc6.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc6.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All 
+    var reqc7 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/all");
+
+    reqc7.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc7.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc7.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ////////////////////////////////////////
+    //All uncomplete 
+    var reqc8 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/admin/uncomplete");
+
+    reqc8.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc8.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc8.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //
+    var reqc9 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/admin/complete");
+
+    reqc9.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc9.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc9.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+
   }
   handleBug(event) {
     console.log("Props from clientMes to messagePage: ", this.props)
   }
 
-  handleFilter (event){
+  handleFilter (event) {
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://courier50003.herokuapp.com/portal/"+event);
+
+    req.query({
+      "token": localStorage.getItem("token")
+    });
+
+    req.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+
+  }
+
+  handleCat (event){
     console.log("Event [messagePage]: ", event.target.id);
     //Do stuff here
     this.setState({
@@ -146,7 +351,7 @@ class AMessagePage extends Component {
         <Container className="MessagePage">
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Row>
-            {/* <FormGroup>
+            <FormGroup>
               <label>
                 Choose your filter
               </label>
@@ -155,16 +360,26 @@ class AMessagePage extends Component {
                 options={filterOptions}
                 onChange={this.handleFilter}
               />
-            </FormGroup> */}
+            </FormGroup>
+          </Row>
+          <Row>
             <Col>
               <ButtonGroup vertical className="SideBar">
-                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Sort by status</Button>
-                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Sort by date</Button>
-                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Sort by who</Button>
-                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Sort by category</Button>
-                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Sort by priority</Button>
-                <Button squared theme="light" id= "adminview" onClick={this.handleFilter}>All my jobs</Button>
-                <Button squared theme="light" id= "adminviewstatus" onClick={this.handleFilter}>My jobs sorted by status</Button>
+                {/* Own tickets */}
+                <Button squared theme="light" id= "admin/viewuncompleteonly" onClick={this.handleCat}>Your unsolved tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassigned.numRequests}</Badge></Button>
+                <Button squared theme="light" id= "admin/viewcompleteonly" onClick={this.handleCat}>Your completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassigned}</Badge></Button>
+
+                {/* Team tickets */}
+                <Button squared theme="light" id= "team/viewall" onClick={this.handleCat}>All requests in my team&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "team/unassigned" onClick={this.handleCat}>Team's unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "team/uncomplete" onClick={this.handleCat}>Team's uncompleted tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "team/complete" onClick={this.handleCat}>Team's completed tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+
+                {/* All tickets */}
+                <Button squared theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncomplete}</Badge></Button>
+                <Button squared theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                <Button squared theme="light" id= "viewdate" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
               </ButtonGroup>
             </Col>
             <Col>
@@ -174,9 +389,11 @@ class AMessagePage extends Component {
                     <Row>
                       <Col>Subject</Col>
                       <Col>Requester</Col>
+                      <Col>Handler</Col>
                       <Col>Requested</Col>
                       <Col>Type</Col>
                       <Col>Status</Col>
+                      <Col>Priority</Col>
                     </Row>
                   </Container>
                 </ListGroupItemHeading>

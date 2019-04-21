@@ -6,8 +6,9 @@ import IdContactUs from "../Components/idContactUsForm";
 import CMessagePage from "./cMessagePage";
 import CIndMes from "./clientIndividualMessage";
 import MyReqs from "./myReqs";
-import Chats from "./Chats";
-import { Nav, NavItem, NavLink } from "shards-react";
+import clientChats from "./clientChats";
+import { Nav, NavItem, NavLink, Badge} from "shards-react";
+import Notifications from "../Components/notifications";
 
 class ClientMessage extends Component {
     constructor(props) {
@@ -36,12 +37,13 @@ class ClientMessage extends Component {
             <NavItem>
               <NavLink href="/cmessagepage/">Main</NavLink>
             </NavItem>
+            <Notifications/>
           </Nav>
 
           <Router>
               <Switch>
                 <Route path="/cmessagepage/contactus" component={IdContactUs}/>
-                <Route path="/cmessagepage/chats" component={Chats} />
+                <Route path="/cmessagepage/chats" component={clientChats} />
                 <Route path="/cmessagepage/cindividualmessage" component={CIndMes} />
                 {/* <Route path="/cmessagepage/chats" component={Chats} /> */}
                 <Route path="/cmessagepage/" render={(routeProps) => <CMessagePage {...routeProps} token={this.state.token}/>}/>

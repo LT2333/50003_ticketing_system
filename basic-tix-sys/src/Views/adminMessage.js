@@ -3,10 +3,11 @@ import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Button, Container } from "shards-react";
 import adminHeaderBar from "../Components/adminHeaderBar";
 import ContactUs from "../Components/contactUsForm";
+import Notifications from "../Components/notifications";
 import HeaderBar from "../Components/headerBar";
 import AMessagePage from "./aMessagePage";
 import AIndMes from "./adminIndividualMessage";
-import Chats from "./Chats";
+import adminChats from "./adminChats";
 import MyJobs from "./myJobs";
 import Ahistory from "./historyAdmin";
 import ProfileDisp from "./profileDisplaying";
@@ -30,8 +31,8 @@ class AdminMessage extends Component {
       return (
         <Container>
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
-          {/* <Nav tabs>
-            <NavItem>
+          <Nav tabs>
+            {/* <NavItem>
               <NavLink href="/amessagepage/profile">Profile</NavLink>
             </NavItem>
             <NavItem>
@@ -39,16 +40,17 @@ class AdminMessage extends Component {
             </NavItem>
             <NavItem>
               <NavLink href="/amessagepage/ahistory">History</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/amessagepage/main">Main</NavLink>
-            </NavItem>
-          </Nav> */}
+            </NavItem> */}
+            {/* <NavItem>
+              <NavLink href="/amessagepage/">Main</NavLink>
+            </NavItem> */}
+            <Notifications/>
+          </Nav>
 
           <Router>
               <Switch>
                   <Route path="/amessagepage/aindividualmessage" component={AIndMes} />
-                  <Route path="/amessagepage/chats" component={Chats} />
+                  <Route path="/amessagepage/chats" component={adminChats} />
                   {/* <Route path="/amessagepage/chats" component={Chats} /> */}
                   <Route path="/amessagepage/" render={(routeProps) => <AMessagePage {...routeProps} token={this.state.token}/>}/>
                   {/* <Route path="/amessagepage/ahistory" render={(routeProps) => <Ahistory {...routeProps} token={this.state.token}/>}/>

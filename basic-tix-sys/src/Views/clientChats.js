@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import {
   Button,
   Row,
@@ -8,12 +9,12 @@ import {
   NavLink,
   Container,
   InputGroup,
-  InputGroupAddon
+  InputGroupAddon,
 } from "shards-react";
 import "../Components/chatMessages.css";
 import "./signupPage.css";
 
-class Chats extends Component {
+class clientChats extends Component {
   constructor(props) {
     super(props);
 
@@ -168,10 +169,14 @@ class Chats extends Component {
             </Button>
           </InputGroupAddon>
         </InputGroup>
-
+        <Link
+          to={"/cmessagepage/cindividualmessage" }
+            >
+          Back
+        </Link>
       </div>
     );
   }
 }
 
-export default Chats;
+export default clientChats;

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Form, FormInput, FormGroup, Button, NavLink } from "shards-react";
+import { Form, FormInput, FormGroup, Button, NavLink,
+Modal,ModalBody,ModalHeader,Card,CardBody,CardFooter,CardHeader,CardTitle,CardImg } from "shards-react";
 import "./signupPage.css";
 import { Redirect,  Router } from "react-router-dom";
 
@@ -13,11 +14,42 @@ class LoginCreds extends Component {
       errormsg: "",
       canlogin: false,
       token: "",
-      type: ""
+      type: "",
+      team: "",
+      open: false,
+      redirect: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChoose = this.handleChoose.bind(this);
   }
+
+  handleChoose(event) {
+    var unirest = require("unirest");
+
+    var req = unirest("POST", "http://localhost:1234/user/team");
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      "team": event.target.id,
+      "id": localStorage.getItem("token"),
+    });
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+
+      this.setState({redirect: true})
+    });
+
+  }
+
 
   handleChange(event) {
     const target = event.target;
@@ -59,6 +91,7 @@ class LoginCreds extends Component {
         this.setState({ canlogin: true });
         this.setState({token: res.body.token});
         this.setState({type: res.body.authority});
+        this.setState({team: res.body.team});
 
         localStorage.setItem("token", res.body.token);
         localStorage.setItem("authority", res.body.authority);
@@ -66,13 +99,16 @@ class LoginCreds extends Component {
       } else {
         this.setState({ errormsg: res.body.message });
       }
+      if (res.body.authority == "admin" && res.body.team == "") {
+        this.setState({ open: true });
+      }
 
       console.log("res.body: ", res.body);
     });
   }
 
   render() {
-    if (this.state.canlogin && this.state.type === "admin") {
+    if (this.state.canlogin && this.state.type === "admin" && this.state.team != "") {
       return (
         <Redirect to = {{
             pathname: '/amessagepage',
@@ -121,6 +157,21 @@ class LoginCreds extends Component {
         <NavLink active href="/contactus">
           Want to contact us without an acount? Click here!
         </NavLink>
+        <Modal open={this.state.open} toggle={this.handleSubmit}>
+          <ModalHeader>Admin choose your team</ModalHeader>
+          <ModalBody>
+            <Card style={{ maxWidth: "300px" }}>
+              <CardHeader>Card header</CardHeader>
+              <CardImg src="https://place-hold.it/300x200" />
+              <CardBody>
+                <CardTitle>API</CardTitle>
+                <p>Lorem ipsum dolor sit amet.</p>
+                <Button onClick={this.handleChoose} id="API">Choose &rarr;</Button>
+              </CardBody>
+              <CardFooter>Card footer</CardFooter>
+            </Card>
+          </ModalBody>
+        </Modal>
       </div>
     );
   }
