@@ -5,6 +5,10 @@ var Isemail = require('isemail'); // Checks for valid email
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "123");
 
+// For JWT
+let jwt = require('jsonwebtoken');
+const config = require('../config.js');
+
 
 
 
@@ -195,6 +199,7 @@ exports.login = function (req,res){
     }
     console.log(users);
     const user = users[0]; // get the username
+    username = user.username;
 
     if(!user.validPassword(password)){
       return res.send({
@@ -202,6 +207,12 @@ exports.login = function (req,res){
         message: 'Error:invalid password'
       });
     }
+    // Generate the token
+    let jwttoken = jwt.sign({username: username},
+         config.secret,
+         { expiresIn: '24h' // expires in 24 hours
+         }
+       );
     //const userSession = new USERSESSION();
     let userSession = new USERSESSION( // Match the require path
       {
@@ -221,7 +232,8 @@ exports.login = function (req,res){
         message: 'Valid sign in',
         // token: user._id, // this is the real ID upon creation
         token: doc._id, // This is the id of the user session
-        authority: user.authority //
+        authority: user.authority,
+        jwttoken: jwttoken //
         // username: user.username
       });
     });
@@ -235,33 +247,27 @@ exports.logout = function(req,res){
   console.log(token);
 
   USERSESSION.findOneAndUpdate({
-        _id: token
+        _id: token // token is unique since it is session token
         //isDeleted: false
       }, {
         $set:{isDeleted:true}
-    }, null, (err,sessions) => {
-        if(err){
-            // console.log(err);
-            return res.send({
-              success: false,
-              message: 'Invalid token used'
-            });
-        }
-        if(!sessions[0]){
-          return res.send({
-            success: false,
-            message: 'Invalid token used'
-          });
-        }
-        else{
-
-          return res.send({
-            success: true,
-            message: 'valid logout'
-          });
-        }
-
-
+    }, { new: true }, function(err, docs){
+      if(docs){
+        console.log(docs);
+        return res.send({
+          success: true,
+          userID: docs.userId,
+          deletedStatus: docs.isDeleted
+        })
+        return res.send(docs);
+      }
+      else{
+        console.log('invalid token');
+        return res.send({
+          success: false,
+          message: 'Invalid token used'
+        });
+      }
 
     });
 }

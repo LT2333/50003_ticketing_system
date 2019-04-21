@@ -1,0 +1,42 @@
+{
+  "name": "backend_new",
+  "version": "1.0.0",
+  "engines": {
+    "node": "10.15.1"
+  },
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --timeout 5000 test/testing.js",
+    "start": "node app.js"
+  },
+  "author": "Glenn",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
+    "aws-sdk": "^2.437.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "isemail": "^3.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^6.0.2",
+    "mocha-test-url": "^0.1.17",
+    "mongoose": "^5.4.19",
+    "multer": "^1.4.1",
+    "multer-s3": "^2.9.0",
+    "nodemailer": "^5.1.1",
+    "path": "^0.12.7",
+    "retext": "^6.0.1",
+    "retext-keywords": "^4.0.2",
+    "sentiment": "^5.0.1",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2",
+    "url": "^0.11.0",
+    "validator": "^10.11.0"
+  }
+}
