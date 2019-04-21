@@ -68,6 +68,7 @@ class CIndMes extends Component {
             >
           Chat Now!
           </Link>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Link
           to={"/cmessagepage"}
             >

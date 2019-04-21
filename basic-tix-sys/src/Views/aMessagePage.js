@@ -84,7 +84,7 @@ class AMessagePage extends Component {
       countunassignedAll: 0,
       countuncompleteAll: 0,
       countcompleteAll: 0,
-      countallAll: "",
+      countallAll: 0,
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -305,9 +305,11 @@ class AMessagePage extends Component {
   }
 
   handleFilter (event) {
+    let currentComponent = this;
     var unirest = require("unirest");
+    console.log(event);
 
-    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/viewstatus");
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/"+event.value);
 
     req.headers({
       "cache-control": "no-cache",
@@ -317,12 +319,13 @@ class AMessagePage extends Component {
     req.type("json");
     req.send({
       "token": localStorage.getItem("token"),
-      "meta": "own"
+      "meta": localStorage.getItem("cat")
     });
 
     req.end(function (res) {
       if (res.error) throw new Error(res.error);
-
+      currentComponent.setState({
+        messageInfoArray: res.body.requests});
       console.log(res.body);
     });
 
@@ -332,6 +335,8 @@ class AMessagePage extends Component {
     console.log("Event [messagePage]: ", event.target.id);
     //Do stuff here
     var unirest = require("unirest");
+
+    localStorage.setItem("cat",event.target.id);
 
     var req = unirest(
       "GET",

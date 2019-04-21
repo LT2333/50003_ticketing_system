@@ -74,6 +74,11 @@ class CMessagePage extends Component {
       token: this.props.token,
       filterEndpoint: "https://courier50003.herokuapp.com/portal/viewdate",
       open: false,
+      //All
+      countunassignedAll: 0,
+      countuncompleteAll: 0,
+      countcompleteAll: 0,
+      countallAll: 0,
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -84,18 +89,18 @@ class CMessagePage extends Component {
   }
   componentDidMount() {
     //Do stuff here
-    this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/viewstatus"});
+    let currentComponent = this;
 
     var unirest = require("unirest");
 
     var req = unirest(
       "GET",
-      this.state.filterEndpoint
+      "https://courier50003.herokuapp.com/portal/viewall"
     );
 
     req.query({
-      token:localStorage.getItem("token")
+      token: localStorage.getItem("token")
+      // token:this.state.token
       //"5c94643a471b590004e5fd00"
     });
 
@@ -110,42 +115,112 @@ class CMessagePage extends Component {
       this.setState({
         messageInfoArray: res.body.requests});
       });
+    ///////////////////////////////////////
+    //All unassigned
+    var reqc1 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/unassigned");
+
+    reqc1.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc1.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc1.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      currentComponent.setState({countunassignedAll:res.body.numRequests})
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All uncomplete
+    var reqc2 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/uncomplete");
+
+    reqc2.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc2.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc2.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      currentComponent.setState({countuncompleteAll:res.body.numRequests})
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All complete
+    var reqc10 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/complete");
+
+    reqc10.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc10.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc10.end(function (res) {
+      if (res.error) throw new Error(res.error);
+      currentComponent.setState({countcompleteAll:res.body.numRequests})
+      console.log(res.body);
+    });
+    ///////////////////////////////////////
+    //All 
+    var reqc7 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/all");
+
+    reqc7.query({
+      "token": localStorage.getItem("token")
+    });
+
+    reqc7.headers({
+      "cache-control": "no-cache"
+    });
+
+
+    reqc7.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+      console.log(res.body.numRequests.toString());
+      currentComponent.setState({countallAll: res.body.numRequests.toString()});
+    });
   }
   handleBug(event) {
     console.log("Props from clientMes to messagePage: ", this.props)
   }
 
-  handleFilter (event){
-    console.log("Event [messagePage]: ", event.target.id);
-    //Do stuff here
-    this.setState({
-      filterEndpoint: "https://courier50003.herokuapp.com/portal/" + event.target.id});
-
+  handleFilter (event) {
+    let currentComponent = this;
     var unirest = require("unirest");
+    console.log(event);
 
-    var req = unirest(
-      "GET",
-      this.state.filterEndpoint
-    );
-
-    req.query({
-      token: localStorage.getItem("token")
-      //"5c94643a471b590004e5fd00"
-    });
+    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/"+event.value);
 
     req.headers({
-      "cache-control": "no-cache"
+      "cache-control": "no-cache",
+      "content-type": "application/json"
     });
 
-    req.end(res => {
-      console.log("res.body [messagePage]: ", res.body);
-      console.log("token passed [messagePage]: ", this.state.token);
+    req.type("json");
+    req.send({
+      "token": localStorage.getItem("token"),
+      "meta": localStorage.getItem("cat")
+    });
+
+    req.end(function (res) {
       if (res.error) throw new Error(res.error);
-      this.setState({
+      currentComponent.setState({
         messageInfoArray: res.body.requests});
-      });
-    
-  };
+      console.log(res.body);
+    });
+
+  }
+
 
   render() {
     return (
@@ -183,11 +258,11 @@ class CMessagePage extends Component {
             </FormGroup> */}
             <Col>
               <ButtonGroup vertical className="SideBar">
-                <Button squared theme="light" id= "viewstatus" onClick={this.handleFilter}>Requests sorted by status&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "viewdate" onClick={this.handleFilter}>Requests sorted by date&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "viewwho" onClick={this.handleFilter}>Requests sorted by who&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "viewcategory" onClick={this.handleFilter}>Requests sorted by category&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
-                <Button squared theme="light" id= "viewpriority" onClick={this.handleFilter}>Requests sorted by priority&nbsp;&nbsp;<Badge pill theme="primary">2</Badge></Button>
+                {/* All tickets */}
+                <Button squared theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
+                <Button squared theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
+                <Button squared theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
+                <Button squared theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
               </ButtonGroup>
             </Col>
             <Col>

@@ -29,6 +29,8 @@ class AMessageBox extends Component {
     this.changeStatus = this.changeStatus.bind(this);
     this.handleFinish = this.handleFinish.bind(this);
 
+  }
+  componentDidMount() {
     if (this.props.messageInfo.priority<0) {
       this.setState({priority:"High"}) ;
     } 
