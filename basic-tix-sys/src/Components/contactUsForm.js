@@ -64,12 +64,17 @@ class ContactUs extends Component {
       title: "",
       problem: "",
       relatedtags: null,
-      selectedFile: null //Here
+      selectedFile: null, //Here
+
+      body: [],
+      solution: [],
+      category: ""
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeSelect = this.handleChangeSelect.bind(this);
     this.singleFileChangedHandler = this.singleFileChangedHandler.bind(this); //Here
+    this.handleSolution = this.handleSolution.bind(this);
   }
 
   handleChange(event) {
@@ -161,6 +166,7 @@ class ContactUs extends Component {
 
     console.log("my url is:" + my_precious_url);
     //image parts end here
+    let currentComponent = this;
 
     var unirest = require("unirest");
 
@@ -187,6 +193,62 @@ class ContactUs extends Component {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
+      currentComponent.setState({ body: res.body });
+    });
+
+    var req1 = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/recommended"
+    );
+
+    req1.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req1.type("json");
+    req1.send({
+      tags: this.state.body.tags,
+      category: this.state.body.category
+    });
+
+    req1.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+      currentComponent.setState({ solution: res.body });
+    });
+  }
+  handleSolution(event) {
+    let currentComponent = this;
+    var unirest = require("unirest");
+    console.log("cat", this.state.category);
+    console.log("tags", this.state.tags);
+    var req1 = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/recommended"
+    );
+
+    req1.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req1.type("json");
+    req1.send({
+      // tag1: this.state.tag1,
+      // tag2: this.state.tag2,
+      // tag3: this.state.tag3,
+      // tag4: this.state.tag4,
+      // tag5: this.state.tag5,
+      category: this.state.category[0][0].label
+    });
+
+    req1.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log("second res.body", res.body);
+      currentComponent.setState({ solution: res.body.solList });
     });
   }
 
@@ -286,8 +348,17 @@ class ContactUs extends Component {
                     <ModalHeader>Submitted</ModalHeader>
                     <ModalBody>
                       Thanks! We have received your request. Meanwhile, you
-                      might want to check out these common problems: help help
-                      help
+                      might want to check out these common problems:
+                      <hr />
+                      <Button onClick={this.handleSolution} id="AI">
+                        Click to view recommended solutions &rarr;
+                      </Button>
+                      <hr />
+                      <ul>
+                        {this.state.solution.map(function(s, index) {
+                          return <li key={index}>{s}</li>;
+                        })}
+                      </ul>
                     </ModalBody>
                   </Modal>
                 </Form>

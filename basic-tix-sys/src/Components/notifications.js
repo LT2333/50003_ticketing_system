@@ -6,10 +6,20 @@ export default class Notifications extends React.Component {
     super(props);
 
     this.state = {
-      visible: false
+      visible: false,
+      notifications: localStorage.getItem("notifications")
     };
 
     this.toggleNotifications = this.toggleNotifications.bind(this);
+  }
+  componentDidMount() {
+    this.setState({ notifications: localStorage.getItem("notifications") });
+    console.log(
+      "localStorage: ",
+      JSON.parse(localStorage.getItem("notifications")),
+      "type",
+      typeof JSON.parse(localStorage.getItem("notifications"))
+    );
   }
 
   toggleNotifications() {
@@ -28,7 +38,7 @@ export default class Notifications extends React.Component {
           <div className="nav-link-icon__wrapper">
             Notifications &nbsp;&nbsp;
             <Badge pill theme="danger">
-              2
+              {JSON.parse(localStorage.getItem("notifications")).length}
             </Badge>
           </div>
         </NavLink>
@@ -37,36 +47,21 @@ export default class Notifications extends React.Component {
           className="dropdown-menu dropdown-menu-small"
         >
           <DropdownItem>
-            <div className="notification__icon-wrapper">
-              <div className="notification__icon">
-              </div>
-            </div>
-            <div className="notification__content">
-              <span className="notification__category">Analytics</span>
-              <p>
-                Your website’s active users count increased by{" "}
-                <span className="text-success text-semibold">28%</span> in the
-                last week. Great job!
-              </p>
-            </div>
+            <hr />
+            <ul>
+              {JSON.parse(localStorage.getItem("notifications")).map(function(
+                n,
+                index
+              ) {
+                return <li key={index}>{n}</li>;
+              })}
+            </ul>
+            <hr />
+            {/* {localStorage.getItem("notifications")} */}
           </DropdownItem>
-          <DropdownItem>
-            <div className="notification__icon-wrapper">
-              <div className="notification__icon">
-              </div>
-            </div>
-            <div className="notification__content">
-              <span className="notification__category">Sales</span>
-              <p>
-                Last week your store’s sales count decreased by{" "}
-                <span className="text-danger text-semibold">5.52%</span>. It
-                could have been worse!
-              </p>
-            </div>
-          </DropdownItem>
-          <DropdownItem className="notification__all text-center">
+          {/* <DropdownItem className="notification__all text-center">
             View all Notifications
-          </DropdownItem>
+          </DropdownItem> */}
         </Collapse>
       </NavItem>
     );

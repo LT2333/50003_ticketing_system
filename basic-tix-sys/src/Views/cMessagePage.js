@@ -12,7 +12,9 @@ import {
   ListGroup,
   ListGroupItemHeading,
   ButtonGroup,
-  Popover, PopoverBody, PopoverHeader 
+  Popover,
+  PopoverBody,
+  PopoverHeader
 } from "shards-react";
 import Select from "react-select";
 import { Badge } from "shards-react";
@@ -34,12 +36,12 @@ const hours = new Date().getHours(); //Current Hours
 const min = new Date().getMinutes(); //Current Minutes
 
 const filterOptions = [
-  {label: "Sort by status", value: "viewstatus" },
-  {label: "Sort by date", value: "viewdate" },
-  {label: "Sort by who", value: "viewwho" },
-  {label: "Sort by category", value: "viewcategory" },
-  {label: "Sort by priority", value: "viewpriority" },
-]
+  { label: "Sort by status", value: "viewstatus" },
+  { label: "Sort by date", value: "viewdate" },
+  { label: "Sort by who", value: "viewwho" },
+  { label: "Sort by category", value: "viewcategory" },
+  { label: "Sort by priority", value: "viewpriority" }
+];
 
 class CMessagePage extends Component {
   constructor(props) {
@@ -79,6 +81,8 @@ class CMessagePage extends Component {
       countuncompleteAll: 0,
       countcompleteAll: 0,
       countallAll: 0,
+
+      notifications: []
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -92,6 +96,26 @@ class CMessagePage extends Component {
     let currentComponent = this;
 
     var unirest = require("unirest");
+    var req1 = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/notifications/"
+    );
+
+    req1.query({
+      token: localStorage.getItem("token")
+    });
+
+    req1.headers({
+      "cache-control": "no-cache"
+    });
+
+    req1.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+      // currentComponent.setState({ notifications: res.body });
+      localStorage.setItem("notifications", res.body);
+    });
 
     var req = unirest(
       "GET",
@@ -113,93 +137,107 @@ class CMessagePage extends Component {
       console.log("token passed [messagePage]: ", this.state.token);
       if (res.error) throw new Error(res.error);
       this.setState({
-        messageInfoArray: res.body.requests});
+        messageInfoArray: res.body.requests
       });
+    });
     ///////////////////////////////////////
     //All unassigned
-    var reqc1 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/unassigned");
+    var reqc1 = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/count/unassigned"
+    );
 
     reqc1.query({
-      "token": localStorage.getItem("token")
+      token: localStorage.getItem("token")
     });
 
     reqc1.headers({
       "cache-control": "no-cache"
     });
 
-
-    reqc1.end(function (res) {
+    reqc1.end(function(res) {
       if (res.error) throw new Error(res.error);
-      currentComponent.setState({countunassignedAll:res.body.numRequests})
+      currentComponent.setState({ countunassignedAll: res.body.numRequests });
       console.log(res.body);
     });
     ///////////////////////////////////////
     //All uncomplete
-    var reqc2 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/uncomplete");
+    var reqc2 = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/count/uncomplete"
+    );
 
     reqc2.query({
-      "token": localStorage.getItem("token")
+      token: localStorage.getItem("token")
     });
 
     reqc2.headers({
       "cache-control": "no-cache"
     });
 
-
-    reqc2.end(function (res) {
+    reqc2.end(function(res) {
       if (res.error) throw new Error(res.error);
-      currentComponent.setState({countuncompleteAll:res.body.numRequests})
+      currentComponent.setState({ countuncompleteAll: res.body.numRequests });
       console.log(res.body);
     });
     ///////////////////////////////////////
     //All complete
-    var reqc10 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/complete");
+    var reqc10 = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/count/complete"
+    );
 
     reqc10.query({
-      "token": localStorage.getItem("token")
+      token: localStorage.getItem("token")
     });
 
     reqc10.headers({
       "cache-control": "no-cache"
     });
 
-
-    reqc10.end(function (res) {
+    reqc10.end(function(res) {
       if (res.error) throw new Error(res.error);
-      currentComponent.setState({countcompleteAll:res.body.numRequests})
+      currentComponent.setState({ countcompleteAll: res.body.numRequests });
       console.log(res.body);
     });
     ///////////////////////////////////////
-    //All 
-    var reqc7 = unirest("GET", "https://courier50003.herokuapp.com/portal/count/all");
+    //All
+    var reqc7 = unirest(
+      "GET",
+      "https://courier50003.herokuapp.com/portal/count/all"
+    );
 
     reqc7.query({
-      "token": localStorage.getItem("token")
+      token: localStorage.getItem("token")
     });
 
     reqc7.headers({
       "cache-control": "no-cache"
     });
 
-
-    reqc7.end(function (res) {
+    reqc7.end(function(res) {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
       console.log(res.body.numRequests.toString());
-      currentComponent.setState({countallAll: res.body.numRequests.toString()});
+      currentComponent.setState({
+        countallAll: res.body.numRequests.toString()
+      });
     });
   }
   handleBug(event) {
-    console.log("Props from clientMes to messagePage: ", this.props)
+    console.log("Props from clientMes to messagePage: ", this.props);
   }
 
-  handleFilter (event) {
+  handleFilter(event) {
     let currentComponent = this;
     var unirest = require("unirest");
     console.log(event);
 
-    var req = unirest("POST", "https://courier50003.herokuapp.com/portal/"+event.value);
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/" + event.value
+    );
 
     req.headers({
       "cache-control": "no-cache",
@@ -208,42 +246,41 @@ class CMessagePage extends Component {
 
     req.type("json");
     req.send({
-      "token": localStorage.getItem("token"),
-      "meta": localStorage.getItem("cat")
+      token: localStorage.getItem("token"),
+      meta: localStorage.getItem("cat")
     });
 
-    req.end(function (res) {
+    req.end(function(res) {
       if (res.error) throw new Error(res.error);
       currentComponent.setState({
-        messageInfoArray: res.body.requests});
+        messageInfoArray: res.body.requests
+      });
       console.log(res.body);
     });
-
   }
-
 
   render() {
     return (
       <div>
         <Container className="MessagePage">
-        <Button id="popover-1" onClick={this.toggle} className="ChatBot">
-          ChatBot
-        </Button>
-        <Popover
-          placement="bottom"
-          open={this.state.open}
-          toggle={this.toggle}
-          target="#popover-1"
-        >
-          <PopoverBody>
-          <iframe
-              allow="microphone;"
-              width="350"
-              height="430"
-              src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1">
-          </iframe>
-          </PopoverBody>
-        </Popover>
+          <Button id="popover-1" onClick={this.toggle} className="ChatBot">
+            ChatBot
+          </Button>
+          <Popover
+            placement="bottom"
+            open={this.state.open}
+            toggle={this.toggle}
+            target="#popover-1"
+          >
+            <PopoverBody>
+              <iframe
+                allow="microphone;"
+                width="350"
+                height="430"
+                src="https://console.dialogflow.com/api-client/demo/embedded/8a3f1d1d-1ff2-4a83-9cfe-d7d848c6e3d1"
+              />
+            </PopoverBody>
+          </Popover>
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Row>
             {/* <FormGroup>
@@ -259,10 +296,50 @@ class CMessagePage extends Component {
             <Col>
               <ButtonGroup vertical className="SideBar">
                 {/* All tickets */}
-                <Button className="SideBar" theme="light" id= "viewallunassigned" onClick={this.handleCat}>All unassigned tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countunassignedAll}</Badge></Button>
-                <Button className="SideBar" theme="light" id= "viewalluncomplete" onClick={this.handleCat}>All uncomplete tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countuncompleteAll}</Badge></Button>
-                <Button className="SideBar" theme="light" id= "viewallcomplete" onClick={this.handleCat}>All completed tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countcompleteAll}</Badge></Button>
-                <Button className="SideBar" theme="light" id= "viewall" onClick={this.handleCat}>All tickets&nbsp;&nbsp;<Badge pill theme="primary">{this.state.countallAll}</Badge></Button>
+                <Button
+                  className="SideBar"
+                  theme="light"
+                  id="viewallunassigned"
+                  onClick={this.handleCat}
+                >
+                  All unassigned tickets&nbsp;&nbsp;
+                  <Badge pill theme="primary">
+                    {this.state.countunassignedAll}
+                  </Badge>
+                </Button>
+                <Button
+                  className="SideBar"
+                  theme="light"
+                  id="viewalluncomplete"
+                  onClick={this.handleCat}
+                >
+                  All uncomplete tickets&nbsp;&nbsp;
+                  <Badge pill theme="primary">
+                    {this.state.countuncompleteAll}
+                  </Badge>
+                </Button>
+                <Button
+                  className="SideBar"
+                  theme="light"
+                  id="viewallcomplete"
+                  onClick={this.handleCat}
+                >
+                  All completed tickets&nbsp;&nbsp;
+                  <Badge pill theme="primary">
+                    {this.state.countcompleteAll}
+                  </Badge>
+                </Button>
+                <Button
+                  className="SideBar"
+                  theme="light"
+                  id="viewall"
+                  onClick={this.handleCat}
+                >
+                  All tickets&nbsp;&nbsp;
+                  <Badge pill theme="primary">
+                    {this.state.countallAll}
+                  </Badge>
+                </Button>
               </ButtonGroup>
             </Col>
             <Col>
@@ -279,7 +356,12 @@ class CMessagePage extends Component {
                   </Container>
                 </ListGroupItemHeading>
                 {this.state.messageInfoArray.map(messageInfoArray => {
-                  return <CMessageBox messageInfo={messageInfoArray} token={this.state.token}/>;
+                  return (
+                    <CMessageBox
+                      messageInfo={messageInfoArray}
+                      token={this.state.token}
+                    />
+                  );
                 })}
               </ListGroup>
             </Col>

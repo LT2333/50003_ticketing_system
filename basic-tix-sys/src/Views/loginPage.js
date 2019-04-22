@@ -1,8 +1,22 @@
 import React, { Component } from "react";
-import { Form, FormInput, FormGroup, Button, NavLink,
-Modal,ModalBody,ModalHeader,Card,CardBody,CardFooter,CardHeader,CardTitle,CardImg } from "shards-react";
+import {
+  Form,
+  FormInput,
+  FormGroup,
+  Button,
+  NavLink,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardImg
+} from "shards-react";
 import "./signupPage.css";
-import { Redirect,  Router } from "react-router-dom";
+import { Redirect, Router } from "react-router-dom";
 
 class LoginCreds extends Component {
   constructor(props) {
@@ -18,6 +32,8 @@ class LoginCreds extends Component {
       team: "",
       open: false,
       redirect: false,
+
+      category: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,21 +53,19 @@ class LoginCreds extends Component {
 
     req.type("json");
     req.send({
-      "team": event.target.id,
-      "id": localStorage.getItem("token"),
+      team: event.target.id,
+      id: localStorage.getItem("token")
     });
 
-    req.end(function (res) {
+    req.end(function(res) {
       if (res.error) throw new Error(res.error);
 
       console.log(res.body);
       if (res.body.success === true) {
-        currentComponent.setState({team: res.body.team});
+        currentComponent.setState({ team: res.body.team });
       }
     });
-
   }
-
 
   handleChange(event) {
     const target = event.target;
@@ -91,13 +105,13 @@ class LoginCreds extends Component {
 
       if (res.body.success === true) {
         this.setState({ canlogin: true });
-        this.setState({token: res.body.token});
-        this.setState({type: res.body.authority});
-        this.setState({team: res.body.team});
+        this.setState({ token: res.body.token });
+        this.setState({ type: res.body.authority });
+        this.setState({ team: res.body.team });
 
         localStorage.setItem("token", res.body.token);
         localStorage.setItem("authority", res.body.authority);
-
+        localStorage.setItem("notifications", ["n1"]);
       } else {
         this.setState({ errormsg: res.body.message });
       }
@@ -110,20 +124,30 @@ class LoginCreds extends Component {
   }
 
   render() {
-    if (this.state.canlogin && this.state.type === "admin" && this.state.team != "") {
+    if (
+      this.state.canlogin &&
+      this.state.type === "admin" &&
+      this.state.team != ""
+    ) {
       return (
-        <Redirect to = {{
-            pathname: '/amessagepage',
+        <Redirect
+          to={{
+            pathname: "/amessagepage",
             state: this.state.token
-        }}/> )
+          }}
+        />
+      );
     }
 
     if (this.state.canlogin && this.state.type === "user") {
       return (
-        <Redirect to = {{
-            pathname: '/cmessagepage',
+        <Redirect
+          to={{
+            pathname: "/cmessagepage",
             state: this.state.token
-        }}/> )
+          }}
+        />
+      );
     }
 
     return (
@@ -165,25 +189,33 @@ class LoginCreds extends Component {
             <Card>
               <CardBody>
                 <CardTitle>API DevOps</CardTitle>
-                <Button onClick={this.handleChoose} id="API">Choose &rarr;</Button>
+                <Button onClick={this.handleChoose} id="API">
+                  Choose &rarr;
+                </Button>
               </CardBody>
             </Card>
             <Card>
               <CardBody>
                 <CardTitle>Multilingual Chatbot</CardTitle>
-                <Button onClick={this.handleChoose} id="Multilingual">Choose &rarr;</Button>
+                <Button onClick={this.handleChoose} id="Multilingual">
+                  Choose &rarr;
+                </Button>
               </CardBody>
             </Card>
             <Card>
               <CardBody>
                 <CardTitle>AI Translator</CardTitle>
-                <Button onClick={this.handleChoose} id="AI">Choose &rarr;</Button>
+                <Button onClick={this.handleChoose} id="AI">
+                  Choose &rarr;
+                </Button>
               </CardBody>
             </Card>
             <Card>
               <CardBody>
                 <CardTitle>Digital Butler</CardTitle>
-                <Button onClick={this.handleChoose} id="Digital">Choose &rarr;</Button>
+                <Button onClick={this.handleChoose} id="Digital">
+                  Choose &rarr;
+                </Button>
               </CardBody>
             </Card>
           </ModalBody>

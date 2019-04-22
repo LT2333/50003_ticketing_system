@@ -62,11 +62,23 @@ class IdContactUs extends Component {
       title: "",
       problem: "",
       relatedtags: null,
-      selectedFile: null //Here
+      selectedFile: null, //Here
+
+      body: [],
+      solution: [],
+
+      category: "",
+      tags: [],
+      tag1: "",
+      tag2: "",
+      tag3: "",
+      tag4: "",
+      tag5: ""
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeSelect = this.handleChangeSelect.bind(this);
+    this.handleSolution = this.handleSolution.bind(this);
     this.singleFileChangedHandler = this.singleFileChangedHandler.bind(this); //Here
   }
 
@@ -130,6 +142,8 @@ class IdContactUs extends Component {
     console.log("my url is:" + my_precious_url);
     //image parts end here
 
+    let currentComponent = this;
+
     var unirest = require("unirest");
 
     var req = unirest(
@@ -154,10 +168,65 @@ class IdContactUs extends Component {
     req.end(function(res) {
       if (res.error) throw new Error(res.error);
 
-      console.log(res.body);
+      console.log("first res.body", res.body);
+      currentComponent.setState({ category: res.body.category });
+      currentComponent.setState({ tags: res.body.tags });
+
+      // if (this.state.tags.length === 1) {
+      //   currentComponent.setState({ tag1: this.state.tags[0] });
+      // } else if (this.state.tags.length === 1) {
+      //   currentComponent.setState({ tag1: this.state.tags[0] });
+      //   currentComponent.setState({ tag2: this.state.tags[1] });
+      // } else if (this.state.tags.length === 1) {
+      //   currentComponent.setState({ tag1: this.state.tags[0] });
+      //   currentComponent.setState({ tag2: this.state.tags[1] });
+      //   currentComponent.setState({ tag3: this.state.tags[2] });
+      // } else if (this.state.tags.length === 1) {
+      //   currentComponent.setState({ tag1: this.state.tags[0] });
+      //   currentComponent.setState({ tag2: this.state.tags[1] });
+      //   currentComponent.setState({ tag3: this.state.tags[2] });
+      //   currentComponent.setState({ tag4: this.state.tags[3] });
+      // } else if (this.state.tags.length >= 5) {
+      //   currentComponent.setState({ tag1: this.state.tags[0] });
+      //   currentComponent.setState({ tag2: this.state.tags[1] });
+      //   currentComponent.setState({ tag3: this.state.tags[2] });
+      //   currentComponent.setState({ tag4: this.state.tags[3] });
+      //   currentComponent.setState({ tag5: this.state.tags[4] });
+      // }
     });
   }
+  handleSolution(event) {
+    let currentComponent = this;
+    var unirest = require("unirest");
+    console.log("cat", this.state.category);
+    console.log("tags", this.state.tags);
+    var req1 = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/recommended"
+    );
 
+    req1.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req1.type("json");
+    req1.send({
+      // tag1: this.state.tag1,
+      // tag2: this.state.tag2,
+      // tag3: this.state.tag3,
+      // tag4: this.state.tag4,
+      // tag5: this.state.tag5,
+      category: this.state.category[0][0].label
+    });
+
+    req1.end(function(res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log("second res.body", res.body);
+      currentComponent.setState({ solution: res.body.solList });
+    });
+  }
   //Image
   singleFileChangedHandler = event => {
     console.log(event.target.files);
@@ -226,9 +295,17 @@ class IdContactUs extends Component {
                   <Modal open={open} toggle={this.toggle}>
                     <ModalHeader>Submitted</ModalHeader>
                     <ModalBody>
-                      Thanks! We have received your request. Meanwhile, you
-                      might want to check out these common problems: help help
-                      help
+                      Thanks! We have received your request. Meanwhile,
+                      <hr />
+                      <Button onClick={this.handleSolution} id="AI">
+                        Click to view recommended solutions &rarr;
+                      </Button>
+                      <hr />
+                      <ul>
+                        {this.state.solution.map(function(s, index) {
+                          return <li key={index}>{s}</li>;
+                        })}
+                      </ul>
                     </ModalBody>
                   </Modal>
                 </Form>
