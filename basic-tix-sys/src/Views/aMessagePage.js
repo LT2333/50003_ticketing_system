@@ -84,9 +84,7 @@ class AMessagePage extends Component {
       countunassignedAll: 0,
       countuncompleteAll: 0,
       countcompleteAll: 0,
-      countallAll: 0,
-
-      notifications: []
+      countallAll: 0
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -103,8 +101,8 @@ class AMessagePage extends Component {
     );
 
     req1.query({
-      // token: localStorage.getItem("token")
-      token: "5cbca01a1dbf140004e59539"
+      token: localStorage.getItem("token")
+      // token: "5cbca01a1dbf140004e59539"
     });
 
     req1.headers({
@@ -125,9 +123,9 @@ class AMessagePage extends Component {
     );
 
     req.query({
+      //token: "5cbd3f0ce598560004d9c39d"
       token: localStorage.getItem("token")
-      // token:this.state.token
-      //"5c94643a471b590004e5fd00"
+      //token: "5c94643a471b590004e5fd00"
     });
 
     req.headers({
@@ -422,6 +420,7 @@ class AMessagePage extends Component {
             <FormGroup>
               <label>Choose your filter</label>
               <Select
+                id="SelectFilter"
                 multiple={false}
                 options={filterOptions}
                 onChange={this.handleFilter}

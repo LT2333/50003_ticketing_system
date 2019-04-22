@@ -80,9 +80,7 @@ class CMessagePage extends Component {
       countunassignedAll: 0,
       countuncompleteAll: 0,
       countcompleteAll: 0,
-      countallAll: 0,
-
-      notifications: []
+      countallAll: 0
     };
     this.handleBug = this.handleBug.bind(this);
   }
@@ -92,6 +90,7 @@ class CMessagePage extends Component {
     });
   }
   componentDidMount() {
+    console.log("localStorage", localStorage.getItem("token"));
     //Do stuff here
     let currentComponent = this;
 
@@ -103,6 +102,7 @@ class CMessagePage extends Component {
 
     req1.query({
       token: localStorage.getItem("token")
+      //token: "5c94643a471b590004e5fd00"
     });
 
     req1.headers({
@@ -114,7 +114,7 @@ class CMessagePage extends Component {
 
       console.log(res.body);
       // currentComponent.setState({ notifications: res.body });
-      localStorage.setItem("notifications", res.body);
+      localStorage.setItem("notifications", JSON.stringify(res.body));
     });
 
     var req = unirest(
@@ -124,8 +124,6 @@ class CMessagePage extends Component {
 
     req.query({
       token: localStorage.getItem("token")
-      // token:this.state.token
-      //"5c94643a471b590004e5fd00"
     });
 
     req.headers({

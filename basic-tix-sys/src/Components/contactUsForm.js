@@ -115,34 +115,10 @@ class ContactUs extends Component {
         this.state.selectedFile //Here
     );
 
-    //   var unirest = require("unirest");
-
-    //   var req = unirest("POST", "http://localhost:3000/form");
-
-    //   req.headers({
-    //     "cache-control": "no-cache",
-    //     "Content-Type": "application/json"
-    //   });
-
-    //   req.type("json");
-    //   req.send({
-    //     Username: this.state.name,
-    //     Email: this.state.email,
-    //     Contact_Number: this.state.contactnum,
-    //     Topic_Chosen: this.state.relatedtags,
-    //     Message: this.state.problem
-    //   });
-
-    //   req.end(function(res) {
-    //     if (res.error) throw new Error(res.error);
-
-    //     console.log(res.body);
-    //   });
-
     //Image starts here
     const data = new FormData();
     // If file selected
-    if (this.state.selectedFile) {
+    if (this.state.selectedFile && this.state.open == false) {
       data.append("profileImage", this.state.selectedFile); //, this.state.selectedFile.name
       axios
         .post(
@@ -161,63 +137,71 @@ class ContactUs extends Component {
           if (200 === response.status) {
             my_precious_url = response.data.location;
           }
+          console.log("my url is:" + my_precious_url);
+        })
+        .then(() => {
+          console.log("Second then executed ");
+          var unirest = require("unirest");
+
+          var req = unirest(
+            "POST",
+            "https://courier50003.herokuapp.com/portal/usersubmit"
+          );
+
+          req.headers({
+            "cache-control": "no-cache",
+            "content-type": "application/json"
+          });
+
+          req.type("json");
+          req.send({
+            name: this.state.name,
+            title: this.state.title,
+            email: this.state.email,
+            contact_num: this.state.contactnum,
+            message: this.state.problem,
+            category: this.state.relatedtags,
+            imageURL: my_precious_url //Here
+          });
+
+          req.end(function(res) {
+            if (res.error) throw new Error(res.error);
+
+            console.log(res.body);
+          });
         });
+    } else if (!this.state.selectedFile && this.state.open == false) {
+      var unirest = require("unirest");
+
+      var req = unirest(
+        "POST",
+        "https://courier50003.herokuapp.com/portal/usersubmit"
+      );
+
+      req.headers({
+        "cache-control": "no-cache",
+        "content-type": "application/json"
+      });
+
+      req.type("json");
+      req.send({
+        name: this.state.name,
+        title: this.state.title,
+        email: this.state.email,
+        contact_num: this.state.contactnum,
+        message: this.state.problem,
+        category: this.state.relatedtags,
+        imageURL: my_precious_url //Here
+      });
+
+      req.end(function(res) {
+        if (res.error) throw new Error(res.error);
+
+        console.log(res.body);
+      });
     }
 
-    console.log("my url is:" + my_precious_url);
     //image parts end here
-    let currentComponent = this;
-
-    var unirest = require("unirest");
-
-    var req = unirest(
-      "POST",
-      "https://courier50003.herokuapp.com/portal/usersubmit"
-    );
-
-    req.headers({
-      "cache-control": "no-cache",
-      "content-type": "application/json"
-    });
-
-    req.type("json");
-    req.send({
-      email: this.state.email,
-      contact_num: this.state.contactnum,
-      message: this.state.problem,
-      category: this.state.relatedtags,
-      imageURL: my_precious_url //Here
-    });
-
-    req.end(function(res) {
-      if (res.error) throw new Error(res.error);
-
-      console.log(res.body);
-      currentComponent.setState({ body: res.body });
-    });
-
-    var req1 = unirest(
-      "POST",
-      "https://courier50003.herokuapp.com/portal/recommended"
-    );
-
-    req1.headers({
-      "cache-control": "no-cache",
-      "content-type": "application/json"
-    });
-
-    req1.type("json");
-    req1.send({
-      tags: this.state.body.tags,
-      category: this.state.body.category
-    });
-
-    req1.end(function(res) {
-      if (res.error) throw new Error(res.error);
-
-      console.log(res.body);
-      currentComponent.setState({ solution: res.body });
-    });
   }
   handleSolution(event) {
     let currentComponent = this;

@@ -6,14 +6,12 @@ export default class Notifications extends React.Component {
     super(props);
 
     this.state = {
-      visible: false,
-      notifications: localStorage.getItem("notifications")
+      visible: false
     };
 
     this.toggleNotifications = this.toggleNotifications.bind(this);
   }
   componentDidMount() {
-    this.setState({ notifications: localStorage.getItem("notifications") });
     console.log(
       "localStorage: ",
       JSON.parse(localStorage.getItem("notifications")),

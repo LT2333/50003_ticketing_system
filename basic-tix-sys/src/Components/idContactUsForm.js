@@ -113,11 +113,10 @@ class IdContactUs extends Component {
         "\nuploadedImage: " +
         this.state.selectedFile //Here
     );
-
     //Image starts here
     const data = new FormData();
     // If file selected
-    if (this.state.selectedFile) {
+    if (this.state.selectedFile && this.state.open == false) {
       data.append("profileImage", this.state.selectedFile); //, this.state.selectedFile.name
       axios
         .post(
@@ -136,64 +135,67 @@ class IdContactUs extends Component {
           if (200 === response.status) {
             my_precious_url = response.data.location;
           }
+          console.log("my url is:" + my_precious_url);
+        })
+        .then(() => {
+          console.log("Second then executed ");
+
+          var unirest = require("unirest");
+
+          var req = unirest(
+            "POST",
+            "https://courier50003.herokuapp.com/portal/usersubmitacc"
+          );
+
+          req.headers({
+            "cache-control": "no-cache",
+            "content-type": "application/json"
+          });
+
+          req.type("json");
+          req.send({
+            title: this.state.title,
+            id: localStorage.getItem("token"),
+            message: this.state.problem,
+            category: this.state.relatedtags,
+            imageurl: my_precious_url //Here
+          });
+
+          req.end(function(res) {
+            if (res.error) throw new Error(res.error);
+
+            console.log(res.body);
+          });
         });
+    } else if (!this.state.selectedFile && this.state.open == false) {
+      var unirest = require("unirest");
+
+      var req = unirest(
+        "POST",
+        "https://courier50003.herokuapp.com/portal/usersubmitacc"
+      );
+
+      req.headers({
+        "cache-control": "no-cache",
+        "content-type": "application/json"
+      });
+
+      req.type("json");
+      req.send({
+        title: this.state.title,
+        id: localStorage.getItem("token"),
+        message: this.state.problem,
+        category: this.state.relatedtags,
+        imageurl: my_precious_url //Here
+      });
+
+      req.end(function(res) {
+        if (res.error) throw new Error(res.error);
+
+        console.log(res.body);
+      });
     }
-
-    console.log("my url is:" + my_precious_url);
     //image parts end here
-
-    let currentComponent = this;
-
-    var unirest = require("unirest");
-
-    var req = unirest(
-      "POST",
-      "https://courier50003.herokuapp.com/portal/usersubmitacc"
-    );
-
-    req.headers({
-      "cache-control": "no-cache",
-      "content-type": "application/json"
-    });
-
-    req.type("json");
-    req.send({
-      title: this.state.title,
-      id: localStorage.getItem("token"),
-      message: this.state.problem,
-      category: this.state.relatedtags,
-      imageurl: my_precious_url //Here
-    });
-
-    req.end(function(res) {
-      if (res.error) throw new Error(res.error);
-
-      console.log("first res.body", res.body);
-      currentComponent.setState({ category: res.body.category });
-      currentComponent.setState({ tags: res.body.tags });
-
-      // if (this.state.tags.length === 1) {
-      //   currentComponent.setState({ tag1: this.state.tags[0] });
-      // } else if (this.state.tags.length === 1) {
-      //   currentComponent.setState({ tag1: this.state.tags[0] });
-      //   currentComponent.setState({ tag2: this.state.tags[1] });
-      // } else if (this.state.tags.length === 1) {
-      //   currentComponent.setState({ tag1: this.state.tags[0] });
-      //   currentComponent.setState({ tag2: this.state.tags[1] });
-      //   currentComponent.setState({ tag3: this.state.tags[2] });
-      // } else if (this.state.tags.length === 1) {
-      //   currentComponent.setState({ tag1: this.state.tags[0] });
-      //   currentComponent.setState({ tag2: this.state.tags[1] });
-      //   currentComponent.setState({ tag3: this.state.tags[2] });
-      //   currentComponent.setState({ tag4: this.state.tags[3] });
-      // } else if (this.state.tags.length >= 5) {
-      //   currentComponent.setState({ tag1: this.state.tags[0] });
-      //   currentComponent.setState({ tag2: this.state.tags[1] });
-      //   currentComponent.setState({ tag3: this.state.tags[2] });
-      //   currentComponent.setState({ tag4: this.state.tags[3] });
-      //   currentComponent.setState({ tag5: this.state.tags[4] });
-      // }
-    });
   }
   handleSolution(event) {
     let currentComponent = this;
