@@ -997,7 +997,98 @@ exports.chats = function(req,res){
 //===============//
 // ADMIN APIs
 //===============//
+// Post request. We get the admin id and change the field
+  // We need the admin_id (Returned when the user sign in)
+  // We need the object id (Return when we view all messages)
+  exports.teamhandle = function(req,res){
+    // Goal is to update the text
+    // we will receive the token in the body
+    // The token will be used to change the value
+    const{body} = req;
+    const{
+      admin_id,  // Who the admin is
+      request_id  // for us to search the request and update the who field
+    } = body;
+    if(!admin_id){
+      return res.send({
+        success: false,
+        message: 'Error: Admin ID not sent'
+      });
+    }
+    if(!request_id){
+      return res.send({
+        success: false,
+        message:"Error: Requests id not sent"
+      });
+    }
+    USERSESSION.find({
+        _id:admin_id
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    // Search for the admin's username
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      username = user.username;  // Then we can change the field name
+      team = user.team;
+      console.log(username);
+      console.log(team);
 
+
+     // Serach for the specific request
+
+     REQUESTS.findOneAndUpdate({
+           _id: request_id // token is unique since it is session token
+           //isDeleted: false
+         }, {
+           $set:{ team: team }
+       }, { new: true }, function(err, docs){
+         if(docs){
+           console.log(docs);
+           return res.send({
+             success: true,
+             team: docs.team
+           })
+           return res.send(docs);
+         }
+         else{
+           console.log('invalid token');
+           return res.send({
+             success: false,
+             message: 'Invalid token used'
+           });
+         }
+       });
+    });
+  });
+
+  }
 // Post request. We get the admin id and change the field
 // We need the admin_id (Returned when the user sign in)
 // We need the object id (Return when we view all messages)
