@@ -937,7 +937,63 @@ exports.chats = function(req,res){
       });
   }
 
+  // View a specific requests (The chats)
+    // Pre-condition: request_id
+    // post-condition: see the full details of a request
+    exports.notifications = function(req,res){
+      const { query } = req;
+      const { token } = query;
+      console.log(token);
+      USERSESSION.find({
+          _id:token
+      }, (err, usersess)=>{
+        if(err){
+          return res.send({
+            success: false,
+            message: 'Error: Server error, usersession collection'
+          });
+        }
+        if(usersess.length != 1){
+          return res.send({
+            success: false,
+            message: 'Error: session does not exist'
+          });
+        }
+        const usersess1 = usersess[0];
+        let user_id = usersess1.userId;  // get the user ID to search
+      USER.find({
+        _id:user_id
+      }, function(err, requests) {
+          if(err){
+            return res.send({
+              success: false,
+              message: 'Error: First Server error, request collection'
+            });
+          }
+          var emptyChat = ["No notifications"];
+          if(requests[0]){
+            console.log("something");
+            var oneReq = requests[0];
+            var notifsOnly = oneReq.notifications;
+            console.log(notifsOnly)
+            var notifsArr = [];
+            for(let i=0; i<notifsOnly.length;i++){
+                notifsArr.push(notifsOnly[i].message);
+            }
+            return res.send(
+              notifsArr
+            );
+          }
+          else{
+            console.log("Nothing");
+            return res.send(
+              emptyChat
+            );
+          }
 
+        });
+      });
+    }
 //===============//
 // ADMIN APIs
 //===============//
