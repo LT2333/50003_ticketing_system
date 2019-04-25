@@ -1436,6 +1436,57 @@ exports.adminviewstatus = function(req,res){
     });
 });
 }
+
+// admin archives the solution to the problem
+  // Pre-condition: request_id (request that is complete) and solution
+  // Post-condition: Update the solution field of the request
+  exports.adminarchive = function(req,res){
+    // Goal is to update the text
+    // we will receive the token in the body
+    // The token will be used to change the value
+    const{body} = req;
+    const{
+      request_id,  // for us to search the request and update the who field
+      solution
+    } = body;
+
+    if(!request_id){
+      return res.send({
+        success: false,
+        message:"Error: Requests id not sent"
+      });
+    }
+
+     // Serach for the specific request
+       REQUESTS.findOneAndUpdate({
+             _id: request_id
+           }, {
+             $set:{solution:solution}
+         }, { new: true }, function(err, docs){
+           if(docs){
+             console.log(docs);
+             return res.send({
+               success: true,
+               tags: docs.tags,
+               category: docs.category,
+               message: docs.message,
+               dateComplete: docs.dateComplete,
+               solution: docs.solution
+             })
+             return res.send(docs);
+           }
+           else{
+             console.log('invalid request id');
+             return res.send({
+               success: false,
+               message: 'Invalid request id sent'
+             });
+           }
+         });
+
+
+  }
+  
 exports.recommended = function(req,res){
     const{body} = req;
     const{ // Category used to search requests. Then we search by category
