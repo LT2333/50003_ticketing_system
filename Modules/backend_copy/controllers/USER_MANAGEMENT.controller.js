@@ -215,6 +215,7 @@ exports.login = function (req,res){
     }
     console.log(users);
     const user = users[0]; // get the username
+    username = user.username;
 
     if(!user.validPassword(password)){
       return res.send({
@@ -248,7 +249,8 @@ exports.login = function (req,res){
         // token: user._id, // this is the real ID upon creation
         token: doc._id, // This is the id of the user session
         authority: user.authority,
-        jwttoken: jwttoken //
+        jwttoken: jwttoken, //
+        team: user.team
         // username: user.username
       });
     });

@@ -9,8 +9,14 @@ let UserManagementSchema = new Schema({
     email: {type: String}, //, required: true},
     contact_num: {type: Number}, //, require: true},
     authority:{type: String, default: 'user'}, // user, admin or superAdmin
-    team:{type: String, default:''}  // Example: API Dev Ops, Aesop, Digital Butler
+    team:{type: String, default:''},  // Example: API Dev Ops, Aesop, Digital Butler
     //myUnsolvedTickets:{type: Number, default:0}
+    notifications:{type: [
+      {
+        message: {type:String},
+        date:{type: Date, default:new Date()}
+      }
+    ]},
 
 
 });
@@ -23,4 +29,4 @@ UserManagementSchema.methods.validPassword = function(password){
 };
 
 // Export the model
-module.exports = mongoose.model('USER_MANAGEMENT', UserManagementSchema);
+module.exports = mongoose.model('USER_MANAGEMENT2', UserManagementSchema);

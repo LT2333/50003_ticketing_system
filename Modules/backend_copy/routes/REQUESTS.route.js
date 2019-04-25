@@ -22,6 +22,7 @@ router.post('/recommended', REQUESTS_controller.recommended);
 //===========//
 // PART C-1: FOR ADMIN HANDLING
 //===========//
+router.post('/teamhandle', REQUESTS_controller.teamhandle);
 // 1) Admin can take up a problem
 router.post('/adminhandle', REQUESTS_controller.adminhandle);
 // 2) Admin can change the status to complete (To remove this and integrate control logic in the above one)
@@ -57,7 +58,7 @@ router.get('/view', REQUESTS_controller.viewmessage);
 // Chat between admin and user
 router.post('/chats',REQUESTS_controller.chats);
 // Sort by date
-router.get('/viewdate', REQUESTS_controller.viewdate);
+router.post('/viewdate', REQUESTS_controller.viewdate);
 // Sort by status and date
 //router.get('/viewstatus', REQUESTS_controller.viewstatus);
 router.post('/viewstatus', REQUESTS_controller.viewstatus);
@@ -78,7 +79,10 @@ router.get('/viewallunassigned', REQUESTS_controller.viewallunassigned);
 router.get('/viewalluncomplete', REQUESTS_controller.viewalluncomplete);
 // 9) Admin sees Admin sees ACNAPI completed tickets || user sees all uncompleted only
 router.get('/viewallcomplete', REQUESTS_controller.viewallcomplete);
-
+// 10) View all the messages regardless of status
+router.get('/viewall', REQUESTS_controller.viewall);
+// 11) notifications
+router.get('/notifications', REQUESTS_controller.notifications);
 //===========//
 // PART D2: FOR COUNTING VARIOUS TICKET TYPES
 //===========//

@@ -27,7 +27,7 @@ const s3 = new aws.S3({
 const profileImgUpload = multer({
    storage: multerS3({
     s3: s3,
-    bucket: 'esc-images-lt',
+    bucket: 'accenture-esc-group9-images',
     acl: 'public-read',
     key: function (req, file, cb) {
      cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
@@ -351,8 +351,13 @@ exports.usersubmit = function (req, res) {
   exports.recommended = function(req,res){
     const{body} = req;
     const{ // Category used to search requests. Then we search by category
-      tags, // array of Strings
-      category
+      //tags, // array of Strings
+      category,
+      tag1,
+      tag2,
+      tag3,
+      tag4,
+      tag5
     } = body;
 
     if(!category){
@@ -361,96 +366,262 @@ exports.usersubmit = function (req, res) {
         error:"category is blank"
       });
     }
+    console.log(category);
+    console.log(body);
+    REQUESTS.find({
+      category:category, status:"finished"
+    }, function(err, requests) {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, requests collection'
+        });
+      } else if (!requests) {
+        return res.send({
+          success: false,
+          message: 'No recommendations found'
+        });
+      } else{
+        var solList = [];
+            for(let i=0; i<requests.length; i++){
+              solList.push(requests[i].solution);
+            }
+            return res.send({
+              success:true,
+              solList
+            });
+          }
+    });
+  }
+
+
+
+  //   if (tag1!="" && tag2!="" && tag3!="" && tag4!="" && tag5!= ""){
+  //     REQUESTS.find({
+  //       category:category, status: "finished", $or: [ { tags: tag1 }, { tags: tag2}, { tags: tag3 }, { tags: tag4}, { tags: tag5} ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       }
+  //     });
+  //   } else if (tag1!="" && tag2!="" && tag3!="" && tag4!="") {
+  //     REQUESTS.find({
+  //       category:category, status: "finished", $or: [ { tags: tag1 }, { tags: tag2}, { tags: tag3 }, { tags: tag4} ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   }
+  //   else if (tag1!="" && tag2!="" && tag3!="") {
+  //     REQUESTS.find({
+  //       category:category, status:"finished", $or: [ { tags: tag1 }, { tags: tag2}, { tags: tag3 } ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   } else if (tag1!="" && tag2!="" ) {
+  //     REQUESTS.find({
+  //       category:category, status:"finished", $or: [ { tags: tag1 }, { tags: tag2} ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   }
+  //   else{
+  //     console.log("CATEGORY ONLY");
+  //     // Limit to 3 tags
+  //     REQUESTS.find({
+  //       category:category, status:"finished"
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   }
+  // }
+
+    // REQUESTS.find({
+    //   category:category, status: "finished", tags:tags
+    // }, function(err, requests) {
+    //   if(err){
+    //     return res.send({
+    //       success: false,
+    //       message: 'Error: Server error, requests collection'
+    //     });
+    //   } else if (!requests) {
+    //     return res.send({
+    //       success: false,
+    //       message: 'No recommendations found'
+    //     });
+    //   } else{
+    //     var solList = [];
+    //     for(let i=0; i<requests.length; i++){
+    //       solList.push(requests[i].solution);
+    //     }
+    //     return res.send({
+    //       success:true,
+    //       solList
+    //     });
+    //   }
+    // });
 
     // Code for tag length of 1
-    if (tags.length == 1){
-      REQUESTS.find({
-        category:category, status: "finished", tags:tags[0]
-      }, function(err, requests) {
-        if(err){
-          return res.send({
-            success: false,
-            message: 'Error: Server error, requests collection'
-          });
-        } else if (!requests) {
-          return res.send({
-            success: false,
-            message: 'No recommendations found'
-          });
-        } else{
-          return res.send({
-            success:true,
-            requests
-          });
-        }
-      });
-    } else if (tags.length == 2) {
-      REQUESTS.find({
-        category:category, status: "finished", $or: [ { tags: tags[0] }, { tags: tags[1]} ]
-      }, function(err, requests) {
-        if(err){
-          return res.send({
-            success: false,
-            message: 'Error: Server error, requests collection'
-          });
-        } else if (!requests) {
-          return res.send({
-            success: false,
-            message: 'No recommendations found'
-          });
-        } else{
-          return res.send({
-            success:true,
-            requests
-          });
-        };
-      });
-    }
-    else if (tags.length == 3) {
-      REQUESTS.find({
-        category:category, status:"finished", $or: [ { tags: tags[0] }, { tags: tags[1]}, {tags: tags[2]} ]
-      }, function(err, requests) {
-        if(err){
-          return res.send({
-            success: false,
-            message: 'Error: Server error, requests collection'
-          });
-        } else if (!requests) {
-          return res.send({
-            success: false,
-            message: 'No recommendations found'
-          });
-        } else{
-          return res.send({
-            success:true,
-            requests
-          });
-        };
-      });
-    } else{
-      // Limit to 3 tags
-      REQUESTS.find({
-        category:category, status:"finished", $or: [ { tags: tags[0] }, { tags: tags[1]}, {tags: tags[2]}, {tags: tags[3]} ]
-      }, function(err, requests) {
-        if(err){
-          return res.send({
-            success: false,
-            message: 'Error: Server error, requests collection'
-          });
-        } else if (!requests) {
-          return res.send({
-            success: false,
-            message: 'No recommendations found'
-          });
-        } else{
-          return res.send({
-            success:true,
-            requests
-          });
-        };
-      });
-    }
-  }
+  //   if (tags.length == 1){
+  //     REQUESTS.find({
+  //       category:category, status: "finished", tags:tags[0]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       }
+  //     });
+  //   } else if (tags.length == 2) {
+  //     REQUESTS.find({
+  //       category:category, status: "finished", $or: [ { tags: tags[0] }, { tags: tags[1]} ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   }
+  //   else if (tags.length == 3) {
+  //     REQUESTS.find({
+  //       category:category, status:"finished", $or: [ { tags: tags[0] }, { tags: tags[1]}, {tags: tags[2]} ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   } else{
+  //     // Limit to 3 tags
+  //     REQUESTS.find({
+  //       category:category, status:"finished", $or: [ { tags: tags[0] }, { tags: tags[1]}, {tags: tags[2]}, {tags: tags[3]} ]
+  //     }, function(err, requests) {
+  //       if(err){
+  //         return res.send({
+  //           success: false,
+  //           message: 'Error: Server error, requests collection'
+  //         });
+  //       } else if (!requests) {
+  //         return res.send({
+  //           success: false,
+  //           message: 'No recommendations found'
+  //         });
+  //       } else{
+  //         return res.send({
+  //           success:true,
+  //           requests
+  //         });
+  //       };
+  //     });
+  //   }
+  // }
 
   //===============//
   // Mutual
@@ -632,7 +803,10 @@ exports.usersubmit = function (req, res) {
     const{body} = req;
     const{
       token,  // Who the admin is
-      meta  // "own", "team", "all"
+      meta
+      // "adminview/uncompleteonly", "adminview/completeonly"
+      // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+      // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
     } = body;
 
     if(!token){
@@ -691,16 +865,67 @@ exports.usersubmit = function (req, res) {
       username = user.username;
       console.log(username);
       if(authority == 'admin'){
-        if(meta == "own"){
-          // Search by username
-          REQUESTS.find({who:username}).sort({date:1}).exec(function(err, requests) {
+        // "adminview/uncompleteonly", "adminview/completeonly"
+        // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+        // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
+        if(meta == "adminview/uncompleteonly"){
+          REQUESTS.find({who:username, status: "addressing"}).sort({date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
               });
             });
-        } else if (meta == "team") {
+        } else if (meta == "adminview/completeonly") {
+          REQUESTS.find({who:username, status: "finished"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/viewall") {
           REQUESTS.find({team:user.team}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/unassigned") {
+          REQUESTS.find({team:user.team, status:"unaddressed"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/uncomplete") {
+          REQUESTS.find({team:user.team, status:"addressing"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/complete") {
+          REQUESTS.find({team:user.team, status:"finished"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        }else if (meta == "viewallunassigned") {
+          REQUESTS.find({status:"unaddressed"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewalluncomplete") {
+          REQUESTS.find({status:"addressing"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewallcomplete") {
+          REQUESTS.find({status:"finished"}).sort({date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
@@ -725,6 +950,7 @@ exports.usersubmit = function (req, res) {
             });
           });
         }
+
       });
     });
   }
@@ -736,7 +962,10 @@ exports.usersubmit = function (req, res) {
     const{body} = req;
     const{
       token,  // Who the admin is
-      meta  // "own", "team", "all"
+      meta
+      // "adminview/uncompleteonly", "adminview/completeonly"
+      // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+      // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
     } = body;
 
     if(!token){
@@ -795,16 +1024,67 @@ exports.usersubmit = function (req, res) {
       username = user.username;
       console.log(username);
       if(authority == 'admin'){
-        if(meta == "own"){
-          // Search by username
-          REQUESTS.find({who:username}).sort({status:-1, date:1}).exec(function(err, requests) {
+        // "adminview/uncompleteonly", "adminview/completeonly"
+        // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+        // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
+        if(meta == "adminview/uncompleteonly"){
+          REQUESTS.find({who:username, status: "addressing"}).sort({date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
               });
             });
-        } else if (meta == "team") {
+        } else if (meta == "adminview/completeonly") {
+          REQUESTS.find({who:username, status: "finished"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/viewall") {
           REQUESTS.find({team:user.team}).sort({status:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/unassigned") {
+          REQUESTS.find({team:user.team, status:"unaddressed"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/uncomplete") {
+          REQUESTS.find({team:user.team, status:"addressing"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/complete") {
+          REQUESTS.find({team:user.team, status:"finished"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        }else if (meta == "viewallunassigned") {
+          REQUESTS.find({status:"unaddressed"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewalluncomplete") {
+          REQUESTS.find({status:"addressing"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewallcomplete") {
+          REQUESTS.find({status:"finished"}).sort({date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
@@ -829,6 +1109,7 @@ exports.usersubmit = function (req, res) {
             });
           });
         }
+
       });
     });
   }
@@ -840,7 +1121,10 @@ exports.usersubmit = function (req, res) {
     const{body} = req;
     const{
       token,  // Who the admin is
-      meta  // "own", "team", "all"
+      meta
+      // "adminview/uncompleteonly", "adminview/completeonly"
+      // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+      // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
     } = body;
 
     if(!token){
@@ -899,16 +1183,67 @@ exports.usersubmit = function (req, res) {
       username = user.username;
       console.log(username);
       if(authority == 'admin'){
-        if(meta == "own"){
-          // Search by username
-          REQUESTS.find({who:username}).sort({date:1}).exec(function(err, requests) {
+        // "adminview/uncompleteonly", "adminview/completeonly"
+        // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+        // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
+        if(meta == "adminview/uncompleteonly"){
+          REQUESTS.find({who:username, status: "addressing"}).sort({date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
               });
             });
-        } else if (meta == "team") {
+        } else if (meta == "adminview/completeonly") {
+          REQUESTS.find({who:username, status: "finished"}).sort({date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/viewall") {
           REQUESTS.find({team:user.team}).sort({who:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/unassigned") {
+          REQUESTS.find({team:user.team, status:"unaddressed"}).sort({who:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/uncomplete") {
+          REQUESTS.find({team:user.team, status:"addressing"}).sort({who:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/complete") {
+          REQUESTS.find({team:user.team, status:"finished"}).sort({who:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        }else if (meta == "viewallunassigned") {
+          REQUESTS.find({status:"unaddressed"}).sort({who:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewalluncomplete") {
+          REQUESTS.find({status:"addressing"}).sort({who:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewallcomplete") {
+          REQUESTS.find({status:"finished"}).sort({who:-1, date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
@@ -933,9 +1268,11 @@ exports.usersubmit = function (req, res) {
             });
           });
         }
+
       });
     });
   }
+
 
   // filter by category
   // Pre-condition: Object id (used to determine admin or user)
@@ -944,7 +1281,10 @@ exports.usersubmit = function (req, res) {
     const{body} = req;
     const{
       token,  // Who the admin is
-      meta  // "own", "team", "all"
+      meta
+      // "adminview/uncompleteonly", "adminview/completeonly"
+      // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+      // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
     } = body;
 
     if(!token){
@@ -1003,16 +1343,67 @@ exports.usersubmit = function (req, res) {
       username = user.username;
       console.log(username);
       if(authority == 'admin'){
-        if(meta == "own"){
-          // Search by username
-          REQUESTS.find({who:username}).sort({category:-1, date:1}).exec(function(err, requests) {
+        // "adminview/uncompleteonly", "adminview/completeonly"
+        // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+        // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
+        if(meta == "adminview/uncompleteonly"){
+          REQUESTS.find({who:username, status: "addressing"}).sort({category:-1, date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
               });
             });
-        } else if (meta == "team") {
+        } else if (meta == "adminview/completeonly") {
+          REQUESTS.find({who:username, status: "finished"}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/viewall") {
           REQUESTS.find({team:user.team}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/unassigned") {
+          REQUESTS.find({team:user.team, status:"unaddressed"}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/uncomplete") {
+          REQUESTS.find({team:user.team, status:"addressing"}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/complete") {
+          REQUESTS.find({team:user.team, status:"finished"}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        }else if (meta == "viewallunassigned") {
+          REQUESTS.find({status:"unaddressed"}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewalluncomplete") {
+          REQUESTS.find({status:"addressing"}).sort({category:-1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewallcomplete") {
+          REQUESTS.find({status:"finished"}).sort({category:-1, date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
@@ -1049,7 +1440,10 @@ exports.usersubmit = function (req, res) {
     const{body} = req;
     const{
       token,  // Who the admin is
-      meta  // "own", "team", "all"
+      meta
+      // "adminview/uncompleteonly", "adminview/completeonly"
+      // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+      // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
     } = body;
 
     if(!token){
@@ -1108,15 +1502,67 @@ exports.usersubmit = function (req, res) {
       username = user.username;
       console.log(username);
       if(authority == 'admin'){
-        if(meta == "own"){
-          REQUESTS.find({who:username}).sort({priority:1, date:1}).exec(function(err, requests) {
+        // "adminview/uncompleteonly", "adminview/completeonly"
+        // "team/viewall", "team/unassigned", "team/uncomplete", "team/complete"
+        // "viewallunassigned", "viewalluncomplete", "viewallcomplete", "viewall"
+        if(meta == "adminview/uncompleteonly"){
+          REQUESTS.find({who:username, status: "addressing"}).sort({priority:1, date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
               });
             });
-        } else if (meta == "team") {
+        } else if (meta == "adminview/completeonly") {
+          REQUESTS.find({who:username, status: "finished"}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/viewall") {
           REQUESTS.find({team:user.team}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/unassigned") {
+          REQUESTS.find({team:user.team, status:"unaddressed"}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/uncomplete") {
+          REQUESTS.find({team:user.team, status:"addressing"}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "team/complete") {
+          REQUESTS.find({team:user.team, status:"finished"}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        }else if (meta == "viewallunassigned") {
+          REQUESTS.find({status:"unaddressed"}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewalluncomplete") {
+          REQUESTS.find({status:"addressing"}).sort({priority:1, date:1}).exec(function(err, requests) {
+              return res.send({
+                success:true,
+                requests
+              });
+            });
+        } else if (meta == "viewallcomplete") {
+          REQUESTS.find({status:"finished"}).sort({priority:1, date:1}).exec(function(err, requests) {
               return res.send({
                 success:true,
                 requests
@@ -1183,13 +1629,71 @@ exports.usersubmit = function (req, res) {
       });
   }
 
+  // View a specific requests (The chats)
+  // Pre-condition: request_id
+  // post-condition: see the full details of a request
+  exports.notifications = function(req,res){
+    const { query } = req;
+    const { token } = query;
+    console.log(token);
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id:user_id
+    }, function(err, requests) {
+        if(err){
+          return res.send({
+            success: false,
+            message: 'Error: First Server error, request collection'
+          });
+        }
+        var emptyChat = ["No notifications"];
+        if(requests[0]){
+          console.log("something");
+          var oneReq = requests[0];
+          var notifsOnly = oneReq.notifications;
+          console.log(notifsOnly)
+          var notifsArr = [];
+          for(let i=0; i<notifsOnly.length;i++){
+              notifsArr.push(notifsOnly[i].message);
+          }
+          return res.send(
+            notifsArr
+          );
+        }
+        else{
+          console.log("Nothing");
+          return res.send(
+            emptyChat
+          );
+        }
+
+      });
+    });
+  }
+
   //===============//
   // ADMIN APIs
   //===============//
   // Post request. We get the admin id and change the field
   // We need the admin_id (Returned when the user sign in)
   // We need the object id (Return when we view all messages)
-  exports.adminhandle = function(req,res){
+  exports.teamhandle = function(req,res){
     // Goal is to update the text
     // we will receive the token in the body
     // The token will be used to change the value
@@ -1251,30 +1755,143 @@ exports.usersubmit = function (req, res) {
 
 
      // Serach for the specific request
+
      REQUESTS.findOneAndUpdate({
-           _id: request_id,
+           _id: request_id // token is unique since it is session token
+           //isDeleted: false
          }, {
-           $set:{
-             who:username,
-             status:"addressing",
-             dateTaken: new Date(),
-             team: team
-           }
-       }, null,(err,sessions) => {
-           if(err){
-               console.log(err);
-               return res.send({
-                   success:false,
-                   message:'Error: Server error'
-               });
-           }
-         return res.send({
+           $set:{ team: team }
+       }, { new: true }, function(err, docs){
+         if(docs){
+           console.log(docs);
+           return res.send({
              success: true,
-             message: 'request is being handled',
-             adminHandle: username, // Send back the user id which is used later
-             team: team
-         });
+             team: docs.team
+           })
+           return res.send(docs);
+         }
+         else{
+           console.log('invalid token');
+           return res.send({
+             success: false,
+             message: 'Invalid token used'
+           });
+         }
        });
+    });
+  });
+
+  }
+
+  exports.adminhandle = function(req,res){
+    // Goal is to update the text
+    // we will receive the token in the body
+    // The token will be used to change the value
+    const{body} = req;
+    const{
+      admin_id,  // Who the admin is
+      request_id,  // for us to search the request and update the who field
+      usersusername // Search for a user
+    } = body;
+    if(!admin_id){
+      return res.send({
+        success: false,
+        message: 'Error: Admin ID not sent'
+      });
+    }
+    if(!request_id){
+      return res.send({
+        success: false,
+        message:"Error: Requests id not sent"
+      });
+    }
+    USERSESSION.find({
+        _id:admin_id
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    // Search for the admin's username
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      username = user.username;  // Then we can change the field name
+      team = user.team;
+      console.log(username);
+      console.log(team);
+
+      USER.updateMany({
+            $or: [ { team: team }, { username:usersusername } ] // token is unique since it is session token
+            //isDeleted: false
+          }, {
+            "$push": {
+              "notifications": {
+                name: username,
+                message: username + " took up a request"
+                }
+              }
+        }, { new: true }, function(err, docs){
+          if(docs){
+            console.log(docs);
+          }
+          else{
+            console.log('error');
+            }
+          }
+        );
+
+      REQUESTS.findOneAndUpdate({
+            _id: request_id // token is unique since it is session token
+            //isDeleted: false
+          }, {
+            $set:{
+              who:username,
+              status:"addressing",
+              dateTaken: new Date(),
+              team: team }
+        }, { new: true }, function(err, docs){
+          if(docs){
+            console.log(docs);
+            return res.send({
+              success: true,
+              message: "request is being handled",
+              team: docs.team,
+              adminHandle: docs.adminHandle
+            })
+            return res.send(docs);
+          }
+          else{
+            console.log('invalid token');
+            return res.send({
+              success: false,
+              message: 'Invalid token used'
+            });
+          }
+        });
     });
   });
 
@@ -1345,25 +1962,30 @@ exports.usersubmit = function (req, res) {
 
      // Serach for the specific request
      REQUESTS.findOneAndUpdate({
-           _id: request_id,
+           _id: request_id // token is unique since it is session token
+           //isDeleted: false
          }, {
            $set:{
              status:"finished",
-             dateComplete: new Date()
-           }
-       }, null,(err,sessions) => {
-           if(err){
-               console.log(err);
-               return res.send({
-                   success:false,
-                   message:'Error: Server error, requests collection'
-               });
-           }
-         return res.send({
+             dateComplete: new Date() }
+       }, { new: true }, function(err, docs){
+         if(docs){
+           console.log(docs);
+           return res.send({
              success: true,
-             message: 'request is completed',
-             adminComplete: username // Send back the user id which is used later
-         });
+             message: "request is being handled",
+             team: docs.team,
+             adminComplete: docs.adminComplete
+           })
+           return res.send(docs);
+         }
+         else{
+           console.log('invalid token');
+           return res.send({
+             success: false,
+             message: 'Invalid token used'
+           });
+         }
        });
     });
   });
@@ -1906,6 +2528,77 @@ exports.usersubmit = function (req, res) {
       } else{
         // Chcek the username
         REQUESTS.find({username:username, status:"finished"}).sort({who:-1, date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+        }
+      });
+    });
+  }
+
+  // Pre-condition: Object id (used to determine admin or user)
+  // Post-condition: JSON list of requests regardless of status
+  exports.viewall = function(req,res){
+    const { query } = req;
+    // with the token issued at login we will search for the type in User collection
+    // Once the user is found we will get the type and the Username
+    // type is used to check if admin or user
+    // username to render specific messages
+    const { token } = query;
+    console.log(token);
+    // Retrieve the type
+    console.log("finding all");
+    USERSESSION.find({
+        _id:token
+    }, (err, usersess)=>{
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, usersession collection'
+        });
+      }
+      if(usersess.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: session does not exist'
+        });
+      }
+      const usersess1 = usersess[0];
+      let user_id = usersess1.userId;  // get the user ID to search
+    USER.find({
+      _id: user_id,
+    }, (err, users)=> {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: First Server error'
+        });
+      }
+      if(users.length != 1){
+        return res.send({
+          success: false,
+          message: 'Error: account does not exist'
+        });
+      }
+      const user = users[0]; // users is an array of users that share the same username
+      authority = user.authority;
+      console.log(authority);
+      username = user.username;
+      console.log(username);
+      if(authority == 'admin'){
+        // Render all images if admin and sort from the earliest at the front of the list
+        // Find all that are currently being handled
+        REQUESTS.find({}).sort({date:1}).exec(function(err, requests) {
+            return res.send({
+              success:true,
+              requests
+            });
+          });
+      } else{
+        // Chcek the username
+        REQUESTS.find({username:username}).sort({status:-1, date:1}).exec(function(err, requests) {
             return res.send({
               success:true,
               requests

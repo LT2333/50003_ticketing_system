@@ -21,7 +21,7 @@ let RequestsSchema = new Schema({
     priority:{type: Number, default:-1}, // Calculated between 0-1, accepts floats
     status:{type: String, default:'unaddressed'}, // unaddressed, addressing, finished
     who:{type: String, default:'unaddressed'}, // Admin Username. Find a way to link
-    team:{type: String}, // Keep track of which team is assigned to handle it
+    team:{type: String, default:''}, // Keep track of which team is assigned to handle it
     tags:{type: [String]}, // Array of tags of String data type
     category:{type: String, default:''}, // selected from a drop-down
     chat:{type: [
@@ -33,9 +33,9 @@ let RequestsSchema = new Schema({
     ]}, // An array of hashMaps
     dateTaken:{type: Date},
     dateComplete:{ type: Date},
-    solution:{type: String, default:''} // At the end when the admin completes the ticket this is filled up 
+    solution:{type: String, default:''} // At the end when the admin completes the ticket this is filled up
 });
 
 
 // Export the model
-module.exports = mongoose.model('REQUESTS', RequestsSchema);
+module.exports = mongoose.model('REQUEST2', RequestsSchema);
