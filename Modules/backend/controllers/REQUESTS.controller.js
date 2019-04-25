@@ -951,7 +951,8 @@ exports.adminhandle = function(req,res){
   const{body} = req;
   const{
     admin_id,  // Who the admin is
-    request_id  // for us to search the request and update the who field
+    request_id,  // for us to search the request and update the who field
+    usersusername // Search for a user
   } = body;
   if(!admin_id){
     return res.send({
@@ -1000,32 +1001,58 @@ exports.adminhandle = function(req,res){
     }
     const user = users[0]; // users is an array of users that share the same username
     username = user.username;  // Then we can change the field name
+    team = user.team;
     console.log(username);
+    console.log(team);
 
+    USER.updateMany({
+          $or: [ { team: team }, { username:usersusername } ] // token is unique since it is session token
+          //isDeleted: false
+        }, {
+          "$push": {
+            "notifications": {
+              name: username,
+              message: username + " took up a request"
+              }
+            }
+      }, { new: true }, function(err, docs){
+        if(docs){
+          console.log(docs);
+        }
+        else{
+          console.log('error');
+          }
+        }
+      );
 
-   // Serach for the specific request
-   REQUESTS.findOneAndUpdate({
-         _id: request_id,
-       }, {
-         $set:{
-           who:username,
-           status:"addressing",
-           dateTaken: Date.now()
-         }
-     }, null,(err,sessions) => {
-         if(err){
-             console.log(err);
-             return res.send({
-                 success:false,
-                 message:'Error: Server error'
-             });
-         }
-       return res.send({
-           success: true,
-           message: 'request is being handled',
-           adminHandle: username // Send back the user id which is used later
-       });
-     });
+    REQUESTS.findOneAndUpdate({
+          _id: request_id // token is unique since it is session token
+          //isDeleted: false
+        }, {
+          $set:{
+            who:username,
+            status:"addressing",
+            dateTaken: new Date(),
+            team: team }
+      }, { new: true }, function(err, docs){
+        if(docs){
+          console.log(docs);
+          return res.send({
+            success: true,
+            message: "request is being handled",
+            team: docs.team,
+            adminHandle: docs.adminHandle
+          })
+          return res.send(docs);
+        }
+        else{
+          console.log('invalid token');
+          return res.send({
+            success: false,
+            message: 'Invalid token used'
+          });
+        }
+      });
   });
 });
 
