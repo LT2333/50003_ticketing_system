@@ -15,6 +15,8 @@ router.get('/test', REQUESTS_controller.test);
 router.post('/usersubmit', REQUESTS_controller.usersubmit);
 // 3) User submits form (have an account)
 router.post('/usersubmitacc', REQUESTS_controller.usersubmitacc);
+// 4) Post recommendations by searching the category and then tags of old request
+router.post('/recommended', REQUESTS_controller.recommended);
 
 //===========//
 // PART C: FOR ADMIN HANDLING

@@ -31,7 +31,8 @@ let RequestsSchema = new Schema({
       }
     ]}, // An array of hashMaps
     dateTaken:{type: Date},
-    dateComplete:{ type: Date}
+    dateComplete:{ type: Date},
+    solution:{type: String, default:''}
 });
 
 

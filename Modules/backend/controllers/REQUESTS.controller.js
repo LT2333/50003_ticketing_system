@@ -1261,7 +1261,51 @@ exports.adminviewstatus = function(req,res){
     });
 });
 }
+exports.recommended = function(req,res){
+    const{body} = req;
+    const{ // Category used to search requests. Then we search by category
+      //tags, // array of Strings
+      category,
+      tag1,
+      tag2,
+      tag3,
+      tag4,
+      tag5
+    } = body;
 
+    if(!category){
+      return res.send({
+        success: false,
+        error:"category is blank"
+      });
+    }
+    console.log(category);
+    console.log(body);
+    REQUESTS.find({
+      category:category, status:"finished"
+    }, function(err, requests) {
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error: Server error, requests collection'
+        });
+      } else if (!requests) {
+        return res.send({
+          success: false,
+          message: 'No recommendations found'
+        });
+      } else{
+        var solList = [];
+            for(let i=0; i<requests.length; i++){
+              solList.push(requests[i].solution);
+            }
+            return res.send({
+              success:true,
+              solList
+            });
+          }
+    });
+  }
 
 exports.bot = function(req,res){
   const talk = req.body.queryResult.queryText;
