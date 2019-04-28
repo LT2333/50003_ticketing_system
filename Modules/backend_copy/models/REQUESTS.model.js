@@ -1,13 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// var chatSchema = new Schema(
-//   {
-//     name: {type: String}, // Who is addressing it
-//     message: {type: String} // message content
-//   }
-// );
-
 let RequestsSchema = new Schema({
     username: {type: String, default:"no account"},// max: 100}, // If the user is signed in then the username is already in the system
     name:{type: String}, // This is for users who don't have accounts
