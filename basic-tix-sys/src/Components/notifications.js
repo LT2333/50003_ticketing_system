@@ -36,7 +36,7 @@ export default class Notifications extends React.Component {
           <div className="nav-link-icon__wrapper">
             Notifications &nbsp;&nbsp;
             <Badge pill theme="danger">
-              {/* {JSON.parse(localStorage.getItem("notifications")).length} */}
+              {JSON.parse(localStorage.getItem("notifications")).length}
             </Badge>
           </div>
         </NavLink>
@@ -46,14 +46,14 @@ export default class Notifications extends React.Component {
         >
           <DropdownItem>
             <hr />
-            {/* <ul>
+            <ul>
               {JSON.parse(localStorage.getItem("notifications")).map(function(
                 n,
                 index
               ) {
                 return <li key={index}>{n}</li>;
               })}
-            </ul> */}
+            </ul>
             <hr />
             {/* {localStorage.getItem("notifications")} */}
           </DropdownItem>

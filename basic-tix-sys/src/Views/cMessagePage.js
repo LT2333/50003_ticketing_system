@@ -82,11 +82,41 @@ class CMessagePage extends Component {
       countcompleteAll: 0,
       countallAll: 0
     };
+    this.handleFilter = this.handleFilter.bind(this);
     this.handleBug = this.handleBug.bind(this);
   }
   toggle() {
     this.setState({
       open: !this.state.open
+    });
+  }
+  handleFilter(event) {
+    let currentComponent = this;
+    var unirest = require("unirest");
+    console.log(event);
+
+    var req = unirest(
+      "POST",
+      "https://courier50003.herokuapp.com/portal/" + event.value
+    );
+
+    req.headers({
+      "cache-control": "no-cache",
+      "content-type": "application/json"
+    });
+
+    req.type("json");
+    req.send({
+      token: localStorage.getItem("token"),
+      meta: localStorage.getItem("cat")
+    });
+
+    req.end(function(res) {
+      if (res.error) throw new Error(res.error);
+      currentComponent.setState({
+        messageInfoArray: res.body.requests
+      });
+      console.log(res.body);
     });
   }
   componentDidMount() {
@@ -281,88 +311,91 @@ class CMessagePage extends Component {
           </Popover>
           {/* <Button onClick={this.handleBug}>Debugger</Button> */}
           <Row>
-            {/* <FormGroup>
-              <label>
-                Choose your filter
-              </label>
-              <Select
-                multiple={false}
-                options={filterOptions}
-                onChange={this.handleFilter}
-              />
-            </FormGroup> */}
-            <Col>
-              <ButtonGroup vertical className="SideBar">
-                {/* All tickets */}
-                <Button
-                  className="SideBar"
-                  theme="light"
-                  id="viewallunassigned"
-                  onClick={this.handleCat}
-                >
-                  All unassigned tickets&nbsp;&nbsp;
-                  <Badge pill theme="primary">
-                    {this.state.countunassignedAll}
-                  </Badge>
-                </Button>
-                <Button
-                  className="SideBar"
-                  theme="light"
-                  id="viewalluncomplete"
-                  onClick={this.handleCat}
-                >
-                  All uncomplete tickets&nbsp;&nbsp;
-                  <Badge pill theme="primary">
-                    {this.state.countuncompleteAll}
-                  </Badge>
-                </Button>
-                <Button
-                  className="SideBar"
-                  theme="light"
-                  id="viewallcomplete"
-                  onClick={this.handleCat}
-                >
-                  All completed tickets&nbsp;&nbsp;
-                  <Badge pill theme="primary">
-                    {this.state.countcompleteAll}
-                  </Badge>
-                </Button>
-                <Button
-                  className="SideBar"
-                  theme="light"
-                  id="viewall"
-                  onClick={this.handleCat}
-                >
-                  All tickets&nbsp;&nbsp;
-                  <Badge pill theme="primary">
-                    {this.state.countallAll}
-                  </Badge>
-                </Button>
-              </ButtonGroup>
-            </Col>
-            <Col>
-              <ListGroup>
-                <ListGroupItemHeading>
-                  <Container>
-                    <Row className="MessageBox">
-                      <Col>Subject</Col>
-                      <Col>Requester</Col>
-                      <Col>Requested</Col>
-                      <Col>Type</Col>
-                      <Col>Status</Col>
-                    </Row>
-                  </Container>
-                </ListGroupItemHeading>
-                {this.state.messageInfoArray.map(messageInfoArray => {
-                  return (
-                    <CMessageBox
-                      messageInfo={messageInfoArray}
-                      token={this.state.token}
-                    />
-                  );
-                })}
-              </ListGroup>
-            </Col>
+            <Row>
+              <FormGroup>
+                <label>Choose your filter</label>
+                <Select
+                  id="SelectFilter"
+                  multiple={false}
+                  options={filterOptions}
+                  onChange={this.handleFilter}
+                />
+              </FormGroup>
+            </Row>
+            <Row>
+              <Col>
+                <ButtonGroup vertical className="SideBar">
+                  {/* All tickets */}
+                  <Button
+                    className="SideBar"
+                    theme="light"
+                    id="viewallunassigned"
+                    onClick={this.handleCat}
+                  >
+                    All unassigned tickets&nbsp;&nbsp;
+                    <Badge pill theme="primary">
+                      {this.state.countunassignedAll}
+                    </Badge>
+                  </Button>
+                  <Button
+                    className="SideBar"
+                    theme="light"
+                    id="viewalluncomplete"
+                    onClick={this.handleCat}
+                  >
+                    All uncomplete tickets&nbsp;&nbsp;
+                    <Badge pill theme="primary">
+                      {this.state.countuncompleteAll}
+                    </Badge>
+                  </Button>
+                  <Button
+                    className="SideBar"
+                    theme="light"
+                    id="viewallcomplete"
+                    onClick={this.handleCat}
+                  >
+                    All completed tickets&nbsp;&nbsp;
+                    <Badge pill theme="primary">
+                      {this.state.countcompleteAll}
+                    </Badge>
+                  </Button>
+                  <Button
+                    className="SideBar"
+                    theme="light"
+                    id="viewall"
+                    onClick={this.handleCat}
+                  >
+                    All tickets&nbsp;&nbsp;
+                    <Badge pill theme="primary">
+                      {this.state.countallAll}
+                    </Badge>
+                  </Button>
+                </ButtonGroup>
+              </Col>
+              <Col>
+                <ListGroup>
+                  <ListGroupItemHeading>
+                    <Container>
+                      <Row className="MessageBox">
+                        <Col>Subject</Col>
+                        <Col>Requester</Col>
+                        <Col>Requested</Col>
+                        <Col>Type</Col>
+                        <Col>Status</Col>
+                      </Row>
+                    </Container>
+                  </ListGroupItemHeading>
+                  {this.state.messageInfoArray.map(messageInfoArray => {
+                    return (
+                      <CMessageBox
+                        messageInfo={messageInfoArray}
+                        token={this.state.token}
+                      />
+                    );
+                  })}
+                </ListGroup>
+              </Col>
+            </Row>
           </Row>
         </Container>
       </div>
