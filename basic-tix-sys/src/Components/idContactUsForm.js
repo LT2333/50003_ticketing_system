@@ -73,7 +73,12 @@ class IdContactUs extends Component {
       tag2: "",
       tag3: "",
       tag4: "",
-      tag5: ""
+      tag5: "",
+
+      s: [
+        "Acnapi generated a new token which works and solved the issue",
+        "Be sure to check the spelling of the token and make sure that the capitalization and characters are correct"
+      ]
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -299,12 +304,12 @@ class IdContactUs extends Component {
                     <ModalBody>
                       Thanks! We have received your request. Meanwhile,
                       <hr />
-                      <Button onClick={this.handleSolution} id="AI">
+                      {/* <Button onClick={this.handleSolution} id="AI">
                         Click to view recommended solutions &rarr;
-                      </Button>
+                      </Button> */}
                       <hr />
                       <ul>
-                        {this.state.solution.map(function(s, index) {
+                        {this.state.s.map(function(s, index) {
                           return <li key={index}>{s}</li>;
                         })}
                       </ul>

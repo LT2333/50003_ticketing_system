@@ -111,7 +111,6 @@ class LoginCreds extends Component {
 
         localStorage.setItem("token", res.body.token);
         localStorage.setItem("authority", res.body.authority);
-        localStorage.setItem("notifications", ["n1"]);
       } else {
         this.setState({ errormsg: res.body.message });
       }
